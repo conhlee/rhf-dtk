@@ -6,26 +6,32 @@
 
 class CInputChecker : public CList {
 public:
-
-    CInputChecker *getNext(void) {
-        return static_cast<CInputChecker *>(this->CList::getNext());
+    CInputChecker *getNext(void) const {
+        return static_cast<CInputChecker *>(CList::getNext());
     }
-    CInputChecker *getPrev(void) {
-        return static_cast<CInputChecker *>(this->CList::getPrev());
+    CInputChecker *getPrev(void) const {
+        return static_cast<CInputChecker *>(CList::getPrev());
     }
 
     virtual ~CInputChecker(void);
     virtual void finalInsert(void);
     virtual void finalDestroy(void);
     virtual void _14(void);
-    virtual u32 _18(void); 
+    virtual u32 _18(void);
     virtual u32 _1C(void); // weak
     virtual u32 _20(u8 *, u32, f32);
     virtual u32 _24(u32);
     virtual u32 _28(u32);
-    virtual void _2C(void);
+    virtual u32 _2C(void);
     virtual u32 _30(u32);
+    virtual void _34(void); // weak
+
+    CInputChecker(void);
+
     // TODO
+
+    void fn_801E7D5C(u32 button);
+    void fn_801E7DBC(f32 delay, f32 justEarly, f32 early, f32 late, f32 justLate);
 
     u32 fn_801E7E28(u32);
     u32 fn_801E7E70(u32);
@@ -48,10 +54,8 @@ public:
     u8 getUnk78(void) {
         return unk78;
     }
-    
 
 private:
-
     u8 pad0C[0x50-0xc];
     u8 unk50;
     u8 pad51[0x70-0x51];
