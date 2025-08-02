@@ -1,0 +1,8 @@
+#ifndef GAME_SCRIPT_CHARACTERINTRO_HPP
+#define GAME_SCRIPT_CHARACTERINTRO_HPP
+
+#include "ExFlowDecl.hpp"
+
+TFD_EXTERN(lbl_802B5D40)
+
+#endif
