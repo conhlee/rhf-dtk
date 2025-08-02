@@ -1,9 +1,88 @@
 #include "Layout.hpp"
 
-// TODO: functions above the clayout ctor
+#include "Mem.hpp"
+
+#include "LayoutManager.hpp"
 
 CLayout::CLayout(void) {
-
+    mAnimationCount = 0;
+    mLayout = NULL;
+    mAnimations = NULL;
 }
 
-// TODO: functions below the clayout ctor
+void CLayout::_0C(void) {
+    mLayout = new nw4r::lyt::Layout;
+
+    mAnimations = new CLayoutAnimation[mAnimationCount];
+
+    mUnk10 = 1;
+    mUnk11 = 1;
+}
+
+void CLayout::fn_801D9B10(void) {
+    mUnk12 = 1;
+    mScaleX = 1.0f;
+    mScaleY = 1.0f;
+}
+
+void CLayout::_14(void) {
+    if (mLayout != NULL) {
+        delete mLayout;
+    }
+    if (mAnimations != NULL) {
+        delete[] mAnimations;
+    }
+}
+
+void CLayout::_18(nw4r::lyt::DrawInfo *drawInfo) {
+    f32 scaleX = mScaleX;
+    f32 scaleY = mScaleY;
+
+    if (mUnk12 != 0) {
+        scaleX *= gLayoutManager->fn_801D7188();
+        scaleY *= gLayoutManager->fn_801D7190();
+    }
+
+    mLayout->GetRootPane()->SetScale(nw4r::math::VEC2(scaleX, scaleY));
+
+    _20(drawInfo);
+
+    for (s32 i = 0; i < mAnimationCount; i++) {
+        mAnimations[i].fn_801DA354();
+    }
+
+    mLayout->Animate(0);
+    mLayout->CalculateMtx(*drawInfo);
+
+    for (s32 i = 0; i < mAnimationCount; i++) {
+        mAnimations[i].fn_801DA590();
+    }
+}
+
+void CLayout::_1C(nw4r::lyt::DrawInfo *drawInfo) {
+    _20(drawInfo);
+
+    mLayout->Draw(*drawInfo);
+}
+
+void CLayout::_20(nw4r::lyt::DrawInfo *drawInfo) {
+    nw4r::ut::Rect viewRect = mLayout->GetLayoutRect();
+
+    f32 nearField = 0.0f;
+    f32 farField = 500.0f;
+    
+    Mtx44 projMtx;
+    C_MTXOrtho(projMtx, viewRect.top, viewRect.bottom, viewRect.left, viewRect.right, nearField, farField);
+
+    GXSetProjection(projMtx, GX_ORTHOGRAPHIC);
+
+    nw4r::math::MTX34 viewMtx;
+    PSMTXIdentity(viewMtx.mtx);
+
+    drawInfo->SetViewMtx(viewMtx);
+    drawInfo->SetViewRect(viewRect);
+}
+
+void CLayout::fn_801D9E24(bool enable) {
+    mUnk12 = enable;
+}
