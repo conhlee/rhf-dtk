@@ -10,14 +10,17 @@
 
 class CTickFlowManager : public TSingleton<CTickFlowManager> {
 public:
-
     virtual void _08(void);
     virtual ~CTickFlowManager(void);
     virtual void _10(void);
     virtual void _14(void);
     virtual void _18(void);
-    virtual void _1C(void *, u32);
-    
+    virtual void _1C(CTickFlow::CreateFn, u32);
+
+    template <typename T>
+    void registerFlow() {
+        _1C(&T::create, sizeof(T));
+    }
 
     void fn_801E1E4C(void);
     void fn_801E1CC0(const TickFlowCode *code, f32 initRest = 0.0f);
