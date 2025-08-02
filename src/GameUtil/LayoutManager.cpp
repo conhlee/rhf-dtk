@@ -1,8 +1,8 @@
 #include <revolution/GX.h>
 #include <revolution/SC.h>
-#include <nw4r/lyt/init.h>
-#include <nw4r/lyt/arcResourceAccessor.h>
+
 #include "Mem.hpp"
+
 #include "LayoutManager.hpp"
 #include "FileManager.hpp"
 
@@ -28,12 +28,13 @@ void CLayoutManager::_10(void) {
     unk4C = new nw4r::lyt::DrawInfo;
     if (SCGetAspectRatio() == SC_ASPECT_STD) {
         unk4C->SetLocationAdjust(false);
-    } else { // SC_ASPECT_WIDE
-        unk4C->SetLocationAdjust(true);
-        unk4C->SetLocationAdjustScale(nw4r::math::VEC2(0.7307692f, 1.0f));
     }
-    unk54 = 0;
-    unk44 = 0;
+    else { // SC_ASPECT_WIDE
+        unk4C->SetLocationAdjust(true);
+        unk4C->SetLocationAdjustScale(nw4r::math::VEC2((608.0f / 832.0f), 1.0f));
+    }
+    unk54 = NULL;
+    mFontInfo = NULL;
 }
 
 void CLayoutManager::_08(void) {
@@ -68,7 +69,7 @@ void CLayoutManager::_28(void) {
     unk38->DetachAll();
     if (unk3C) {
         delete[] unk3C;
-        unk3C = 0;
+        unk3C = NULL;
     }
     unk40 = 0;
     unk41 = 0;
@@ -94,12 +95,12 @@ void CLayoutManager::fn_801D6B2C(CLayout *arg1) {
 }
 
 void CLayoutManager::fn_801D6BB0(void) {
-    for (int i = 0; i < unk51; i++) {
+    for (s32 i = 0; i < unk51; i++) {
         delete unk54[i];
     }
     if (unk54) {
         delete[] unk54;
-        unk54 = 0;
+        unk54 = NULL;
     }
     unk50 = 0;
     unk51 = 0;
@@ -110,7 +111,7 @@ CLayout *CLayoutManager::fn_801D6C50(u8 arg1) {
 }
 
 void CLayoutManager::_18(void) {
-    for (int i = 0; i < unk51; i++) {
+    for (s32 i = 0; i < unk51; i++) {
         if (unk54[i]->getUnk10()) {
             unk54[i]->_18(unk4C);
         }
@@ -119,7 +120,7 @@ void CLayoutManager::_18(void) {
 
 void CLayoutManager::_1C(void) {
     fn_801D6D78();
-    for (int i = 0; i < unk51; i++) {
+    for (s32 i = 0; i < unk51; i++) {
         if (unk54[i]->getUnk11()) {
             unk54[i]->_1C(unk4C);
         }
@@ -134,67 +135,66 @@ void CLayoutManager::fn_801D6D78(void) {
 void CLayoutManager::fn_801D6DAC(u8 arg1) {
     unk49 = 0;
     unk48 = arg1;
-    unk44 = new CLayoutManager_sub *[arg1];
-    for (int i = 0; i < unk48; i++) {
-        unk44[i] = new CLayoutManager_sub;
+    mFontInfo = new CFontInfo *[arg1];
+    for (s32 i = 0; i < unk48; i++) {
+        mFontInfo[i] = new CFontInfo;
     }
 }
 
-#define AS_RSFNT(a) ((nw4r::ut::ResFont *)(a))
-#define AS_ARCFNT(a) ((nw4r::ut::ArchiveFont *)(a))
 bool CLayoutManager::fn_801D6E2C(void *arg1, const char *arg2) {
     if (strstr(arg2, ".brfnt")) {
-        unk44[unk49]->unk00 = 0;
-    } else if (strstr(arg2, ".brfna")) {
-        unk44[unk49]->unk00 = 1;
+        mFontInfo[unk49]->fontType = eFontType_ResFont;
     }
-    
-    switch (unk44[unk49]->unk00) {
-        case 0:
-            unk44[unk49]->unk08 = new nw4r::ut::ResFont;
-            AS_RSFNT(unk44[unk49]->unk08)->SetResource(arg1);
-            break;
-        case 1:
-            u32 tempsize = nw4r::ut::ArchiveFont::GetRequireBufferSize(arg1, lbl_80329968);
-            unk44[unk49]->unk0C = new (eHeap_MEM2, 32) u8[tempsize];
-            unk44[unk49]->unk08 = new nw4r::ut::ArchiveFont;
-            AS_ARCFNT(unk44[unk49]->unk08)->Construct(unk44[unk49]->unk0C, tempsize, arg1, lbl_80329968);
-            break;
+    else if (strstr(arg2, ".brfna")) {
+        mFontInfo[unk49]->fontType = eFontType_ArchiveFont;
     }
-    bool ret = unk44[unk49]->unk00 == 1;
-    unk44[unk49]->unk04 = new nw4r::lyt::FontRefLink;
-    unk44[unk49]->unk04->Set(arg2, unk44[unk49]->unk08);
-    unk38->RegistFont(unk44[unk49]->unk04);
+
+    switch (mFontInfo[unk49]->fontType) {
+    case eFontType_ResFont:
+        mFontInfo[unk49]->font = new nw4r::ut::ResFont;
+        mFontInfo[unk49]->getResFont()->SetResource(arg1);
+        break;
+    case eFontType_ArchiveFont:
+        u32 bufferSize = nw4r::ut::ArchiveFont::GetRequireBufferSize(arg1, lbl_80329968);
+        mFontInfo[unk49]->buffer = new (eHeap_MEM2, 32) u8[bufferSize];
+        mFontInfo[unk49]->font = new nw4r::ut::ArchiveFont;
+        mFontInfo[unk49]->getArchiveFont()->Construct(mFontInfo[unk49]->buffer, bufferSize, arg1, lbl_80329968);
+        break;
+    }
+
+    bool isArchiveFont = mFontInfo[unk49]->fontType == eFontType_ArchiveFont;
+
+    mFontInfo[unk49]->unk04 = new nw4r::lyt::FontRefLink;
+    mFontInfo[unk49]->unk04->Set(arg2, mFontInfo[unk49]->font);
+    unk38->RegistFont(mFontInfo[unk49]->unk04);
     unk49++;
-    return ret;
-    
+
+    return isArchiveFont;
 }
 
 void CLayoutManager::fn_801D705C(void) {
-    for (int i = 0; i < unk49; i++) {
-        unk38->UnregistFont(unk44[i]->unk04);
-        switch (unk44[i]->unk00) {
-            case 0:
-                AS_RSFNT(unk44[i]->unk08)->RemoveResource();
-                break;
-            case 1:
-                AS_ARCFNT(unk44[i]->unk08)->Destroy();
-                break;
+    for (s32 i = 0; i < unk49; i++) {
+        unk38->UnregistFont(mFontInfo[i]->unk04);
+        switch (mFontInfo[i]->fontType) {
+        case eFontType_ResFont:
+            mFontInfo[i]->getResFont()->RemoveResource();
+            break;
+        case eFontType_ArchiveFont:
+            mFontInfo[i]->getArchiveFont()->Destroy();
+            break;
         }
-        delete unk44[i]->unk04;
-        delete unk44[i]->unk08;
-        delete[] unk44[i]->unk0C;
-        delete unk44[i];
+        delete mFontInfo[i]->unk04;
+        delete mFontInfo[i]->font;
+        delete[] mFontInfo[i]->buffer;
+        delete mFontInfo[i];
     }
-    if (unk44) {
-        delete[] unk44;
-        unk44 = 0;
+    if (mFontInfo) {
+        delete[] mFontInfo;
+        mFontInfo = NULL;
     }
     unk48 = 0;
     unk49 = 0;
 }
-#undef AS_RSFNT
-#undef AS_ARCFNT
 
 void CLayoutManager::fn_801D717C(f32 arg1, f32 arg2) {
     unk58 = arg1;

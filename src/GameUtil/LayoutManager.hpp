@@ -3,21 +3,13 @@
 
 #include <revolution/types.h>
 #include <revolution/MEM.h>
-#include <nw4r/lyt/arcResourceAccessor.h>
-#include <nw4r/lyt/drawInfo.h>
-#include <nw4r/ut/ResFont.h>
-#include <nw4r/ut/ArchiveFont.h>
+
+#include <nw4r/lyt.h>
+#include <nw4r/ut.h>
+
 #include "Singleton.hpp"
+
 #include "Layout.hpp"
-
-class CLayoutManager_sub { // CFontInfo
-public:
-
-    u8 unk00;
-    nw4r::lyt::FontRefLink *unk04;
-    nw4r::ut::Font *unk08;
-    u8 *unk0C;
-};
 
 class CLayoutManager : public TSingleton<CLayoutManager> {
 public:
@@ -32,7 +24,7 @@ public:
     virtual void _20(s32);
     virtual void _24(s32, const char *);
     virtual void _28(void);
-    
+
     void fn_801D6AEC(u8);
     void fn_801D6B2C(CLayout *);
     void fn_801D6BB0(void);
@@ -59,6 +51,25 @@ public:
         return unk38;
     }
 private:
+    enum EFontType {
+        eFontType_ResFont = 0,      // nw4r::ut::ResFont
+        eFontType_ArchiveFont = 1,  // nw4r::ut::ArchiveFont
+    };
+
+    class CFontInfo {
+    public:
+        u8 fontType; // EFontType
+        nw4r::lyt::FontRefLink *unk04;
+        nw4r::ut::Font *font;
+        u8 *buffer;
+
+        nw4r::ut::ResFont *getResFont(void) {
+            return static_cast<nw4r::ut::ResFont *>(font);
+        }
+        nw4r::ut::ArchiveFont *getArchiveFont(void) {
+            return static_cast<nw4r::ut::ArchiveFont *>(font);
+        }
+    };
 
     u8 *unk04;
     MEMiHeapHead *unk08;
@@ -71,7 +82,7 @@ private:
     nw4r::lyt::ArcResourceLink *unk3C;
     u8 unk40;
     u8 unk41;
-    CLayoutManager_sub **unk44;
+    CFontInfo **mFontInfo;
     u8 unk48;
     u8 unk49;
     nw4r::lyt::DrawInfo *unk4C;
