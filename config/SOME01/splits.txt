@@ -39,6 +39,13 @@ Game/ExScene.cpp:
 	.sbss       start:0x80320198 end:0x803201CC
 	.bss        start:0x8032A1A0 end:0x8032A278
 
+Game/Prologue/MyFlow.cpp:
+	.text       start:0x8000AC24 end:0x8000AD34
+	.rodata     start:0x801F8D78 end:0x801F8D98
+	.data       start:0x802E58C0 end:0x802E5920
+	.sdata      start:0x8031EF50 end:0x8031EF68
+	.sdata2     start:0x803211F8 end:0x80321200
+
 Game/Prologue/ScenePrologue.cpp:
 	.text       start:0x8000AD34 end:0x8000B1D4
 	.rodata     start:0x801F8D98 end:0x801F8E58
@@ -47,6 +54,9 @@ Game/Prologue/ScenePrologue.cpp:
 	.sbss       start:0x80320238 end:0x80320240
 	.bss        start:0x8032A278 end:0x8032A378
 
+Game/BalloonLayout.cpp:
+	.text       start:0x800399E4 end:0x8003A52C
+
 Game/Pseudo3D.cpp:
 	.text       start:0x800729C4 end:0x80072AAC
 	.rodata     start:0x80251F48 end:0x80251F58
@@ -54,12 +64,109 @@ Game/Pseudo3D.cpp:
 	.sdata      start:0x8031F358 end:0x8031F360
 	.sdata2     start:0x80324920 end:0x80324928
 
+Game/Prologue/MyLayout.cpp:
+	.text       start:0x800777C0 end:0x80077908
+	.rodata     start:0x80253E58 end:0x80253E90
+	.data       start:0x802EC308 end:0x802EC338
+	.sdata      start:0x8031F3A0 end:0x8031F3B0
+
+Game/Strap/SceneStrap.cpp:
+	.text       start:0x8007B270 end:0x8007B70C
+	.rodata     start:0x80254648 end:0x802546F0
+	.data       start:0x802EC5F0 end:0x802EC630
+	.sdata      start:0x8031F420 end:0x8031F428
+	.sbss       start:0x803203C0 end:0x803203C8
+	.sdata2     start:0x80324F08 end:0x80324F10
+
+Game/Strap/MyChecker.cpp:
+	.text       start:0x8007B70C end:0x8007B808
+	.rodata     start:0x802546F0 end:0x80254708
+	.data       start:0x802EC630 end:0x802EC688
+	.sdata      start:0x8031F428 end:0x8031F430
+
+Game/Strap/MyFlow.cpp:
+	.text       start:0x8007B808 end:0x8007B95C
+	.rodata     start:0x80254708 end:0x80254718
+	.data       start:0x802EC688 end:0x802EC6C8
+	.sdata      start:0x8031F430 end:0x8031F438
+
 Game/SceneManager.cpp:
 	.text       start:0x80089DF0 end:0x8008B844
 	.rodata     start:0x80255710 end:0x80255888
 	.data       start:0x802ECE20 end:0x802ED310
 	.sdata      start:0x8031F4F8 end:0x8031F508
 	.sdata2     start:0x803251B8 end:0x80325330
+
+Game/ExFlow.cpp:
+	.text       start:0x8008D290 end:0x8008E430
+	.data       start:0x802ED598 end:0x802ED5B8
+
+Game/Logo/MyChecker.cpp:
+	.text       start:0x800A090C end:0x800A0A08
+	.rodata     start:0x802633D0 end:0x802633E8
+	.data       start:0x802EEFE8 end:0x802EF040
+	.sdata      start:0x8031F728 end:0x8031F730
+
+Game/Logo/MyFlow.cpp:
+	.text       start:0x800A0A08 end:0x800A0B5C
+	.rodata     start:0x802633E8 end:0x802633F8
+	.data       start:0x802EF040 end:0x802EF080
+	.sdata      start:0x8031F730 end:0x8031F738
+
+Game/Logo/SceneLogo.cpp:
+	.text       start:0x800A0B5C end:0x800A0DAC
+	.rodata     start:0x802633F8 end:0x80263418
+	.data       start:0x802EF080 end:0x802EF0C0
+	.sdata      start:0x8031F738 end:0x8031F740
+	.sbss       start:0x803204E8 end:0x803204F0
+	.sdata2     start:0x80325C18 end:0x80325C20
+
+Game/AgbGhost/MyFlow.cpp:
+	.text       start:0x800A7208 end:0x800A75DC
+
+Game/AgbGhost/SceneAgbGhost.cpp:
+	.text       start:0x800A75DC end:0x800A8B28
+	.rodata     start:0x80267208 end:0x80267268
+	.data       start:0x802EF598 end:0x802EF5D8
+	.sdata      start:0x8031F7B8 end:0x8031F7C0
+	.sdata2     start:0x80325F38 end:0x80325FE0
+
+Game/Script/CharacterIntro.cpp:
+	.rodata     start:0x802B4278 end:0x802B5D80
+	.sdata2     start:0x80327918 end:0x80327AC0
+
+Game/WindParticle.cpp:
+	.text       start:0x800C3078 end:0x800C378C
+
+Game/Credit/MyChecker.cpp:
+	.text       start:0x800C3A8C end:0x800C3B88
+	.rodata     start:0x802B5D80 end:0x802B5D98
+	.data       start:0x802F07D8 end:0x802F0830
+	.sdata      start:0x8031F958 end:0x8031F960
+
+Game/Credit/MyFlow.cpp:
+	.text       start:0x800C3B88 end:0x800C3FE4
+	.rodata     start:0x802B5D98 end:0x802B5DA8
+	.data       start:0x802F0830 end:0x802F0898
+	.sdata      start:0x8031F960 end:0x8031F968
+	.sdata2     start:0x80327AC0 end:0x80327AC8
+
+Game/Credit/MyLayout.cpp:
+	.text       start:0x800C3FE4 end:0x800C421C
+	.rodata     start:0x802B5DA8 end:0x802B5DE8
+	.data       start:0x802F0898 end:0x802F08C8
+	.sdata      start:0x8031F968 end:0x8031F978
+	.sdata2     start:0x80327AC8 end:0x80327AD0
+	.bss        start:0x8034C850 end:0x8034C860
+
+Game/Credit/SceneCredit.cpp:
+	.text       start:0x800C421C end:0x800C4EF8
+	.rodata     start:0x802B5DE8 end:0x802B5EC0
+	.data       start:0x802F08C8 end:0x802F0908
+	.sdata      start:0x8031F978 end:0x8031F980
+	.sbss       start:0x80320578 end:0x80320580
+	.sdata2     start:0x80327AD0 end:0x80327B30
+	.bss        start:0x8034C860 end:0x8034C878
 
 revolution/base/PPCArch.c:
 	.text       start:0x800D8DD0 end:0x800D8FF0
@@ -2106,7 +2213,7 @@ GameUtil/FaderFlash.cpp:
 	.text       start:0x801D859C end:0x801D85BC
 
 GameUtil/Layout.cpp:
-	.text       start:0x801D85BC end:0x801D9E40
+	.text       start:0x801D9A2C end:0x801D9E40
 	.ctors      start:0x801F7568 end:0x801F756C
 	.data       start:0x803162F8 end:0x803163E0
 	.sbss       start:0x80320FA0 end:0x80320FA8
@@ -2114,6 +2221,10 @@ GameUtil/Layout.cpp:
 
 GameUtil/LayoutAnimation.cpp:
 	.text       start:0x801D9E40 end:0x801DA8A4
+	.rodata     start:0x802E4C38 end:0x802E4C58
+	.data       start:0x803163E0 end:0x803163F0
+	.sdata      start:0x80320038 end:0x80320040
+	.sdata2     start:0x803295A8 end:0x803295C8
 
 GameUtil/Random.cpp:
 	.text       start:0x801DA8A4 end:0x801DAA60
