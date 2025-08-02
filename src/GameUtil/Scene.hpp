@@ -6,10 +6,10 @@
 #include "Mem.hpp"
 
 #define SCENE_DECL_CREATE_FN() static CScene *create(u16 heapId);
-#define SCENE_IMPL_CREATE_FN(sceneClass)     \
-    CScene *sceneClass::create(u16 heapId) { \
+#define SCENE_IMPL_CREATE_FN(_className)     \
+    CScene *_className::create(u16 heapId) { \
         fn_801D369C(heapId);                 \
-        sceneClass *scene = new sceneClass;  \
+        _className *scene = new _className;  \
         fn_801D3644();                       \
         scene->setHeapId(heapId);            \
         return scene;                        \
@@ -17,7 +17,7 @@
 
 class CScene {
 public:
-    typedef CScene* (*CreateFn)(u16 heapId);
+    typedef CScene *(*CreateFn)(u16 heapId);
     enum EState {
         eState_Unprepared = 0,
         eState_Preparing = 1,
