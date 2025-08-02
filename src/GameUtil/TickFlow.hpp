@@ -7,8 +7,21 @@
 
 #include "TickFlowDecl.hpp"
 
+#include "Mem.hpp"
+
+#include <nw4r/lyt.h>
+
+#define TICKFLOW_DECL_CREATE_FN() static CTickFlow *create(void *memory, const TickFlowCode *code, f32 initRest);
+#define TICKFLOW_IMPL_CREATE_FN(_className)                                               \
+    CTickFlow *_className::create(void *memory, const TickFlowCode *code, f32 initRest) { \
+        _className *instance = new (memory) _className(code, initRest);                    \
+        return static_cast<CTickFlow *>(instance);                                       \
+    }
+
 class CTickFlow : public CList {
 public:
+    typedef CTickFlow *(*CreateFn)(void *memory, const TickFlowCode *code, f32 initRest);
+
     CTickFlow *getNext(void) const {
         return static_cast<CTickFlow *>(this->CList::getNext());
     }
@@ -22,16 +35,16 @@ public:
     virtual void finalDestroy(void);
     virtual void _14(void);
     virtual void _18(CTickFlow *); 
-    virtual bool _1C(u32 opcode, u32 arg0, const u32 *args);
+    virtual bool _1C(u32 opcode, u32 arg0, const s32 *args);
 
-    CTickFlow(const TickFlowCode *code, float initRest);
+    CTickFlow(const TickFlowCode *code, f32 initRest);
 
     bool fn_801DD9E8(void);
     
     void fn_801DEF8C(const TickFlowCode *code);
     
-    static void fn_801DEF58(u8, u32, u32);
-    static u32 fn_801DEF78(u8);
+    static void fn_801DEF58(u8 accessIndex, nw4r::lyt::TextBox *textBox, nw4r::lyt::Pane *container);
+    static nw4r::lyt::TextBox *fn_801DEF78(u8 accessIndex);
 
 private:
     u32 fn_801DECFC(const TickFlowCode *code, u32 labelId);
@@ -45,15 +58,15 @@ private:
         bool skipOneInstr
     );
 
-private:
+protected:
     struct ExecutionFrame {
         const TickFlowCode* code;
-        u32 instructionOffset;
+        u32 instructionPos;
     };
 
     const TickFlowCode *mCode;
 
-    s32 mMyCount;
+    s32 mInstanceCount; // Number of this instance of all TickFlow instances created while game is running.
 
     s32 mCategory;
 
