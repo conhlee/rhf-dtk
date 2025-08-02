@@ -97,15 +97,10 @@ bool CFileManager::fn_801D3D58(void) {
     return false;
 }
 
-// In milliseconds.
-static inline s64 getArcUpdateTickDelay() {
-    return 10;
-}
-
 static inline void runArcUpdateTick() {
     gFileManager->fn_801D49D4();
     gFileManager->fn_801D4544();
-    OSSleepTicks(OS_MSEC_TO_TICKS(getArcUpdateTickDelay()));
+    OSSleepTicks(OS_MSEC_TO_TICKS(10ll));
 }
 
 void CFileManager::fn_801D3D94(void) {
@@ -264,7 +259,10 @@ void CFileManager::fn_801D4544(void) {
     }
 }
 
-#define getSZSExpandSize(src) ((((u8*)(src))[4] << 24) | (((u8*)(src))[5] << 16) | (((u8*)(src))[6] << 8) | ((u8*)(src))[7])
+#define getSZSExpandSize(src) ( \
+    (((u8 *)(src))[4] << 24) | (((u8 *)(src))[5] << 16) | \
+    (((u8 *)(src))[6] << 8) | (((u8 *)(src))[7] << 0) \
+)
 
 void *CFileManager::fn_801D461C(void *data, BOOL deleteSrc, EHeapMEM heap, s32 alignment) {
     s32 expandSize = getSZSExpandSize(data);

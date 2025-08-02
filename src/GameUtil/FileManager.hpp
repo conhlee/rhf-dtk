@@ -23,7 +23,7 @@ public:
     void fn_801D3D94(void);
     void fn_801D3E94(void);
     void fn_801D3F94(s32 idx, const char *file, EHeapMEM heap, s32 alignment);
-    void fn_801D412C(s32, DVDFileInfo *);
+    void fn_801D412C(s32 result, DVDFileInfo *fileInfo);
     void fn_801D41CC(s32 idx);
     u32 fn_801D422C(s32 idx, const char *file);
     void *fn_801D4270(s32 idx, const char *file);
@@ -68,7 +68,7 @@ private:
     };
 
     struct ArchiveInfo {
-        DVDFileInfo* mDvdFileInfo;
+        DVDFileInfo *mDvdFileInfo;
         ARCHandle mArcHandle;
         u8 *mArcData;
         EHeapMEM mHeapMode;
@@ -86,12 +86,12 @@ private:
     char mLocaleDir[4];
 
     s32 mFileCount;
-    DVDFileInfo* mDvdFileInfo; // DVDFileInfo[mFileCount]
-    UnusedFileSub* mUnusedFileSub; // UnusedFileSub[mFileCount]
+    DVDFileInfo *mDvdFileInfo; // DVDFileInfo[mFileCount]
+    UnusedFileSub *mUnusedFileSub; // UnusedFileSub[mFileCount]
     bool* mDvdFileInfoActive; // bool[mFileCount]; describes if a mDvdFileInfo slot at the specified index is in use
 
     s32 mArchiveInfoCount;
-    ArchiveInfo* mArchiveInfo; // ArchiveInfo[mArchiveInfoCount]
+    ArchiveInfo *mArchiveInfo; // ArchiveInfo[mArchiveInfoCount]
 
     u8 _pad20[0x10];
 
