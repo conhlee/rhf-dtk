@@ -102,19 +102,19 @@ public:
     s32 sceneIdx(eSceneID sceneID) {
         int i;
 
-        for (i = 0; i < ARRAY_LENGTH(unk04); i++) {
-            if (unk04[i] == sceneID) {
+        for (i = 0; i < ARRAY_LENGTH(mSceneHist); i++) {
+            if (mSceneHist[i] == sceneID) {
                 return i;
             }
-            if (unk04[i] == EScene_Invalid) { // end of scene stack?
+            if (mSceneHist[i] == EScene_Invalid) { // end of scene stack?
                 return -1;
             }
         }
         return -1; // did not find the scene
     }
-private:
 
-    u32 unk04[0x100];
+private:
+    u32 mSceneHist[0x100];
     u8 unk404;
 };
 

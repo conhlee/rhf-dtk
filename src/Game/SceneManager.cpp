@@ -4,6 +4,10 @@
 
 #include "Menu/SceneMenu.hpp"
 #include "Prologue/ScenePrologue.hpp"
+#include "Strap/SceneStrap.hpp"
+#include "Logo/SceneLogo.hpp"
+#include "Credit/SceneCredit.hpp"
+#include "AgbGhost/SceneAgbGhost.hpp"
 
 CSceneManager::CSceneManager(void) {
 
@@ -23,8 +27,8 @@ void CSceneManager::_08(void) {
 
 void CSceneManager::_14(void) {
     unk404 = 0;
-    for (int i = 0; i < (s32)ARRAY_LENGTH(unk04); i++) {
-        unk04[i] = EScene_Invalid;
+    for (s32 i = 0; i < (s32)ARRAY_LENGTH(mSceneHist); i++) {
+        mSceneHist[i] = EScene_Invalid;
     }
 }
 
@@ -82,13 +86,10 @@ extern "C" void fn_8009E9C8(void);
 extern "C" void fn_800C86EC(void);
 extern "C" void fn_800CB2B8(void);
 extern "C" void fn_8009D6B4(void);
-extern "C" void fn_800A76A4(void);
 extern "C" void fn_800A5B24(void);
 extern "C" void fn_800A8FB8(void);
 extern "C" void fn_800AB9C8(void);
 extern "C" void fn_800795D8(void);
-extern "C" void fn_8007B274(void);
-extern "C" void fn_800A0B60(void);
 extern "C" void fn_80092098(void);
 extern "C" void fn_8000EC28(void);
 extern "C" void fn_800A4674(void);
@@ -100,7 +101,6 @@ extern "C" void fn_8009B39C(void);
 extern "C" void fn_8009A1C8(void);
 extern "C" void fn_800B2918(void);
 extern "C" void fn_800B3FBC(void);
-extern "C" void fn_800C4220(void);
 
 // ??
 const char lbl_803251B8[] = "Menu";
@@ -183,7 +183,7 @@ const char *lbl_802ECE20[] = {
 };
 
 void CSceneManager::fn_80089FE0(eSceneID sceneID, const TickFlowCode *tickFlowCode) {
-    CScene::CreateFn fn = 0;
+    CScene::CreateFn fn = NULL;
 
     switch (sceneID) {
         case EScene_0:
@@ -322,7 +322,7 @@ void CSceneManager::fn_80089FE0(eSceneID sceneID, const TickFlowCode *tickFlowCo
             fn = (CScene::CreateFn)fn_8009D6B4;
             break;
         case EScene_2D:
-            fn = (CScene::CreateFn)fn_800A76A4;
+            fn = CSceneAgbGhost::create;
             break;
         case EScene_2E:
             fn = (CScene::CreateFn)fn_800A5B24;
@@ -337,10 +337,10 @@ void CSceneManager::fn_80089FE0(eSceneID sceneID, const TickFlowCode *tickFlowCo
             fn = (CScene::CreateFn)fn_800795D8;
             break;
         case EScene_32:
-            fn = (CScene::CreateFn)fn_8007B274;
+            fn = CSceneStrap::create;
             break;
         case EScene_33:
-            fn = (CScene::CreateFn)fn_800A0B60;
+            fn = CSceneLogo::create;
             break;
         case EScene_34:
             fn = (CScene::CreateFn)fn_80092098;
@@ -379,27 +379,28 @@ void CSceneManager::fn_80089FE0(eSceneID sceneID, const TickFlowCode *tickFlowCo
             fn = (CScene::CreateFn)fn_800B3FBC;
             break;
         case EScene_40:
-            fn = (CScene::CreateFn)fn_800C4220;
+            fn = CSceneCredit::create;
             break;
     }
 
     gGameManager->_20(fn, 3);
     gGameManager->_34(tickFlowCode);
 
-    for (int i = ARRAY_LENGTH(unk04) - 1; i > 0; i--) {
-        unk04[i] = unk04[i - 1];
+    for (int i = ARRAY_LENGTH(mSceneHist) - 1; i > 0; i--) {
+        mSceneHist[i] = mSceneHist[i - 1];
     }
-    unk04[0] = sceneID;
-    if (unk04[1] == EScene_Invalid) {
-        OSReport("Scene Change [ NULL ] → [ %s ]\n", lbl_802ECE20[unk04[0]]);
-    } else {
-        OSReport("Scene Change [ %s ] → [ %s ]\n", lbl_802ECE20[unk04[1]], lbl_802ECE20[unk04[0]]);
+
+    mSceneHist[0] = sceneID;
+    if (mSceneHist[1] == EScene_Invalid) {
+        OSReport("Scene Change [ NULL ] → [ %s ]\n", lbl_802ECE20[mSceneHist[0]]);
+    }
+    else {
+        OSReport("Scene Change [ %s ] → [ %s ]\n", lbl_802ECE20[mSceneHist[1]], lbl_802ECE20[mSceneHist[0]]);
     }
 }
 
 
 // TODO: migrate these vars into their respective scene files
-extern s32 lbl_80320144;
 extern s32 lbl_80320378;
 extern s32 lbl_80320380;
 extern s32 lbl_80320308;
@@ -449,12 +450,9 @@ extern s32 lbl_80320500;
 extern s32 lbl_80320510;
 extern s32 lbl_80320518;
 extern s32 lbl_803203BC;
-extern s32 lbl_803203C0;
-extern s32 lbl_803204E8;
 extern s32 lbl_803204A8;
 extern s32 lbl_80320270;
 extern s32 lbl_803204F8;
-extern s32 lbl_8032023C;
 extern s32 lbl_80320250;
 extern s32 lbl_80320260;
 extern s32 lbl_803205A0;
@@ -463,12 +461,11 @@ extern s32 lbl_803204C8;
 extern s32 lbl_803204B8;
 extern s32 lbl_80320528;
 extern s32 lbl_80320530;
-extern s32 lbl_80320578;
 
 void CSceneManager::fn_8008A4DC(eSceneID sceneID, u32 ver) {
     switch (sceneID) {
         case EScene_0:
-            lbl_80320144 = ver;
+            Menu::sceneVer = ver;
             break;
         case EScene_1:
             lbl_80320378 = ver;
@@ -618,10 +615,10 @@ void CSceneManager::fn_8008A4DC(eSceneID sceneID, u32 ver) {
             lbl_803203BC = ver;
             break;
         case EScene_32:
-            lbl_803203C0 = ver;
+            Strap::sceneVer = ver;
             break;
         case EScene_33:
-            lbl_803204E8 = ver;
+            Logo::sceneVer = ver;
             break;
         case EScene_34:
             lbl_803204A8 = ver;
@@ -633,7 +630,7 @@ void CSceneManager::fn_8008A4DC(eSceneID sceneID, u32 ver) {
             lbl_803204F8 = ver;
             break;
         case EScene_37:
-            lbl_8032023C = ver;
+            Prologue::sceneVer = ver;
             break;
         case EScene_38:
             lbl_80320250 = ver;
@@ -660,7 +657,7 @@ void CSceneManager::fn_8008A4DC(eSceneID sceneID, u32 ver) {
             lbl_80320530 = ver;
             break;
         case EScene_40:
-            lbl_80320578 = ver;
+            Credit::sceneVer = ver;
             break;
     }
 }
@@ -711,13 +708,10 @@ extern "C" void fn_8009EA84(void);
 extern "C" void fn_800C8810(void);
 extern "C" void fn_800CB354(void);
 extern "C" void fn_8009D718(void);
-extern "C" void fn_800A772C(void);
 extern "C" void fn_800A5BA4(void);
 extern "C" void fn_800A9034(void);
 extern "C" void fn_800ABBC8(void);
 extern "C" void fn_8007963C(void);
-extern "C" void fn_8007B2D8(void);
-extern "C" void fn_800A0BC4(void);
 extern "C" void fn_80092104(void);
 extern "C" void fn_8000EC8C(void);
 extern "C" void fn_800A46D8(void);
@@ -729,7 +723,6 @@ extern "C" void fn_8009B458(void);
 extern "C" void fn_8009A22C(void);
 extern "C" void fn_800B297C(void);
 extern "C" void fn_800B4020(void);
-extern "C" void fn_800C42AC(void);
 
 void CSceneManager::fn_8008A704(eSceneID sceneID) {
     switch (sceneID) {
@@ -869,7 +862,7 @@ void CSceneManager::fn_8008A704(eSceneID sceneID) {
             fn_8009D718();
             break;
         case EScene_2D:
-            fn_800A772C();
+            CSceneAgbGhost::fn_800A772C();
             break;
         case EScene_2E:
             fn_800A5BA4();
@@ -884,10 +877,10 @@ void CSceneManager::fn_8008A704(eSceneID sceneID) {
             fn_8007963C();
             break;
         case EScene_32:
-            fn_8007B2D8();
+            CSceneStrap::fn_8007B2D8();
             break;
         case EScene_33:
-            fn_800A0BC4();
+            CSceneLogo::fn_800A0BC4();
             break;
         case EScene_34:
             fn_80092104();
@@ -926,7 +919,7 @@ void CSceneManager::fn_8008A704(eSceneID sceneID) {
             fn_800B4020();
             break;
         case EScene_40:
-            fn_800C42AC();
+            CSceneCredit::fn_800C42AC();
             break;
     }
 }
@@ -1105,31 +1098,38 @@ void CSceneManager::fn_8008A8D8(void) {
     bool temp_r29 = false;
     bool temp_r28 = false;
 
-    if (unk04[0] == EScene_3C) {
-        int i = sceneIdx(EScene_35);
-        int j = sceneIdx(EScene_3D);
+    if (mSceneHist[0] == EScene_3C) {
+        s32 i = sceneIdx(EScene_35);
+        s32 j = sceneIdx(EScene_3D);
 
         if ((i >= 1) && (j >= 1)) {
             if (i < j) {
                 temp_r31 = true;
-            } else if (j < i) {
+            }
+            else if (j < i) {
                 temp_r29 = true;
             }
-        } else if (i >= 1) {
+        }
+        else if (i >= 1) {
             temp_r31 = true;
-        } else if (j >= 1) {
+        }
+        else if (j >= 1) {
             temp_r29 = true;
-        } else {
+        }
+        else {
             temp_r28 = true;
         }
-    } else if ((unk04[0] == EScene_34) || (unk04[0] == EScene_35)) {
+    }
+    else if ((mSceneHist[0] == EScene_34) || (mSceneHist[0] == EScene_35)) {
         temp_r28 = true;
-    } else {
+    }
+    else {
         if (fn_80009FB4()) {
             temp_r29 = true;
-        } else {
-            int i = sceneIdx(EScene_35);
-            int j = sceneIdx(EScene_36);
+        }
+        else {
+            s32 i = sceneIdx(EScene_35);
+            s32 j = sceneIdx(EScene_36);
 
             if ((i >= 1) && (j >= 1)) {
                 if (i < j) {
@@ -1149,40 +1149,43 @@ void CSceneManager::fn_8008A8D8(void) {
 
     if (temp_r31) {
         gTickFlowManager->fn_801E1CC0(lbl_80253E18);
-    } else if (temp_r30) {
+    }
+    else if (temp_r30) {
         switch (lbl_803204F8) {
-            case 0:
-                gTickFlowManager->fn_801E1CC0(lbl_8027C3E8);
-                break;
-            case 1:
-                gTickFlowManager->fn_801E1CC0(lbl_8027C424);
-                break;
-            case 2:
-                gTickFlowManager->fn_801E1CC0(lbl_8027C460);
-                break;
-            case 5:
-                gTickFlowManager->fn_801E1CC0(lbl_8027C49C);
-                break;
+        case 0:
+            gTickFlowManager->fn_801E1CC0(lbl_8027C3E8);
+            break;
+        case 1:
+            gTickFlowManager->fn_801E1CC0(lbl_8027C424);
+            break;
+        case 2:
+            gTickFlowManager->fn_801E1CC0(lbl_8027C460);
+            break;
+        case 5:
+            gTickFlowManager->fn_801E1CC0(lbl_8027C49C);
+            break;
         }
-    } else if (temp_r29) {
+    }
+    else if (temp_r29) {
         gTickFlowManager->fn_801E1CC0(lbl_80256F30);
-    } else if (temp_r28) {
+    }
+    else if (temp_r28) {
         OSReport("Invalid Scene Change 0002\n");
     }
 }
 
 u32 CSceneManager::fn_8008B058(s32 idx) {
-    return unk04[idx];
+    return mSceneHist[idx];
 }
 
 void CSceneManager::fn_8008B068(void) {
-    for (int i = 0; i < (s32)ARRAY_LENGTH(unk04); i++) {
-        unk04[i] = EScene_Invalid;
+    for (s32 i = 0; i < (s32)ARRAY_LENGTH(mSceneHist); i++) {
+        mSceneHist[i] = EScene_Invalid;
     }
 }
 
 bool CSceneManager::fn_8008B0FC(s32 idx, u32 sceneID) {
-    return unk04[idx] == sceneID;
+    return mSceneHist[idx] == sceneID;
 }
 
 bool CSceneManager::fn_8008B118(eSceneID sceneID) {
@@ -1197,13 +1200,13 @@ bool CSceneManager::fn_8008B27C(void) {
     if (gSceneManager->sceneIdx(EScene_35) < 0) {
         return false;
     }
-    int i = sceneIdx(EScene_35);
-    int j = sceneIdx(EScene_36);
+    s32 i = sceneIdx(EScene_35);
+    s32 j = sceneIdx(EScene_36);
     if ((j != -1) && (j < i)) {
         return false;
     }
 
-    int k = sceneIdx(EScene_40);
+    s32 k = sceneIdx(EScene_40);
     if ((k != -1) && (k < i)) {
         return false;
     }
