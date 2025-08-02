@@ -16,6 +16,8 @@
 
 #include "Menu/MenuData.inc"
 
+#include "rev_tengoku.rsid"
+
 wchar_t CSceneMenu::sTextBuffer[1024];
 wchar_t CSceneMenu::sEntryNumTextBuffer[16];
 
@@ -23,6 +25,12 @@ static u8 lbl_80320140;
 static u8 lbl_80320141;
 static u8 lbl_80320142;
 static u8 lbl_80320143;
+
+namespace Menu {
+
+s32 sceneVer;
+
+} // namespace Menu
 
 SCENE_IMPL_CREATE_FN(CSceneMenu)
 
@@ -57,6 +65,11 @@ namespace {
 
 class CMenuLayout : public CLayout {
 public:
+    virtual ~CMenuLayout(void);
+    virtual void _10(void);
+    virtual void _14(void);
+    virtual void _20(void);
+
     CMenuLayout() {
         setUnk0C(0);
     }
@@ -68,17 +81,12 @@ public:
         return mPaneComment;
     }
 
-    virtual ~CMenuLayout(void);
-    virtual void _10(void);
-    virtual void _14(void);
-    virtual void _20(void);
-
 private:
     nw4r::lyt::TextBox *mPaneTitle;
     nw4r::lyt::TextBox *mPaneComment;
 };
 
-}
+} // namespace
 
 void CSceneMenu::_14(void) {
     gSceneManager->fn_8008B068();
@@ -198,26 +206,24 @@ void CSceneMenu::_20(void) {
     fn_80008A20();
 }
 
-// TODO: wibo bork on utf-16
 void CSceneMenu::fn_800077A8(u8 arg1) {
     lbl_80320143 = arg1;
-    s32 temp_r26 = 20;
-    s32 tempdiv = (lbl_80320143 / 20);
-    if (tempdiv == 5) {
-        temp_r26 = 6;
-    }
 
-    swprintf(sTextBuffer, sizeof(sTextBuffer), L"");
+    s32 entriesPerPage = 20;
+    s32 pageIdx = (lbl_80320143 / entriesPerPage);
+    
+    s32 entriesInThisPage = (pageIdx == 5) ? 6 : entriesPerPage;
+
+    swprintf(sTextBuffer, ARRAY_LENGTH(sTextBuffer), L"");
     wcscat(sTextBuffer, mUnk34);
     wcscat(sTextBuffer, L"\n");
-    tempdiv *= 20;
 
-    for (int i = 0; i < temp_r26; tempdiv++, i++) {
-        // TODO: reg weirdness here
-        swprintf(sEntryNumTextBuffer, sizeof(sEntryNumTextBuffer), L"%03d : ", tempdiv);
-        wcscat(sTextBuffer, (tempdiv == lbl_80320143) ? L"→" : L"　");
+    for (s32 i = 0; i < entriesInThisPage; i++) {
+        s32 entryNum = (pageIdx * 20) + i;
+        swprintf(sEntryNumTextBuffer, ARRAY_LENGTH(sEntryNumTextBuffer), L"%03d : ", entryNum);
+        wcscat(sTextBuffer, (entryNum == lbl_80320143) ? L"→" : L"　");
         wcscat(sTextBuffer, sEntryNumTextBuffer);
-        wcscat(sTextBuffer, lbl_801F8460[tempdiv].labelText);
+        wcscat(sTextBuffer, lbl_801F8460[entryNum].labelText);
         wcscat(sTextBuffer, L"\n");
     }
 
@@ -229,8 +235,7 @@ void CSceneMenu::fn_800077A8(u8 arg1) {
         menuLayout->getTitlePane()->SetString(sTextBuffer);
         menuLayout->getTitlePane()->SetVisible(true);
     }
-
-    swprintf(sTextBuffer, sizeof(sTextBuffer), L"");
+    swprintf(sTextBuffer, ARRAY_LENGTH(sTextBuffer), L"");
     wcscat(sTextBuffer, L"<操作説明、コメント>\n");
     wcscat(sTextBuffer, lbl_801F8460[lbl_80320143].commentText);
 
@@ -242,8 +247,7 @@ void CSceneMenu::fn_800077A8(u8 arg1) {
         menuLayout->getCommentPane()->SetString(sTextBuffer);
         menuLayout->getCommentPane()->SetVisible(true);
     }
-
-    gSoundManager->fn_801E4F60(0x116);
+    gSoundManager->fn_801E4F60(SE_CURSOR);
 }
 
 void CMenuLayout::_14(void) {
@@ -251,8 +255,12 @@ void CMenuLayout::_14(void) {
 }
 
 void CMenuLayout::_10(void) {
-    u32 size;
-    buildLayout(gLayoutManager->getUnk38()->GetResource(0, brlytFiles[0], &size), gLayoutManager->getUnk38());
+    nw4r::lyt::MultiArcResourceAccessor *resAccessor = gLayoutManager->getUnk38();
+
+    u32 layoutBinSize;
+    void *layoutBin = resAccessor->GetResource(0, layoutFileTable[0], &layoutBinSize);
+
+    buildLayout(layoutBin, resAccessor);
 
     gMessageManager->fn_80088474(getLayout()->GetRootPane());
 
@@ -266,9 +274,12 @@ void CMenuLayout::_10(void) {
 
     mPaneTitle->SetScale(nw4r::math::VEC2(.9f, .9f));
     mPaneComment->SetScale(nw4r::math::VEC2(.9f, .9f));
+
     mPaneTitle->SetTranslate(titleTranslate);
     mPaneComment->SetTranslate(commentTranslate);
+
     fn_801D9B10();
+
     mPaneTitle->SetVisible(false);
     mPaneComment->SetVisible(false);
 }
@@ -277,15 +288,12 @@ CMenuLayout::~CMenuLayout(void) {
     _14();
 }
 
-
 void CSceneMenu::_1C(void) {
-    CExScene::_1C();
+    this->CExScene::_1C();
 }
 
 void CSceneMenu::_18(void) {
-    CExScene::_18();
+    this->CExScene::_18();
 }
 
-CSceneMenu::~CSceneMenu(void) {
-
-}
+CSceneMenu::~CSceneMenu(void) {}

@@ -7,8 +7,10 @@
 
 #include "Scene.hpp"
 
-const char msgTest_brlyt[] = "msgTest.brlyt";
-static const char *brlytFiles[] = { msgTest_brlyt, NULL };
+#include "Script/CharacterIntro.hpp"
+
+const char layoutFile_msgTest[] = "msgTest.brlyt";
+static const char *layoutFileTable[] = { layoutFile_msgTest, NULL };
 
 // TODO: move these out
 TFD_EXTERN(lbl_801F96A8)
@@ -19,7 +21,6 @@ TFD_EXTERN(lbl_80256044)
 TFD_EXTERN(lbl_80259540)
 TFD_EXTERN(lbl_8025B500)
 TFD_EXTERN(lbl_80285E30)
-TFD_EXTERN(lbl_802B5D40)
 TFD_EXTERN(lbl_80256F30)
 TFD_EXTERN(lbl_80296E88)
 TFD_EXTERN(lbl_80296EC4)
@@ -310,7 +311,8 @@ TFD_STOP()
 
 // Menu Table
 
-const wchar_t lbl_803210FC[] = L"";
+// TODO: get this string to end up in .sdata2 instead of .sbss2
+const wchar_t lbl_803210FC[] = L"\0\0";
 
 const wchar_t lbl_801F78BC[] = L"ゲーム選択";
 const wchar_t lbl_801F78C8[] =

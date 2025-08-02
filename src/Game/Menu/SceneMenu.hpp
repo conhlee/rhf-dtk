@@ -5,6 +5,12 @@
 #include "Layout.hpp"
 #include "ExScene.hpp"
 
+namespace Menu {
+
+extern s32 sceneVer;
+
+} // namespace Menu
+
 class CSceneMenu : public CExScene {
 public:
     virtual ~CSceneMenu(void);
