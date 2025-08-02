@@ -26,8 +26,7 @@ void *operator new(size_t size) {
         OSReport(" Required : %d B\n", size);
         OSReport(" Free     : %d B\n", MEMGetTotalFreeSizeForExpHeap(lbl_80320F84));
         OSReport(" Max Size : %d B\n", MEMGetAllocatableSizeForExpHeap(lbl_80320F84));
-        OSReport(" Total    : %d B\n", lbl_80320F84->end - (u32)lbl_80320F84);
-    
+        OSReport(" Total    : %d B\n", (u8 *)lbl_80320F84->end - (u8 *)lbl_80320F84);
     }
     return object;
 }
@@ -52,8 +51,7 @@ void *operator new[](size_t size) {
         OSReport(" Required : %d B\n", size);
         OSReport(" Free     : %d B\n", MEMGetTotalFreeSizeForExpHeap(lbl_80320F84));
         OSReport(" Max Size : %d B\n", MEMGetAllocatableSizeForExpHeap(lbl_80320F84));
-        OSReport(" Total    : %d B\n", lbl_80320F84->end - (u32)lbl_80320F84);
-    
+        OSReport(" Total    : %d B\n", (u8 *)lbl_80320F84->end - (u8 *)lbl_80320F84);
     }
     return object;
 }
@@ -98,18 +96,18 @@ void fn_801D3564(void) {
 
 // Initialize the heaps
 void fn_801D3568(void) {
-    if (!lbl_80320F88) {      
+    if (!lbl_80320F88) {
         void *arena1Lo = OSGetMEM1ArenaLo();
         void *arena1Hi = OSGetMEM1ArenaHi();
-        lbl_80320F80 = MEMCreateExpHeapEx(arena1Lo, (u32)arena1Hi - (u32)arena1Lo, 0);
+        lbl_80320F80 = MEMCreateExpHeapEx(arena1Lo, (u8 *)arena1Hi - (u8 *)arena1Lo, 0);
         OSSetMEM1ArenaLo(arena1Hi);
-        
+
         void *arena2Lo = OSGetMEM2ArenaLo();
         void *arena2Hi = OSGetMEM2ArenaHi();
-        u32 size = (u32)arena2Hi - (u32)arena2Lo;
+        u32 size = (u8 *)arena2Hi - (u8 *)arena2Lo;
         if (size > 0x4000000) {
             size -= 0x4000000;
-            (u32 *)arena2Hi -= 0x1000000;
+            arena2Hi = (void *)((u8 *)arena2Hi - 0x4000000);
         }
         lbl_80320F84 = MEMCreateExpHeapEx(arena2Lo, size, 0);
         OSSetMEM2ArenaLo(arena2Hi);
@@ -134,7 +132,7 @@ u16 fn_801D363C(void) {
 
 void fn_801D3644(void) {
     u32 id;
-    
+
     id = lbl_803D5C28[--lbl_80320F89];
     MEMSetGroupIDForExpHeap(lbl_80320F80, id);
     MEMSetGroupIDForExpHeap(lbl_80320F84, id);
