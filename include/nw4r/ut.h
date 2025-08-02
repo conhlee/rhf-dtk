@@ -7,11 +7,12 @@
 #include <nw4r/ut/Color.h>
 #include <nw4r/ut/Font.h>
 #include <nw4r/ut/LinkList.h>
-#include <nw4r/ut/NonCopyable.h>
+#include <nw4r/ut/inlines.h>
 #include <nw4r/ut/Rect.h>
 #include <nw4r/ut/ResFont.h>
 #include <nw4r/ut/ResFontBase.h>
 #include <nw4r/ut/RuntimeTypeInfo.h>
+#include <nw4r/ut/TagProcessor.h>
 #include <nw4r/ut/TagProcessorBase.h>
 #include <nw4r/ut/TextWriter.h>
 #include <nw4r/ut/TextWriterBase.h>

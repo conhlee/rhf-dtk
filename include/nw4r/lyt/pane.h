@@ -47,6 +47,9 @@ public:
     void SetTranslate(const math::VEC3 &value) {
         mTranslate = value;
     }
+    void SetTranslate(const math::VEC2 &value) {
+        mTranslate = nw4r::math::VEC3(value.x, value.y, 0.0f);
+    }
     void SetScale(const math::VEC2 &value) {
         mScale = value;
     }

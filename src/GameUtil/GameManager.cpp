@@ -293,7 +293,7 @@ void CGameManager::DvdMessageData::fn_801D77A4() {
 }
 
 void CGameManager::DvdMessageData::fn_801D7A74() {
-    nw4r::ut::TextWriterWide textWriter;
+    nw4r::ut::WideTextWriter textWriter;
 
     textWriter.SetFont(this->font);
     textWriter.SetCharSpace(2.0f);

@@ -5,6 +5,7 @@
 #include <revolution/MEM.h>
 #include <nw4r/ut/LinkList.h>
 #include <nw4r/ut/Rect.h>
+#include <nw4r/ut/TagProcessor.h>
 #include <nw4r/lyt/animation.h>
 #include <nw4r/lyt/pane.h>
 #include <nw4r/lyt/group.h>
@@ -13,14 +14,28 @@
 namespace nw4r {
 namespace lyt {
 
+// TODO: BAD!
+class AnimResource;
+
 class Layout {
 public:
-
     static MEMAllocator *mspAllocator;
 
     Layout();
     virtual ~Layout();
-    virtual bool Build(const void *lytResBuf, ResourceAccessor *pResAcsr);
+    virtual bool Build(const void *, ResourceAccessor *);
+    virtual AnimTransform *CreateAnimTransform();
+    virtual AnimTransform *CreateAnimTransform(const void *, ResourceAccessor *);
+    virtual AnimTransform *CreateAnimTransform(const AnimResource &, ResourceAccessor *);
+    virtual void BindAnimation(AnimTransform *);
+    virtual void UnbindAnimation(AnimTransform *);
+    virtual void UnbindAllAnimation();
+    virtual bool BindAnimationAuto(const AnimResource &, ResourceAccessor *);
+    virtual void SetAnimationEnable(AnimTransform *, bool);
+    virtual void CalculateMtx(const DrawInfo &);
+    virtual void Draw(const DrawInfo &);
+    virtual void Animate(unsigned long);
+    virtual void SetTagProcessor(ut::WideTagProcessor* pProcessor);
 
     ut::Rect GetLayoutRect() const;
     Pane *GetRootPane() {

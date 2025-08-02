@@ -9,7 +9,7 @@ namespace ut {
 
 typedef TextWriterBase<char> TextWriter;
 
-typedef TextWriterBase<wchar_t> TextWriterWide;
+typedef TextWriterBase<wchar_t> WideTextWriter;
 
 } // namespace ut
 } // namespace nw4r

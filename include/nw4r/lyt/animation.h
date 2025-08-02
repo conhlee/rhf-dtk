@@ -12,9 +12,23 @@ struct AnimationBlock;
 
 class AnimTransform {
 public:
-
     AnimTransform();
-    virtual ~AnimTransform();
+    virtual ~AnimTransform(); // at 0x8
+
+    u16 GetFrameSize() const;
+
+    bool IsLoopData() const;
+
+    f32 GetFrame() const {
+        return mFrame;
+    }
+    void SetFrame(f32 frame) {
+        mFrame = frame;
+    }
+
+    f32 GetFrameMax() const {
+        return static_cast<f32>(GetFrameSize());
+    }
 
     ut::LinkListNode mLink;
 
