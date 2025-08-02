@@ -1,7 +1,7 @@
 #include "ExScene.hpp"
 
 CExScene::CExScene(void) {
-    unk10 = 0;
+    mPauseLayout = NULL;
     unk14 = 0;
     unk18 = 0;
 }

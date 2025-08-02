@@ -2,7 +2,11 @@
 #define GAME_EXSCENE_HPP
 
 #include <revolution/types.h>
+
 #include "Scene.hpp"
+
+#include "PauseLayout.hpp"
+
 #include "CellAnim.hpp"
 
 class CExScene : public CScene {
@@ -22,8 +26,10 @@ public:
 
     void fn_80008A20(void);
 
-private:
-    u32 unk10;
+    void fn_80008FC0(bool, u32);
+
+protected:
+    CPauseLayout *mPauseLayout;
     u32 unk14;
     u32 unk18;
     CCellAnim *unk1C;
