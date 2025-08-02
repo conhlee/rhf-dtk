@@ -10,6 +10,7 @@
 
 class CInputCheckManager : public TSingleton<CInputCheckManager> {
 public:
+    typedef void (*FuncUnk418)(u32);
 
     virtual void _08(void);
     virtual ~CInputCheckManager(void);
@@ -21,7 +22,7 @@ public:
     void fn_801E8BD0(void);
     void *fn_801E9144(u32);
     void fn_801E9150(void *);
-    void fn_801E9158(CInputChecker *);
+    void fn_801E9158(CInputChecker *, bool);
     void fn_801E9204(void);
     void fn_801E923C(u32);
     bool fn_801E93E0(u32, f32, f32);
@@ -45,8 +46,12 @@ public:
     u8 getUnk42E(void) {
         return unk42E;
     }
-private:
 
+    void setUnk418(FuncUnk418 func) {
+        unk418 = func;
+    }
+
+private:
     u8 *unk04;
     MEMiHeapHead *unk08;
     CInputChecker *unk0C;
@@ -58,7 +63,7 @@ private:
     } unk10[0x40];
     u32 unk410;
     void (*unk414)(void);
-    void (*unk418)(u32);
+    FuncUnk418 unk418;
     u8 unk41C;
     u8 pad41D[0x420 - 0x41d];
     u32 unk420;
@@ -89,7 +94,7 @@ private:
     static s32 fn_801E85AC(u32);
 
     void resetUnk0C(void) {
-        for (CInputChecker *cur = unk0C, *next; cur != 0; cur = next) {
+        for (CInputChecker *cur = unk0C, *next; cur != NULL; cur = next) {
             next = cur->getNext();
             if (!cur->_18()) {
                 continue;
@@ -99,13 +104,12 @@ private:
             }
             cur->removeCurrent();
         }
-        for (int i = 0; i < 4; i++) {
-            if (!(unk474[i] > (f64)0)) {
-                continue;
-            }
-            unk474[i] -= gTickFlowManager->fn_801E2698();
-            if (unk474[i] <= (f64)0) {
-                unk474[i] = 0.f;
+        for (s32 i = 0; i < 4; i++) {
+            if (unk474[i] > 0.0) {
+                unk474[i] -= gTickFlowManager->fn_801E2698();
+                if (unk474[i] <= 0.0) {
+                    unk474[i] = 0.0f;
+                }
             }
         }
     }
@@ -115,7 +119,7 @@ private:
             if (!unk10[i].unk0) {
                 continue;
             }
-            
+
             unk10[i].unk8 += gTickFlowManager->fn_801E2698();
             if (!(unk10[i].unk8 > unk10[i].unkC)) {
                 continue;
