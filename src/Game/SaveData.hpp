@@ -8,7 +8,7 @@ struct SaveDataFile {
     u8 pad00[0x280];
 
     void fn_80077C0C(s8);
-    
+
     s8 fn_80077DF8(void);
     u8 fn_80077E08(void);
     void fn_800786E4(void);

@@ -2,15 +2,11 @@
 
 CRandom sRandom;
 
-
 CRandom::CRandom(u32 seed) {
     mX = seed;
     mSeed = seed;
 }
-
-CRandom::~CRandom(void) {
-
-}
+CRandom::~CRandom(void) {}
 
 u32 CRandom::nextU32(void) {
     mX = 7567025607324980273 * mX + 5279421;
@@ -31,4 +27,3 @@ f32 CRandom::nextF32(void) {
 f32 CRandom::nextF32(f32 range) {
     return range * nextF32();
 }
-

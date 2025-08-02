@@ -55,7 +55,7 @@ public:
         return false; // TODO
     }
     virtual void _4C(void);
-    
+
     CController(s32);
     void fn_801D4DDC(void);
     void fn_801D4E38(u32);
@@ -81,7 +81,7 @@ public:
         }
         fn_801D4EA4(temp, arg0);
     }
-    
+
     u32 getUnk133C(void) {
         return unk133C;
     }

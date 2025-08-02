@@ -79,7 +79,7 @@ void CController::fn_801D4EA4(u32 arg1, u32 arg2) {
     unk1340 = 0;
     u32 xorarg1 = xorinput & arg1;
     u32 xorarg2 = xorinput & arg2;
-    
+
     for (int i = 0; i < (s32)ARRAY_LENGTH(unk1344); i++) {
         u32 temp_r12 = 1 << i;
         if (unk1344[i]) {

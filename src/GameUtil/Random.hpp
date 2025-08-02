@@ -6,14 +6,15 @@
 
 class CRandom {
 public:
+    virtual ~CRandom(void);
+
     CRandom(void) {
         mX = 0;
         mSeed = 0;
         reseed();
     }
     CRandom(u32 seed);
-    virtual ~CRandom(void);
-    
+
     void reseed(void) {
         u32 seed = OSGetTick();
 
@@ -23,6 +24,7 @@ public:
 
     u32 nextU32(void);
     u32 nextU32(u32 range);
+
     f32 nextF32(void);
     f32 nextF32(f32 range);
 
