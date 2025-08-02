@@ -234,8 +234,10 @@ cflags_game = [
     *cflags_base,
     "-RTTI on",
     "-str readonly",
+    "-use_lmw_stmw on",
     "-func_align 4",
     "-enc multibyte",
+    "-ipa file",
 ]
 
 # Metrowerks library flags
