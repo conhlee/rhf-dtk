@@ -27,7 +27,7 @@ private:
     u8 mUnk0C;
 
     u8 *mHeapStart;
-    MEMiHeapHead *mExpHeap;
+    MEMiHeapHead *mHeap;
 };
 
 extern CVarParamManager *gVarParamManager;
