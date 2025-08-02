@@ -38,6 +38,9 @@ public:
     u16 fn_801E4144(s32);
     bool fn_801E4178(void);
 
+    s32 getUnk1C(void) {
+        return unk1C;
+    }
     u8 getUnk6D(void) {
         return unk6D;
     }
