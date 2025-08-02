@@ -162,6 +162,12 @@ typedef enum _GXChannelID {
     GX_COLOR_NULL = 255
 } GXChannelID;
 
+typedef enum _GXCITexFmt {
+    GX_TF_C4 = 8,
+    GX_TF_C8,
+    GX_TF_C14X2,
+} GXCITexFmt;
+
 // TODO: Fabricated names from patent
 typedef enum _GXClipMode {
     // "ClipDisable" in XF mem, so 0 = enable
