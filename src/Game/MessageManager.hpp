@@ -2,7 +2,7 @@
 #define GAME_MESSAGEMANAGER_HPP
 
 #include <revolution/types.h>
-#include <nw4r/lyt/pane.h>
+#include <nw4r/lyt.h>
 #include "Singleton.hpp"
 
 class CMessageManager : public TSingleton<CMessageManager> {
