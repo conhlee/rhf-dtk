@@ -20,6 +20,8 @@ void *operator new[](size_t, EHeapMEM, s32);
 void operator delete(void *);
 void operator delete[](void *);
 
+inline void *operator new(size_t, void *p) { return p; }
+
 void fn_801D3564(void);
 void fn_801D3634(void);
 void fn_801D3638(u32);
