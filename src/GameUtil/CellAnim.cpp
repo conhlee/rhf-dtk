@@ -22,7 +22,7 @@ void CCellAnim::init(u8 id, u16 animID) {
     mDestroyAtEnd = false;
     mDisableAtEnd = false;
     mTempoUpdate = false;
-    mTempoUpdateRate = 120;
+    mTempo = 120;
     mPos = nw4r::math::VEC2(0.0f, 0.0f);
     mSize = nw4r::math::VEC2(1.0f, 1.0f);
     mAngle = 0.0f;
@@ -55,7 +55,7 @@ bool CCellAnim::update(void) {
             f32 speed;
             if (mTempoUpdate) {
                 f32 currTempo = gTickFlowManager->fn_801E2CA8();
-                f32 cellTempo = mTempoUpdateRate;
+                f32 cellTempo = mTempo;
                 f32 d = (currTempo - cellTempo);
                 if (((-2.0 < d) && (d < 2.0))) {
                     speed = mSpeed;
