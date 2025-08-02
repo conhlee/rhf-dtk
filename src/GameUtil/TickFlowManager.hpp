@@ -24,8 +24,18 @@ public:
 
     void fn_801E1E4C(void);
     void fn_801E1CC0(const TickFlowCode *code, f32 initRest = 0.0f);
+    void fn_801E2540(CTickFlow *);
     f32 fn_801E2698(void);
+    void fn_801E26A8(void);
+    f32 fn_801E2928(f32);
+    void fn_801E2B9C(f32);
+    void fn_801E2C04(f32);
     f32 fn_801E2CA8(void);
+    void fn_801E3E2C(f32, u32);
+    f32 fn_801E3EA8(s32);
+    s32 fn_801E4124(void);
+    void fn_801E4134(s32, u16);
+    u16 fn_801E4144(s32);
     bool fn_801E4178(void);
 
     u8 getUnk6D(void) {
