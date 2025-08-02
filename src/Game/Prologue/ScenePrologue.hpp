@@ -4,8 +4,22 @@
 #include <revolution/types.h>
 #include "ExScene.hpp"
 
+namespace Prologue {
+
+class CMyFlow; // Forward-declaration
+
+extern s32 sceneVer;
+
+void fn_8000B13C(char *, u32);
+void fn_8000B160(char *);
+void fn_8000B180(u32);
+u32 fn_8000B188(void);
+
+} // namespace Prologue
+
 class CScenePrologue : public CExScene {
 public:
+    friend class Prologue::CMyFlow;
 
     virtual void _10(void);
     virtual void _14(void);
@@ -15,18 +29,11 @@ public:
     virtual bool _24(void);
     virtual void _28(void);
 
-    CScenePrologue() {
-
-    }
+    CScenePrologue() {}
 
     SCENE_DECL_CREATE_FN()
 
     static void fn_8000AD98(void);
 };
-
-void fn_8000B13C(char *, u32);
-void fn_8000B160(char *);
-void fn_8000B180(u32);
-u32 fn_8000B188(void);
 
 #endif

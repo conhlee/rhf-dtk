@@ -1,19 +1,31 @@
 #include "Prologue/ScenePrologue.hpp"
+
 #include "Prologue/MyLayout.hpp"
-#include "Mem.hpp"
+#include "Prologue/MyFlow.hpp"
+
+#include <stdio.h>
+
 #include "FileManager.hpp"
 #include "SceneManager.hpp"
-#include "SaveData.hpp"
 #include "BackupManager.hpp"
 #include "CellAnimManager.hpp"
 #include "LayoutManager.hpp"
 #include "TickFlowManager.hpp"
 
-#include <stdio.h>
+#include "SaveData.hpp"
+
+#include "Mem.hpp"
+
+#include "cellanim/prologue/rcad_prologue_labels.h"
 
 static char lbl_8032A278[0x100];
 static u32 lbl_80320238;
-s32 lbl_8032023C;
+
+namespace Prologue {
+
+s32 sceneVer;
+
+} // namespace Prologue
 
 SCENE_IMPL_CREATE_FN(CScenePrologue)
 
@@ -27,12 +39,7 @@ void CScenePrologue::fn_8000AD98(void) {
 }
 
 void CScenePrologue::_10(void) {
-    fn_801D369C(2);
-    if (gFileManager->fn_801D42E0(51)) {
-        gFileManager->fn_801D3F94(51, "content2/cellanim/prologue/cellanim.szs", eHeap_MEM2, 32);
-        gFileManager->fn_801D3F94(91, lbl_8032A278, eHeap_MEM2, 32);
-    }
-    fn_801D3644();
+    fn_8000AD98();
 }
 
 bool CScenePrologue::_24(void) {
@@ -45,9 +52,6 @@ extern "C" void fn_80084FC8(u32);
 extern "C" void fn_8000C5F4(u8);
 
 extern "C" void fn_801ED7D4(void *);
-extern "C" void fn_801DCF94(void *, s32); // maybe CCellAnim
-
-extern "C" void fn_8000AC24(void); // TODO Prologue::CMyFlow::create
 
 void CScenePrologue::_14(void) {
     fn_8000818C();
@@ -69,26 +73,33 @@ void CScenePrologue::_14(void) {
     }
 
     void *brcadAddr = gFileManager->fn_801D4270(51, "./prologue.brcad");
+
     u32 tplLen = gFileManager->fn_801D422C(51, "./cellanim.tpl");
     void *tplAddr = gFileManager->fn_801D4270(51, "./cellanim.tpl");
     fn_801ED7D4(tplAddr);
     DCStoreRange(tplAddr, tplLen);
+
     gCellAnimManager->fn_801DB568(brcadAddr, tplAddr, 0);
-    fn_801DCF94(gCellAnimManager->fn_801DBE7C(0, 0), -1);
+
+    CCellAnim *cellAnim = gCellAnimManager->fn_801DBE7C(0, prologue_mask);
+
+    cellAnim->fn_801DCF94(-1);
+
     gLayoutManager->_20(1);
     gLayoutManager->_24(91, "");
+
     gLayoutManager->fn_801D6AEC(1);
     gLayoutManager->registerLayout<Prologue::CMyLayout>();
-    gTickFlowManager->_1C(fn_8000AC24, 0x100);
+
+    gTickFlowManager->registerFlow<Prologue::CMyFlow>();
+
     fn_801D3638(300);
 }
 
-void CScenePrologue::_28(void) {
-
-}
+void CScenePrologue::_28(void) {}
 
 void CScenePrologue::_1C(void) {
-    CExScene::_1C();
+    this->CExScene::_1C();
 }
 
 void CScenePrologue::_20(void) {
@@ -99,23 +110,22 @@ void CScenePrologue::_20(void) {
     fn_80008A20();
 }
 
-void fn_8000B13C(char *arg0, u32 arg1) {
-    sprintf(lbl_8032A278, "content2/layout/layout_prologue_%s_ver%d.szs", arg0, arg1);
+void Prologue::fn_8000B13C(char *name, u32 ver) {
+    sprintf(lbl_8032A278, "content2/layout/layout_prologue_%s_ver%d.szs", name, ver);
 }
 
-void fn_8000B160(char *arg0) {
-    sprintf(lbl_8032A278, "content2/layout/layout_prologue_%s_2play.szs", arg0);
+void Prologue::fn_8000B160(char *name) {
+    sprintf(lbl_8032A278, "content2/layout/layout_prologue_%s_2play.szs", name);
 }
 
-void fn_8000B180(u32 arg0) {
+void Prologue::fn_8000B180(u32 arg0) {
     lbl_80320238 = arg0;
 }
 
-u32 fn_8000B188(void) {
+u32 Prologue::fn_8000B188(void) {
     return lbl_80320238;
 }
 
-
 void CScenePrologue::_18(void) {
-    CExScene::_18();
+    this->CExScene::_18();
 }
