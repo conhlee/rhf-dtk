@@ -35,6 +35,10 @@ public:
 
     CGameManager(void);
 
+    CScene *getCurrentScene(void) const {
+        return mCurrentScene;
+    }
+
     static void fn_801D7538(s32 dvdDriveStatus);
 
 private:
