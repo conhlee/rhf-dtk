@@ -3,31 +3,34 @@
 
 #include <revolution/types.h>
 
-struct BrcadTransform {
-    s16 posX, posY;
-    f32 scaleX, scaleY;
-    f32 angle;
-};
-
-struct BrcadAnimationKey {
-    u16 spriteIndex;
-    u16 holdFrames;
-    BrcadTransform transform;
-    u8 opacity;
-};
-
 struct CellAnimSpritePart {
     u16 regionX, regionY;
     u16 regionW, regionH;
     u16 texNumber;
-    BrcadTransform transform;
+    s16 posX, posY;
+    f32 scaleX, scaleY;
+    f32 angle;
     bool flipX, flipY;
     u8 opacity;
 };
 
 struct CellAnimSprite {
-    u16 partNum;
-    CellAnimSpritePart *parts;
+    u16 partCount;
+    CellAnimSpritePart* parts;
+};
+
+struct CellAnimAnimationKey {
+    u16 spriteIndex;
+    u16 frameCount;
+    s16 posX, posY;
+    f32 scaleX, scaleY;
+    f32 angle;
+    u8 opacity;
+};
+
+struct CellAnimAnimation {
+    u16 keyCount;
+    CellAnimAnimationKey* keys;
 };
 
 #endif
