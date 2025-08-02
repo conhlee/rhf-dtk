@@ -39,7 +39,7 @@ void CGraphicManager::_14(GXRenderModeObj *renderMode, GXColor *clearColor, u32 
     GXSetViewport(0.0f, 0.0f, mRenderMode->fbWidth, mRenderMode->efbHeight, 0.0f, 1.0f);
     GXSetScissor(0, 0, mRenderMode->fbWidth, mRenderMode->efbHeight);
 
-    float yScaleFactor = GXGetYScaleFactor(mRenderMode->efbHeight, mRenderMode->xfbHeight);
+    f32 yScaleFactor = GXGetYScaleFactor(mRenderMode->efbHeight, mRenderMode->xfbHeight);
     u16 yLineCount = GXSetDispCopyYScale(yScaleFactor);
 
     GXSetDispCopySrc(0, 0, mRenderMode->fbWidth, mRenderMode->efbHeight);

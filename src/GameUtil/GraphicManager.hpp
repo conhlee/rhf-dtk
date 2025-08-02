@@ -21,6 +21,8 @@ public:
     void fn_801D6514(GXRenderModeObj *renderMode);
     void fn_801D6680(void);
 
+    GXRenderModeObj *getRenderMode(void) const { return mRenderMode; }
+
 private:
     static GXRenderModeObj sRenderModeObj;
 
