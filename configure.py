@@ -314,6 +314,7 @@ config.libs = [
             Object(Matching, "Game/Strap/SceneStrap.cpp"),
             Object(Matching, "Game/Strap/MyChecker.cpp"),
             Object(Matching, "Game/Strap/MyFlow.cpp"),
+            Object(Matching, "Game/SNDHeap.cpp"),
             Object(Matching, "Game/SceneManager.cpp"),
             Object(NonMatching, "Game/ExFlow.cpp"),
             Object(Matching, "Game/Logo/MyChecker.cpp"),
