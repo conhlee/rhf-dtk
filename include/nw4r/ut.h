@@ -7,6 +7,7 @@
 #include <nw4r/ut/Color.h>
 #include <nw4r/ut/Font.h>
 #include <nw4r/ut/LinkList.h>
+#include <nw4r/ut/lock.h>
 #include <nw4r/ut/inlines.h>
 #include <nw4r/ut/Rect.h>
 #include <nw4r/ut/ResFont.h>
