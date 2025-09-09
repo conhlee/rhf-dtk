@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_GX_LIGHT_H
 #define RVL_SDK_GX_LIGHT_H
-#include <types.h>
+#include <revolution/types.h>
 
 #include <revolution/GX/GXTypes.h>
 #ifdef __cplusplus
@@ -8,8 +8,7 @@ extern "C" {
 #endif
 
 typedef struct _GXLightObj {
-private:
-    u8 data[64];
+    u8 _data[64];
 } GXLightObj;
 
 void GXInitLightAttn(GXLightObj* light, f32 aa, f32 ab, f32 ac, f32 ka, f32 kb,

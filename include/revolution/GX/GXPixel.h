@@ -14,7 +14,10 @@ void GXSetAlphaUpdate(GXBool enable);
     
 void GXSetZMode(GXBool enableTest, GXCompare func, GXBool enableUpdate);
 
+void GXGetPixelFmt(GXPixelFmt *pixelFmt, GXZFmt *zFmt);
 void GXSetPixelFmt(GXPixelFmt pixelFmt, GXZFmt zFmt);
+
+void GXSetDither(GXBool enable);
 
 #ifdef __cplusplus
 }

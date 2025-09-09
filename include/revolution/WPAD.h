@@ -18,11 +18,14 @@ typedef enum {
 } WPADChan;
 
 typedef enum {
-    WPAD_RESULT_ERR_3 = -3,
-    WPAD_RESULT_ERR_2,
-    WPAD_RESULT_ERR_1,
+    WPAD_ERR_OK = 0,
+    WPAD_ERR_NO_CONTROLLER = -1,
+    WPAD_ERR_COMMUNICATION_ERROR = -2,
+    WPAD_ERR_TRANSFER = -3,
+    WPAD_ERR_INVALID = -4,
+    WPAD_ERR_CORRUPTED = -7,
 
-    WPAD_RESULT_SUCCESS = 0,
+    WPAD_ERR_BUSY = WPAD_ERR_COMMUNICATION_ERROR,
 } WPADResult;
 
 typedef struct DPDObject {
@@ -91,7 +94,7 @@ u32 WPADGetWorkMemorySize(void);
 
 u8 WPADGetSensorBarPosition(void);
 
-s32 WPADProbe(s32 chan, u32 *type);
+s32 WPADProbe(s32 chan, s32 *type);
 
 void WPADControlMotor(s32 chan, u32 onOff);
 

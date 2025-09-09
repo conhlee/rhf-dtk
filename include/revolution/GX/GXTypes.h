@@ -168,6 +168,11 @@ typedef enum _GXCITexFmt {
     GX_TF_C14X2,
 } GXCITexFmt;
 
+typedef enum _GXClearZ {
+    GX_CLEAR_Z_MIN = 0,
+    GX_CLEAR_Z_MAX = (1 << 24) - 1,
+} GXClearZ;
+
 // TODO: Fabricated names from patent
 typedef enum _GXClipMode {
     // "ClipDisable" in XF mem, so 0 = enable
@@ -554,10 +559,12 @@ typedef enum _GXTevRegID {
 } GXTevRegID;
 
 typedef enum _GXTevScale {
-    GX_TEV_SCALE_0,
-    GX_TEV_SCALE_1,
-    GX_TEV_SCALE_2,
-    GX_TEV_SCALE_3,
+    GX_CS_SCALE_1,
+    GX_CS_SCALE_2,
+    GX_CS_SCALE_4,
+    GX_CS_DIVIDE_2,
+
+    GX_MAX_TEVSCALE
 } GXTevScale;
 
 typedef enum _GXTevStageID {

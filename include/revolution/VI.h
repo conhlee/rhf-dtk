@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include <revolution/VI/vi.h>
+#include <revolution/VI/vihardware.h>
 
 #ifdef __cplusplus
 }

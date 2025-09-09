@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_GX_FRAMEBUF_H
 #define RVL_SDK_GX_FRAMEBUF_H
 #include <revolution/GX/GXTypes.h>
-#include <types.h>
+#include <revolution/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,6 +47,8 @@ void GXCopyDisp(void*, GXBool);
 void GXCopyTex(void*, GXBool);
 
 f32 GXGetYScaleFactor(u16 efbHeight, u16 xfbHeight);
+
+void GXPixModeSync();
 
 #ifdef __cplusplus
 }

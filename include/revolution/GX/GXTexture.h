@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_GX_TEXTURE_H
 #define RVL_SDK_GX_TEXTURE_H
-#include <types.h>
+#include <revolution/types.h>
 
 #include <revolution/GX/GXTypes.h>
 #ifdef __cplusplus
@@ -8,21 +8,17 @@ extern "C" {
 #endif
 
 typedef struct _GXTexObj {
-private:
-    u32 data[8];
+    u32 _data[8];
 } GXTexObj;
 typedef struct _GXTlutObj {
-private:
-    u8 data[0x0C];
+    u8 _data[0x0C];
 } GXTlutObj;
 
 typedef struct _GXTexRegion {
-private:
-    u8 data[16];
+    u8 _data[16];
 } GXTexRegion;
 typedef struct _GXTlutRegion {
-private:
-    u8 data[16];
+    u8 _data[16];
 } GXTlutRegion;
 
 typedef GXTexRegion* (*GXTexRegionCallback)(const GXTexObj* pObj,
