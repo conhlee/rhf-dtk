@@ -4,7 +4,7 @@
 #include <internal/wprintf.h>
 #include <internal/wstring.h>
 #include <limits.h>
-#include <types.h>
+#include <revolution/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

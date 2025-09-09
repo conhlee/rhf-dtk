@@ -1,7 +1,7 @@
 #ifndef MSL_WCHAR_IO_H
 #define MSL_WCHAR_IO_H
 #include <internal/file_io.h>
-#include <types.h>
+#include <revolution/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

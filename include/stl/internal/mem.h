@@ -1,6 +1,6 @@
 #ifndef MSL_MEM_H
 #define MSL_MEM_H
-#include <types.h>
+#include <revolution/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
