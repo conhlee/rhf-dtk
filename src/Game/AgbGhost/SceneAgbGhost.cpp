@@ -147,8 +147,8 @@ void CSceneAgbGhost::_14(void) {
 
     mPauseLayout = gLayoutManager->getLayout<CPauseLayout>(0);
 
-    gLayoutManager->getLayout<CPauseLayout>(0)->setUnk11(0);
-    gLayoutManager->getLayout<CCursorLayout>(1)->setUnk11(0);
+    gLayoutManager->getLayout<CPauseLayout>(0)->setDrawEnable(0);
+    gLayoutManager->getLayout<CCursorLayout>(1)->setDrawEnable(0);
 
     mUnk110.setEasing(0, 1);
     mUnk168.setEasing(3, 2);

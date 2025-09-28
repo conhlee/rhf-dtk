@@ -15,12 +15,12 @@ void CLayout::_0C(void) {
 
     mAnimations = new CLayoutAnimation[mAnimationCount];
 
-    mUnk10 = 1;
-    mUnk11 = 1;
+    mUpdateEnable = true;
+    mDrawEnable = true;
 }
 
 void CLayout::fn_801D9B10(void) {
-    mUnk12 = 1;
+    mApplyManagerScale = true;
     mScaleX = 1.0f;
     mScaleY = 1.0f;
 }
@@ -38,7 +38,7 @@ void CLayout::_18(nw4r::lyt::DrawInfo *drawInfo) {
     f32 scaleX = mScaleX;
     f32 scaleY = mScaleY;
 
-    if (mUnk12 != 0) {
+    if (mApplyManagerScale) {
         scaleX *= gLayoutManager->fn_801D7188();
         scaleY *= gLayoutManager->fn_801D7190();
     }
@@ -84,5 +84,5 @@ void CLayout::_20(nw4r::lyt::DrawInfo *drawInfo) {
 }
 
 void CLayout::fn_801D9E24(bool enable) {
-    mUnk12 = enable;
+    mApplyManagerScale = enable;
 }

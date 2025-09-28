@@ -184,8 +184,8 @@ void CSceneCredit::_14(void) {
     mPauseLayout = gLayoutManager->getLayout<CPauseLayout>(1);
     mPauseLayout->setUnk1D(0);
 
-    gLayoutManager->getLayout<CPauseLayout>(1)->setUnk11(0);
-    gLayoutManager->getLayout<CCursorLayout>(2)->setUnk11(0);
+    gLayoutManager->getLayout<CPauseLayout>(1)->setDrawEnable(0);
+    gLayoutManager->getLayout<CCursorLayout>(2)->setDrawEnable(0);
 
     mScreenScroll.setEasing(2, 2);
 

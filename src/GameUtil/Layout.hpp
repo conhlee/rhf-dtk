@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CLAYOUT_HPP
-#define GAMEUTIL_CLAYOUT_HPP
+#ifndef GAMEUTIL_LAYOUT_HPP
+#define GAMEUTIL_LAYOUT_HPP
 
 #include <revolution/types.h>
 
@@ -28,34 +28,30 @@ public:
     nw4r::lyt::Layout *getLayout(void) {
         return mLayout;
     }
-
-    CLayoutAnimation *getAnimations(void) {
-        return mAnimations;
-    }
     CLayoutAnimation *getAnimation(u32 index) {
         return &mAnimations[index];
     }
 
-    void buildLayout(const void *buf, nw4r::lyt::ResourceAccessor *resAccessor) {
-        getLayout()->Build(buf, resAccessor);
+    void buildLayout(const void *binAddr, nw4r::lyt::ResourceAccessor *resAccessor) {
+        getLayout()->Build(binAddr, resAccessor);
     }
-    void setUnk0C(s32 arg0) {
-        mAnimationCount = arg0;
-    }
-    u8 getUnk10(void) {
-        return mUnk10;
+    void setAnimationCount(s32 count) {
+        mAnimationCount = count;
     }
 
-    u8 getUnk11(void) { return mUnk11; }
-    void setUnk11(u8 unk) { mUnk11 = unk; }
+    bool getUpdateEnable(void) const { return mUpdateEnable; }
+    void setUpdateEnable(bool enabled) { mUpdateEnable = enabled; }
+
+    bool getDrawEnable(void) const { return mDrawEnable; }
+    void setDrawEnable(bool enabled) { mDrawEnable = enabled; }
 
 private:
     nw4r::lyt::Layout *mLayout;
     CLayoutAnimation *mAnimations; // CLayoutAnimation[mAnimationCount]
     s32 mAnimationCount;
-    u8 mUnk10;
-    u8 mUnk11;
-    u8 mUnk12;
+    bool mUpdateEnable;
+    bool mDrawEnable;
+    bool mApplyManagerScale;
     f32 mScaleX;
     f32 mScaleY;
 };
