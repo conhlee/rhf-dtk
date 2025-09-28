@@ -7,7 +7,7 @@ const char layoutFile_prologue[] = "prologue.brlyt";
 const char *layoutFileTable[] = { layoutFile_prologue, NULL };
 
 void Prologue::CMyLayout::_10(void) {
-    nw4r::lyt::MultiArcResourceAccessor *resAccessor = gLayoutManager->getUnk38();
+    nw4r::lyt::MultiArcResourceAccessor *resAccessor = gLayoutManager->getResAccessor();
 
     u32 layoutBinSize;
     void *layoutBin = resAccessor->GetResource(0, layoutFileTable[0], &layoutBinSize);

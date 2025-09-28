@@ -47,7 +47,7 @@ public:
         return static_cast<T *>(fn_801D6C50(index));
     }
 
-    nw4r::lyt::MultiArcResourceAccessor *getUnk38(void) {
+    nw4r::lyt::MultiArcResourceAccessor *getResAccessor(void) {
         return mResAccessor;
     }
 private:
@@ -81,16 +81,21 @@ private:
     MEMAllocator mTempAllocator;
 
     nw4r::lyt::MultiArcResourceAccessor *mResAccessor;
+
     nw4r::lyt::ArcResourceLink *mResLink; // nw4r::lyt::ArcResourceLink[mMaxResLinkCount]
     u8 mMaxResLinkCount;
     u8 mResLinkCount;
+
     CFontInfo **mFontInfo; // CFontInfo *[mMaxFontCount]
     u8 mMaxFontCount;
     u8 mFontCount;
+
     nw4r::lyt::DrawInfo *mDrawInfo;
+
     u8 mMaxLayoutCount;
     u8 mLayoutCount;
     CLayout **mLayout; // CLayout *[mMaxLayoutCount]
+
     f32 mScaleX;
     f32 mScaleY;
 };

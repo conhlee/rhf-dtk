@@ -255,7 +255,7 @@ void CMenuLayout::_14(void) {
 }
 
 void CMenuLayout::_10(void) {
-    nw4r::lyt::MultiArcResourceAccessor *resAccessor = gLayoutManager->getUnk38();
+    nw4r::lyt::MultiArcResourceAccessor *resAccessor = gLayoutManager->getResAccessor();
 
     u32 layoutBinSize;
     void *layoutBin = resAccessor->GetResource(0, layoutFileTable[0], &layoutBinSize);

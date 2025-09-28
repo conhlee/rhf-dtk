@@ -16,10 +16,10 @@ __declspec(section ".sdata") const char * const layoutFileTable[] = { layoutFile
 char sPaneNameBuf[16];
 
 void Credit::CMyLayout::_10(void) {
-    nw4r::lyt::MultiArcResourceAccessor *resAccessor = gLayoutManager->getUnk38();
+    nw4r::lyt::MultiArcResourceAccessor *resAccessor = gLayoutManager->getResAccessor();
 
     u32 layoutBinSize;
-    void *layoutBin = gLayoutManager->getUnk38()->GetResource(0, layoutFileTable[0], &layoutBinSize);
+    void *layoutBin = gLayoutManager->getResAccessor()->GetResource(0, layoutFileTable[0], &layoutBinSize);
 
     buildLayout(layoutBin, resAccessor);
 
