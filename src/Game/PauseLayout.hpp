@@ -11,7 +11,7 @@ public:
     virtual void _10(void);
 
     CPauseLayout(void) {
-        setUnk0C(3);
+        setAnimationCount(3);
     }
 
     void setUnk1D(u8 unk) { mUnk1D = unk; }

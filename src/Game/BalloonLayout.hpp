@@ -16,7 +16,7 @@ public:
     virtual void _14(void);
 
     CBalloonLayout(void) {
-        setUnk0C(0);
+        setAnimationCount(0);
     }
 
     void fn_800399E4(void);

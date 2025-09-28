@@ -11,7 +11,7 @@ public:
     virtual void _10(void);
 
     CCursorLayout(void) {
-        setUnk0C(0);
+        setAnimationCount(0);
     }
 
 private:

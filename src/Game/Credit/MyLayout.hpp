@@ -14,7 +14,7 @@ public:
     virtual void _14(void);
 
     CMyLayout(void) {
-        setUnk0C(0);
+        setAnimationCount(0);
     }
 
     void fn_800C416C(s32, f32, f32);

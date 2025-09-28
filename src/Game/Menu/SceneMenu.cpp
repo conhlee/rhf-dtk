@@ -71,7 +71,7 @@ public:
     virtual void _20(void);
 
     CMenuLayout() {
-        setUnk0C(0);
+        setAnimationCount(0);
     }
 
     nw4r::lyt::TextBox *getTitlePane(void) {

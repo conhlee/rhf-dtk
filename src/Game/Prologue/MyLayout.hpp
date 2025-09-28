@@ -13,7 +13,7 @@ public:
     virtual void _10(void);
 
     CMyLayout(void) {
-        setUnk0C(1);
+        setAnimationCount(1);
     }
 
     void fn_8007785C(u32 animIndex);
