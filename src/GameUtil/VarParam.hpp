@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CVARPARAMMANAGER_HPP
-#define GAMEUTIL_CTICKFLOWMANAGER_HPP
+#ifndef GAMEUTIL_VARPARAMMANAGER_HPP
+#define GAMEUTIL_VARPARAMMANAGER_HPP
 
 #include <revolution/types.h>
 #include "Singleton.hpp"
@@ -22,7 +22,7 @@ public:
 private:
     static void fn_801ED44C(void);
 
-    CVarParam *mFirstVarParam;
+    CVarParam *mVarParamHead;
     s32 mDisplayMode;
     u8 mUnk0C;
 
