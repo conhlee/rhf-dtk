@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CTICKFLOW_HPP
-#define GAMEUTIL_CTICKFLOW_HPP
+#ifndef GAMEUTIL_TICKFLOW_HPP
+#define GAMEUTIL_TICKFLOW_HPP
 
 #include <revolution/types.h>
 
@@ -14,8 +14,8 @@
 #define TICKFLOW_DECL_CREATE_FN() static CTickFlow *create(void *memory, const TickFlowCode *code, f32 initRest);
 #define TICKFLOW_IMPL_CREATE_FN(_className)                                               \
     CTickFlow *_className::create(void *memory, const TickFlowCode *code, f32 initRest) { \
-        _className *instance = new (memory) _className(code, initRest);                    \
-        return static_cast<CTickFlow *>(instance);                                       \
+        _className *instance = new (memory) _className(code, initRest);                   \
+        return static_cast<CTickFlow *>(instance);                                        \
     }
 
 class CTickFlow : public CList {
