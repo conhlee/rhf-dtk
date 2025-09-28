@@ -10,7 +10,7 @@
 
 const char layoutFile_credit[] = "credit.brlyt";
 
-__declspec(section ".sdata") const char * const layoutFileTable[] = { layoutFile_credit, NULL };
+DECL_SECTION(".sdata") const char * const layoutFileTable[] = { layoutFile_credit, NULL };
 // TODO: ^^ hack!
 
 char sPaneNameBuf[16];
