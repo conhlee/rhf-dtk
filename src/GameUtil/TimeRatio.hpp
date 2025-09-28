@@ -45,15 +45,13 @@ public:
 
     void fn_801EA550(f32 newTime, f32 newMaxTime, bool stopAtMaxTime);
 
-    void setEasingType(s32 type) { mEasingType = type; }
-    void setEasingPower(s32 power) { mEasingPower = power; }
-
     void setEasing(s32 type, s32 power) {
         mEasingType = type;
         mEasingPower = power;
     }
 
     bool getIsTicking(void) const { return mTicking; }
+    void setIsTicking(bool ticking) { mTicking = ticking; }
 
     f32 getOutputStart(void) const { return mOutputStart; }
     f32 getOutputEnd(void) const { return mOutputEnd; }
