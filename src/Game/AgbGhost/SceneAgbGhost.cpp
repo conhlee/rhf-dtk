@@ -22,6 +22,8 @@
 
 #include "Random.hpp"
 
+#include "cellanim/agbGhost/ver0/rcad_ghost_labels.h"
+
 #include "rev_tengoku.rsid"
 
 namespace AgbGhost {
@@ -36,14 +38,14 @@ void CSceneAgbGhost::fn_800A75DC(u32 button) {
         bool isArrowReady = (scene->mBowArrowAnim->getAnimID() == 3) &&
                             (scene->mBowArrowAnim->fn_801DD43C() != 0);
         if (isArrowReady) {
-            scene->mBowArrowAnim->fn_801DD0AC(4);
+            scene->mBowArrowAnim->fn_801DD0AC(ghost_arrow_shoot);
 
-            CCellAnim *arrowMissAnim = gCellAnimManager->fn_801DBE7C(0, 5);
+            CCellAnim *arrowMissAnim = gCellAnimManager->fn_801DBE7C(0, ghost_arrow_miss);
             arrowMissAnim->fn_801DCF94(2500);
             arrowMissAnim->setPos(-147.0f, -70.0f);
             arrowMissAnim->fn_801DD184(5);
 
-            gSoundManager->fn_801E4F60(SE_AGB_AIM_DOOR, 0.0f, NULL); // TODO: RSID
+            gSoundManager->fn_801E4F60(SE_AGB_AIM_DOOR, 0.0f, NULL);
         }
     }
 }
@@ -75,7 +77,7 @@ void CSceneAgbGhost::_14(void) {
 
     gTickFlowManager->registerFlow<AgbGhost::CMyFlow>();
 
-    fn_80008FC0(true, 0x9F); // TODO: RSID
+    fn_80008FC0(true, WSD_AGB_SHIROI_OBAKE);
 
     void *ghost_brcadAddr = gFileManager->fn_801D4270(2, "./ghost.brcad");
 
@@ -87,9 +89,9 @@ void CSceneAgbGhost::_14(void) {
 
     gCellAnimManager->fn_801DB568(ghost_brcadAddr, ghost_tplAddr, 0);
 
-    CCellAnim *bgBackAnim = gCellAnimManager->fn_801DBE7C(0, 0);
-    CCellAnim *bgMaskAnim = gCellAnimManager->fn_801DBE7C(0, 1);
-    CCellAnim *bgFrontAnim = gCellAnimManager->fn_801DBE7C(0, 1);
+    CCellAnim *bgBackAnim = gCellAnimManager->fn_801DBE7C(0, ghost_bg_back);
+    CCellAnim *bgMaskAnim = gCellAnimManager->fn_801DBE7C(0, ghost_bg_front);
+    CCellAnim *bgFrontAnim = gCellAnimManager->fn_801DBE7C(0, ghost_bg_front);
 
     bgBackAnim->fn_801DCF94(3000);
     bgMaskAnim->fn_801DCF94(1000);
@@ -97,38 +99,38 @@ void CSceneAgbGhost::_14(void) {
 
     bgFrontAnim->fn_801DD2B4(1);
 
-    mBowArrowAnim = gCellAnimManager->fn_801DBE7C(0, 3);
+    mBowArrowAnim = gCellAnimManager->fn_801DBE7C(0, ghost_arrow_ready);
     mBowArrowAnim->fn_801DCF94(300);
     mBowArrowAnim->setPos(1000.0f, 107.0f);
 
-    mGhostAnim = gCellAnimManager->fn_801DBE7C(0, 6);
+    mGhostAnim = gCellAnimManager->fn_801DBE7C(0, ghost_ghost_step);
     mGhostAnim->fn_801DCF94(2000);
     mGhostAnim->setEnabled(false);
 
-    mBgTreeAnim = gCellAnimManager->fn_801DBE7C(0, 2);
+    mBgTreeAnim = gCellAnimManager->fn_801DBE7C(0, ghost_bg_tree);
     mBgTreeAnim->fn_801DCF94(2900);
     mBgTreeAnim->fn_801DD1F0(2);
     mBgTreeAnim->setPos(260.0f, -60.0f);
 
-    mDoorAnim = gCellAnimManager->fn_801DBE7C(0, 15);
+    mDoorAnim = gCellAnimManager->fn_801DBE7C(0, ghost_door_close);
     mDoorAnim->fn_801DCF38();
     mDoorAnim->setPos(-146.0f, -69.0f);
     mDoorAnim->fn_801DCF94(2800);
 
-    mDoorMaskAnim = gCellAnimManager->fn_801DBE7C(0, 16);
+    mDoorMaskAnim = gCellAnimManager->fn_801DBE7C(0, ghost_door_mask);
     mDoorMaskAnim->setPosX(mDoorAnim->getPosX());
     mDoorMaskAnim->setPosY(mDoorAnim->getPosY());
     mDoorMaskAnim->fn_801DCF94(1500);
     mDoorMaskAnim->setEnabled(false);
 
     for (s32 i = 0; i < (s32)ARRAY_LENGTH(mRainAnim); i++) {
-        mRainAnim[i] = gCellAnimManager->fn_801DBE7C(0, 18);
+        mRainAnim[i] = gCellAnimManager->fn_801DBE7C(0, ghost_rain_fast);
         mRainAnim[i]->fn_801DCF94(200);
         mRainAnim[i]->setEnabled(false);
     }
 
     for (s32 i = 0; i < (s32)ARRAY_LENGTH(mRainRippleAnim); i++) {
-        mRainRippleAnim[i] = gCellAnimManager->fn_801DBE7C(0, 19);
+        mRainRippleAnim[i] = gCellAnimManager->fn_801DBE7C(0, ghost_ripple);
         mRainRippleAnim[i]->fn_801DCF94(500);
         mRainRippleAnim[i]->setEnabled(false);
     }
@@ -197,13 +199,13 @@ void CSceneAgbGhost::_28(void) {
             CCellAnim *rainAnim = mRainAnim[mRainNext];
             CCellAnim *rainRippleAnim = mRainRippleAnim[mRainRippleNext];
 
-            rainAnim->fn_801DD0AC(18);
+            rainAnim->fn_801DD0AC(ghost_rain_fast);
 
             f32 rainPosY = sRandom.nextF32(180.0f) - (180.0f / 2.0f);
             f32 rainPosX = sRandom.nextF32(832.0f) - (832.0f / 2.0f);
             rainAnim->setPos(rainPosX, rainPosY);
 
-            rainRippleAnim->fn_801DD0AC(19);
+            rainRippleAnim->fn_801DD0AC(ghost_ripple);
 
             f32 rainRipplePosY = sRandom.nextF32(180.0f) + (180.0f / 6.0f);
             f32 rainRipplePosX = sRandom.nextF32(832.0f) - (832.0f / 2.0f);
@@ -242,10 +244,10 @@ void CSceneAgbGhost::fn_800A7FA8(u32 button, u32 type) {
         bool isArrowReady = (mBowArrowAnim->getAnimID() == 3) &&
                             (mBowArrowAnim->fn_801DD43C() != 0);
         if (isArrowReady) {
-            mBowArrowAnim->fn_801DD0AC(4);
+            mBowArrowAnim->fn_801DD0AC(ghost_arrow_shoot);
 
             if (type != 0) {
-                CCellAnim *arrowMissAnim = gCellAnimManager->fn_801DBE7C(0, 5);
+                CCellAnim *arrowMissAnim = gCellAnimManager->fn_801DBE7C(0, ghost_arrow_miss);
                 arrowMissAnim->fn_801DCF94(2500);
                 arrowMissAnim->setPos(-147.0f, -70.0f);
                 arrowMissAnim->fn_801DD184(5);
@@ -258,10 +260,10 @@ void CSceneAgbGhost::fn_800A7FA8(u32 button, u32 type) {
 
 void CSceneAgbGhost::fn_800A8080(void) {
     // TODO: this is 100% fn_800A815C but it WILL NOT inline!
-    bool isArrowReady = (mBowArrowAnim->getAnimID() == 3) &&
+    bool isArrowReady = (mBowArrowAnim->getAnimID() == ghost_arrow_ready) &&
                         (mBowArrowAnim->fn_801DD43C() != 0);
     if (!isArrowReady) {
-        mBowArrowAnim->fn_801DD0AC(3);
+        mBowArrowAnim->fn_801DD0AC(ghost_arrow_ready);
     }
 }
 
@@ -273,7 +275,7 @@ void CSceneAgbGhost::fn_800A80EC(f32 start, f32 time) {
 }
 
 bool CSceneAgbGhost::fn_800A815C(void) {
-    return mBowArrowAnim->getAnimID() == 3 && mBowArrowAnim->fn_801DD43C() != 0;
+    return mBowArrowAnim->getAnimID() == ghost_arrow_ready && mBowArrowAnim->fn_801DD43C() != 0;
 }
 
 void CSceneAgbGhost::fn_800A81A8(u32 pos) {
@@ -310,7 +312,7 @@ void CSceneAgbGhost::fn_800A8348(void) {
     mGhostAnim->fn_801DD24C(7, 0.0f);
     mGhostAnim->fn_801DD2B4(sRandom.nextU32(4));
 
-    CCellAnim *damageAnim = gCellAnimManager->fn_801DBE7C(0, 12);
+    CCellAnim *damageAnim = gCellAnimManager->fn_801DBE7C(0, ghost_ghost_damage);
     damageAnim->setPos(0.0f, 20.0f);
     damageAnim->fn_801DCF94(mGhostAnim->getLayer() - 1);
     damageAnim->fn_801DD184(12);
@@ -326,7 +328,7 @@ void CSceneAgbGhost::fn_800A8348(void) {
 void CSceneAgbGhost::fn_800A84A8(bool through) {
     mGhostAnim->setEnabled(false);
 
-    CCellAnim *ghostMissAnim = gCellAnimManager->fn_801DBE7C(0, 8);
+    CCellAnim *ghostMissAnim = gCellAnimManager->fn_801DBE7C(0, ghost_ghost_miss_f);
     ghostMissAnim->fn_801DCF94(mGhostAnim->getLayer());
     ghostMissAnim->setPos(0.0f, 0.0f);
 
@@ -340,7 +342,7 @@ void CSceneAgbGhost::fn_800A84A8(bool through) {
 void CSceneAgbGhost::fn_800A854C(bool late) {
     mGhostAnim->setEnabled(false);
 
-    CCellAnim *ghostMissAnim = gCellAnimManager->fn_801DBE7C(0, 10);
+    CCellAnim *ghostMissAnim = gCellAnimManager->fn_801DBE7C(0, ghost_ghost_through);
     ghostMissAnim->fn_801DCF94(mGhostAnim->getLayer());
     ghostMissAnim->setPos(0.0f, 0.0f);
     ghostMissAnim->fn_801DD184(10);
@@ -353,14 +355,14 @@ void CSceneAgbGhost::fn_800A854C(bool late) {
 }
 
 void CSceneAgbGhost::fn_800A860C(void) {
-    mGhostAnim->fn_801DD0AC(13);
+    mGhostAnim->fn_801DD0AC(ghost_ghost_timing_inst);
     mGhostAnim->setPos(0.0f, 0.0f);
 }
 
 void CSceneAgbGhost::fn_800A8658(void) {
     mGhostAnim->setEnabled(false);
 
-    CCellAnim *ghostMissAnim = gCellAnimManager->fn_801DBE7C(0, 10);
+    CCellAnim *ghostMissAnim = gCellAnimManager->fn_801DBE7C(0, ghost_ghost_through);
     ghostMissAnim->fn_801DCF94(mGhostAnim->getLayer());
     ghostMissAnim->setPos(0.0f, 0.0f);
     ghostMissAnim->fn_801DD184(10);
@@ -369,15 +371,15 @@ void CSceneAgbGhost::fn_800A8658(void) {
 }
 
 void CSceneAgbGhost::fn_800A86E0(void) {
-    if (mDoorAnim->getAnimID() != 14) {
-        mDoorAnim->fn_801DD0AC(14);
+    if (mDoorAnim->getAnimID() != ghost_door_open) {
+        mDoorAnim->fn_801DD0AC(ghost_door_open);
         mDoorMaskAnim->setEnabled(true);
     }
 }
 
 void CSceneAgbGhost::fn_800A8730(void) {
-    if (mDoorAnim->getAnimID() == 14) {
-        mDoorAnim->fn_801DD0AC(15);
+    if (mDoorAnim->getAnimID() == ghost_door_open) {
+        mDoorAnim->fn_801DD0AC(ghost_door_close);
         mDoorMaskAnim->setEnabled(false);
         mGhostAnim->setEnabled(false);
     }
@@ -397,7 +399,7 @@ void CSceneAgbGhost::fn_800A8788(bool fallSlow) {
                     speed = 0.0f;
                 }
 
-                mRainAnim[i]->fn_801DD0AC(20);
+                mRainAnim[i]->fn_801DD0AC(ghost_rain_slow);
 
                 f32 posY = sRandom.nextF32(456.0f) - (456.0f / 2.0f);
                 f32 posX = sRandom.nextF32(832.0f) - (832.0f / 2.0f);
