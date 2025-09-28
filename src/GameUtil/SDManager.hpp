@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CSDMANAGER_HPP 
-#define GAMEUTIL_CSDMANAGER_HPP
+#ifndef GAMEUTIL_SDMANAGER_HPP 
+#define GAMEUTIL_SDMANAGER_HPP
 
 #include <revolution/types.h>
 #include "Singleton.hpp"
@@ -13,10 +13,10 @@ public:
 
     CSDManager(void);
 
-    u32 fn_801EC3A8(const char *str);
+    u32 fn_801EC3A8(const char *);
 
 private:
-    u8 pad04[0x11a0-4];
+    u8 pad04[0x11A0 - 4];
 };
 
 extern CSDManager *gSDManager;
