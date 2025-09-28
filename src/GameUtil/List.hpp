@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CLIST_HPP
-#define GAMEUTIL_CLIST_HPP
+#ifndef GAMEUTIL_LIST_HPP
+#define GAMEUTIL_LIST_HPP
 
 #include <revolution/types.h>
 
@@ -11,7 +11,9 @@ public:
 
     CList();
 
+    // Insert the current list before the argument list
     void insertBefore(CList *);
+    // Insert the current list after the argument list
     void insertAfter(CList *);
     void removeCurrent(void);
     void removeAll(void);
