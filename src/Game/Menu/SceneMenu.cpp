@@ -39,7 +39,7 @@ extern "C" void fn_80008EFC(void);
 
 void CSceneMenu::fn_80006FA4(void) {
     fn_80008EFC();
-    fn_801D369C(2);
+    fn_801D369C(eHeapGroup_SceneAsset);
     if (gFileManager->fn_801D42E0(55)) {
         gFileManager->fn_801D3F94(55, "content2/layout/layout_msg.szs", eHeap_MEM2, 32);
     }
@@ -49,7 +49,7 @@ void CSceneMenu::fn_80006FA4(void) {
         return;
     }
 
-    fn_801D369C(1);
+    fn_801D369C(eHeapGroup_CommonAsset);
     gMessageManager->fn_800883F4();
     gMessageManager->fn_8008807C();
     gMessageManager->fn_80088034();
@@ -158,7 +158,7 @@ void CSceneMenu::_28(void) {
             mUnkB4 = true;
             return;
         }
-        gGameManager->_20(lbl_801F8460[lbl_80320143].sceneCreateFn, 3);
+        gGameManager->_20(lbl_801F8460[lbl_80320143].sceneCreateFn, eHeapGroup_Scene);
         return;
     }
     if (((controller->getUnk133C() & 8) || (controller->getUnk1368() & 8)) 

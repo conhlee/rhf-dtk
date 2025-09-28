@@ -35,7 +35,7 @@ void CSceneCredit::fn_800C421C(u32) {}
 SCENE_IMPL_CREATE_FN(CSceneCredit)
 
 void CSceneCredit::fn_800C42AC(void) {
-    fn_801D369C(2);
+    fn_801D369C(eHeapGroup_SceneAsset);
     if (
         gFileManager->fn_801D42E0(2) && gFileManager->fn_801D42E0(3) &&
         gFileManager->fn_801D42E0(55) &&

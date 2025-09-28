@@ -26,7 +26,7 @@ void CSceneLogo::fn_800A0B5C(u32) {}
 SCENE_IMPL_CREATE_FN(CSceneLogo)
 
 void CSceneLogo::fn_800A0BC4(void) {
-    fn_801D369C(2);
+    fn_801D369C(eHeapGroup_SceneAsset);
 
     // Nothing to load ..
 

@@ -51,7 +51,7 @@ void CSceneAgbGhost::fn_800A75DC(u32 button) {
 SCENE_IMPL_CREATE_FN(CSceneAgbGhost)
 
 void CSceneAgbGhost::fn_800A772C(void) {
-    fn_801D369C(2);
+    fn_801D369C(eHeapGroup_SceneAsset);
     if (gFileManager->fn_801D42E0(2)) {
         gFileManager->fn_801D3F94(2, "content2/cellanim/agbGhost/ver0/cellanim.szs", eHeap_MEM2, 32);
     }

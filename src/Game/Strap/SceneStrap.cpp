@@ -32,7 +32,7 @@ void CSceneStrap::fn_8007B270(u32) {}
 SCENE_IMPL_CREATE_FN(CSceneStrap)
 
 void CSceneStrap::fn_8007B2D8(void) {
-    fn_801D369C(2);
+    fn_801D369C(eHeapGroup_SceneAsset);
 
     if (gFileManager->fn_801D42E0(2)) {
         switch (SCGetLanguage()) {

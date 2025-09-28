@@ -30,7 +30,7 @@ s32 sceneVer;
 SCENE_IMPL_CREATE_FN(CScenePrologue)
 
 void CScenePrologue::fn_8000AD98(void) {
-    fn_801D369C(2);
+    fn_801D369C(eHeapGroup_SceneAsset);
     if (gFileManager->fn_801D42E0(51)) {
         gFileManager->fn_801D3F94(51, "content2/cellanim/prologue/cellanim.szs", eHeap_MEM2, 32);
         gFileManager->fn_801D3F94(91, lbl_8032A278, eHeap_MEM2, 32);
