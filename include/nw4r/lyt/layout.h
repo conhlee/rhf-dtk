@@ -19,8 +19,6 @@ class AnimResource;
 
 class Layout {
 public:
-    static MEMAllocator *mspAllocator;
-
     Layout();
     virtual ~Layout();
     virtual bool Build(const void *, ResourceAccessor *);
@@ -42,12 +40,21 @@ public:
         return mpRootPane;
     }
 
+    static MEMAllocator *GetAllocator() {
+        return mspAllocator;
+    }
+    static void SetAllocator(MEMAllocator *pAllocator) {
+        mspAllocator = pAllocator;
+    }
+
 protected:
 
     ut::LinkList<AnimTransform, offsetof(AnimTransform, mLink)> mAnimTransList;
     Pane *mpRootPane;
     GroupContainer *mpGroupContainer;
     Size mLayoutSize;
+
+    static MEMAllocator *mspAllocator;
 };
 
 }
