@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CRANDOM_HPP
-#define GAMEUTIL_CRANDOM_HPP
+#ifndef GAMEUTIL_RANDOM_HPP
+#define GAMEUTIL_RANDOM_HPP
 
 #include <revolution/types.h>
 #include <revolution/OS.h>
