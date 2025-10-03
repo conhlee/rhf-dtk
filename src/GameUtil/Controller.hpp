@@ -100,7 +100,7 @@ private:
 
     s32 unk04;
     s32 unk08;
-    u32 unk0C;
+    s32 unk0C;
     s32 unk10;
     u32 unk14;
     KPADStatus unk18[16];
