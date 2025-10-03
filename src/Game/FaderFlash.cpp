@@ -64,7 +64,7 @@ void CFaderFlash::fn_80007DD8(void) {
 }
 
 void CFaderFlash::_24(u8 alpha) {
-    GXColor color = { 0 };
+    GXColor color = (GXColor){ 0, 0, 0, 0 };
     color.a = alpha;
     
     f32 coord[4];
