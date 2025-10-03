@@ -57,7 +57,7 @@ void CGameManager::_1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u
     MEMGetTotalFreeSizeForExpHeap(lbl_80320F80);
     MEMGetTotalFreeSizeForExpHeap(lbl_80320F84);
 
-    mCurrentScene = initSceneCreateFn(initSceneHeapId);
+    mCurrentScene = initSceneCreateFn(initSceneHeapGroup);
     mFader = fader;
 
     while (TRUE) {
@@ -74,14 +74,14 @@ void CGameManager::_1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u
 
         gCheckPointManager->fn_801EAE20();
 
-        if (mCurrentScene->getState() == CScene::eState_Finished) {
-            u16 heapId = mCurrentScene->getHeapId();
+        if (mCurrentScene->getState() == CScene::eState_Final) {
+            u16 heapGroup = mCurrentScene->getHeapGroup();
             mCurrentScene->fn_801D83BC();
 
-            fn_801D375C(heapId);
-            fn_801D3770(heapId);
+            fn_801D375C(heapGroup);
+            fn_801D3770(heapGroup);
 
-            mCurrentScene = mNextSceneCreateFunc(mNextSceneHeapId);
+            mCurrentScene = mNextSceneCreateFunc(mNextSceneHeapGroup);
         }
 
         bool wasLoading = mCurrentScene->getState() == CScene::eState_Preparing;
@@ -117,9 +117,9 @@ void CGameManager::_1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u
     }
 }
 
-void CGameManager::_20(CScene::CreateFn sceneCreateFn, u16 heapId) {
+void CGameManager::_20(CScene::CreateFn sceneCreateFn, u16 heapGroup) {
     mNextSceneCreateFunc = sceneCreateFn;
-    mNextSceneHeapId = heapId;
+    mNextSceneHeapGroup = heapGroup;
     mCurrentScene->fn_801D8578();
 }
 

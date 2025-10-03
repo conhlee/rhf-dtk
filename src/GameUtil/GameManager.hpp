@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CGAMEMANAGER_HPP
-#define GAMEUTIL_CGAMEMANAGER_HPP
+#ifndef GAMEUTIL_GAMEMANAGER_HPP
+#define GAMEUTIL_GAMEMANAGER_HPP
 
 #include <revolution/types.h>
 #include <revolution/macros.h>
@@ -21,8 +21,8 @@ public:
     virtual void _10(void);
     virtual void _14(void);
     virtual void _18(void);
-    virtual void _1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u16 initSceneHeapId);
-    virtual void _20(CScene::CreateFn sceneCreateFn, u16 heapId);
+    virtual void _1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u16 initSceneHeapGroup);
+    virtual void _20(CScene::CreateFn sceneCreateFn, u16 heapGroup);
     virtual void _24(CFaderFlash *fader);
     virtual void _28(void);
     virtual bool _2C(void);
@@ -61,7 +61,7 @@ private:
 
     CScene *mCurrentScene;
     CScene::CreateFn mNextSceneCreateFunc;
-    u16 mNextSceneHeapId;
+    u16 mNextSceneHeapGroup;
     CFaderFlash *mFader;
     const TickFlowCode *mNextTickFlowCode;
 };
