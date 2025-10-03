@@ -123,8 +123,11 @@ enum {
 
 #define TFC_CATEGORY(category) TFD_CMD(TF_CATEGORY, 1, 0), (TickFlowCode)(category),
 
-#define TFC_REST(ticks) TFD_CMD(TF_REST, 0, ticks),
-#define TFC_REST_FRAMES(frames) TFD_CMD(TF_REST_FRAMES, 0, frames),
+#define TFC_REST(ticks) TFD_CMD(TF_REST, 0, (ticks)),
+#define TFC_REST_FRAMES(frames) TFD_CMD(TF_REST_FRAMES, 0, (frames)),
+
+#define TFC_LABEL(labelID) TFD_CMD(TF_LABEL, 0, (labelID)),
+#define TFC_JUMP(labelID) TFD_CMD(TF_JUMP, 0, (labelID)),
 
 #define TFC_IF_EQU(value) TFD_CMD(TF_IF, 1, 0), (TickFlowCode)(value),
 #define TFC_IF_NEQ(value) TFD_CMD(TF_IF, 1, 1), (TickFlowCode)(value),
@@ -137,18 +140,24 @@ enum {
 
 #define TFC_ENDIF(value) TFD_CMD(TF_ENDIF, 0, 0),
 
-#define TFC_TEMPO(tempo) TFD_CMD(TF_TEMPO, 0, tempo),
+#define TFC_SWITCH_BEGIN() TFD_CMD(TF_SWITCH_BEGIN, 0, 0),
+#define TFC_SWITCH_CASE(value) TFD_CMD(TF_SWITCH_CASE, 0, (value)),
+#define TFC_SWITCH_BREAK() TFD_CMD(TF_SWITCH_BREAK, 0, 0),
+#define TFC_SWITCH_DEFAULT() TFD_CMD(TF_SWITCH_DEFAULT, 0, 0),
+#define TFC_SWITCH_END() TFD_CMD(TF_SWITCH_END, 0, 0),
 
-#define TFC_TEMPO_WAVE(sid) TFD_CMD(TF_TEMPO_WAVE, 0, sid),
+#define TFC_TEMPO(tempo) TFD_CMD(TF_TEMPO, 0, (tempo)),
+
+#define TFC_TEMPO_WAVE(sid) TFD_CMD(TF_TEMPO_WAVE, 0, (sid)),
 
 #define TFC_SPEED(speed) TFD_CMD(TF_SPEED, 0, speed),
 
 #define TFC_PLAY_SFX(sid) TFD_CMD(TF_PLAY_SFX, 1, 0), (TickFlowCode)(sid),
 
-#define TFC_PREPARE_WAVE(sid) TFD_CMD(TF_PREPARE_WAVE, 0, sid),
+#define TFC_PREPARE_WAVE(sid) TFD_CMD(TF_PREPARE_WAVE, 0, (sid)),
 #define TFC_PLAY_WAVE() TFD_CMD(TF_PLAY_WAVE, 0, 0),
 
-#define TFC_MESG_PANE_VISIBLE(accessIdx, isVisible) TFD_CMD(TF_MESG_PANE_VISIBLE, 1, accessIdx), (TickFlowCode)((isVisible) ? 1 : 0),
+#define TFC_MESG_PANE_VISIBLE(accessIdx, isVisible) TFD_CMD(TF_MESG_PANE_VISIBLE, 1, (accessIdx)), (TickFlowCode)((isVisible) ? 1 : 0),
 
 #define TFC_SET_SKIPPABLE(isSkippable) TFD_CMD(TF_SET_SKIPPABLE, 0, (isSkippable) ? 1 : 0),
 
