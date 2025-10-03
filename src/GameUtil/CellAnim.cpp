@@ -37,11 +37,11 @@ void CCellAnim::init(u8 id, u16 animID) {
     mOpacity = 0xff;
     setNext(NULL);
     setPrev(NULL);
-    mBaseCell = NULL;
+    mBaseAnim = NULL;
     mBaseExtCellFirst = NULL;
     mBaseExtCellNext = NULL;
     mBaseExtCell2 = NULL;
-    mBaseCellDraw = false;
+    mBaseAnimDraw = false;
 }
 
 // Returns true if the cellanim needs to be destoryed afterwards
@@ -124,11 +124,13 @@ bool CCellAnim::update(void) {
 }
 
 void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
-    if (defMtx && mBaseCell) {
+    if (defMtx && mBaseAnim != NULL) {
         return;
     }
+
     CellAnimAnimationKey *key = gCellAnimManager->fn_801DBC7C(this);
     CellAnimSprite *sprite = gCellAnimManager->fn_801DBD38(this);
+
     Mtx transMtx;
     Mtx rotMtx;
     Mtx scaleMtx;
@@ -136,7 +138,8 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
 
     if (defMtx) {
         MTXIdentity(mMtx);
-    } else {
+    }
+    else {
         MTXCopy(baseMtx, mMtx);
     }
 
@@ -144,7 +147,8 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
         MTXTrans(transMtx, mPos.x, mPos.y, 0.0f);
         MTXConcat(mMtx, transMtx, mMtx);
     }
-    double myAngle = mAngle; // lmao
+
+    f64 myAngle = mAngle; // lmao
     if (myAngle != 0.0) {
         MTXRotDeg(rotMtx, 'z', mAngle);
         MTXConcat(mMtx, rotMtx, mMtx);
@@ -173,7 +177,7 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
 
         for (s32 i = 0; i < sprite->partCount; i++) {
             bool haseBaseExt = false;
-            for (CCellAnim *cell = mBaseExtCellFirst; cell != 0; cell = cell->mBaseExtCellNext) {
+            for (CCellAnim *cell = mBaseExtCellFirst; cell != NULL; cell = cell->mBaseExtCellNext) {
                 if (i == cell->mBasePartIndex) {
                     haseBaseExt = true;
                     break;
@@ -182,18 +186,20 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
             if (haseBaseExt) {
                 CellAnimSpritePart* part = sprite->parts + i;
 
-                f32 wSa = part->regionW * part->scaleX;
-                f32 hSa = part->regionH * part->scaleY;
+                f32 width = part->regionW * part->scaleX;
+                f32 height = part->regionH * part->scaleY;
 
-                f32 wS = (wSa / 2.0f) + part->posX;
-                f32 hS = (hSa / 2.0f) + part->posY;
+                f32 centerX = (width / 2.0f) + part->posX;
+                f32 centerY = (height / 2.0f) + part->posY;
 
-                if ((wS != 0.0) || (hS != 0.0)) {
-                    MTXTrans(transMtx, wS, hS, 0.0f);
+                if ((centerX != 0.0) || (centerY != 0.0)) {
+                    MTXTrans(transMtx, centerX, centerY, 0.0f);
                     MTXConcat(mMtx, transMtx, tempMtx);
-                } else {
+                }
+                else {
                     MTXCopy(mMtx, tempMtx);
                 }
+
                 if (part->angle != 0.0) {
                     MTXRotDeg(rotMtx, 'z', part->angle);
                     MTXConcat(tempMtx, rotMtx, tempMtx);
@@ -202,9 +208,10 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
                     MTXScale(scaleMtx, part->scaleX, part->scaleY, 1.0f);
                     MTXConcat(tempMtx, scaleMtx, tempMtx);
                 }
-                for (CCellAnim *cell = mBaseExtCellFirst; cell != NULL; cell = cell->mBaseExtCellNext) {
-                    if (i == cell->mBasePartIndex) {
-                        cell->makeMtx(false, tempMtx);
+
+                for (CCellAnim *anim = mBaseExtCellFirst; anim != NULL; anim = anim->mBaseExtCellNext) {
+                    if (i == anim->mBasePartIndex) {
+                        anim->makeMtx(false, tempMtx);
                     }
                 }
             }
@@ -213,48 +220,51 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
 }
 
 void CCellAnim::draw(BOOL forceDraw) {
-    if (mBaseCell == NULL || mBaseCellDraw == false || forceDraw) {
+    if (mBaseAnim == NULL || mBaseAnimDraw == false || forceDraw) {
         Mtx transMtx;
         Mtx rotMtx;
         Mtx scaleMtx;
         Mtx tempMtx;
 
-        CellAnimAnimationKey* key = gCellAnimManager->fn_801DBC7C(this);
-        CellAnimSprite* sprite = gCellAnimManager->fn_801DBD38(this);
+        CellAnimAnimationKey *key = gCellAnimManager->fn_801DBC7C(this);
+        CellAnimSprite *sprite = gCellAnimManager->fn_801DBD38(this);
 
         f32 texW = gCellAnimManager->fn_801DBE04(mID);
         f32 texH = gCellAnimManager->fn_801DBE14(mID);
 
         for (s32 i = 0; i < sprite->partCount; i++) {
-            CellAnimSpritePart* part = sprite->parts + i;
+            CellAnimSpritePart *part = sprite->parts + i;
             gCellAnimManager->fn_801DB3D8(mID, part, mLinear, mTexNumber);
 
-            f32 wSa = part->regionW * part->scaleX;
-            f32 hSa = part->regionH * part->scaleY;
+            f32 sizeX = part->regionW * part->scaleX;
+            f32 sizeY = part->regionH * part->scaleY;
 
-            f32 wS = (wSa / 2.0f) + part->posX;
-            f32 hS = (hSa / 2.0f) + part->posY;
+            f32 centerX = (sizeX / 2.0f) + part->posX;
+            f32 centerY = (sizeY / 2.0f) + part->posY;
 
-            if ((wS != 0.0) || (hS != 0.0)) {
-                MTXTrans(transMtx, wS, hS, 0.0f);
+            if ((centerX != 0.0) || (centerY != 0.0)) {
+                MTXTrans(transMtx, centerX, centerY, 0.0f);
                 MTXConcat(mMtx, transMtx, tempMtx);
-            } else {
+            }
+            else {
                 MTXCopy(mMtx, tempMtx);
             }
+
             if (part->angle != 0.0) {
                 MTXRotDeg(rotMtx, 'z', part->angle);
                 MTXConcat(tempMtx, rotMtx, tempMtx);
             }
-            if ((wSa != 1.0) || (hSa != 1.0)) {
-                MTXScale(scaleMtx, wSa, hSa, 1.0);
+
+            if ((sizeX != 1.0) || (sizeY != 1.0)) {
+                MTXScale(scaleMtx, sizeX, sizeY, 1.0);
                 MTXConcat(tempMtx, scaleMtx, tempMtx);
             }
 
             GXLoadPosMtxImm(tempMtx, 0);
 
             u8 opacity = (key->opacity * part->opacity * mOpacity) / 255 / 255;
-            GXSetTevColor(GX_TEVREG0, (GXColor){mFgColorR, mFgColorG, mFgColorB, opacity});
-            GXSetTevColor(GX_TEVREG1, (GXColor){mBgColorR, mBgColorG, mBgColorB, opacity});
+            GXSetTevColor(GX_TEVREG0, (GXColor){ mFgColorR, mFgColorG, mFgColorB, opacity });
+            GXSetTevColor(GX_TEVREG1, (GXColor){ mBgColorR, mBgColorG, mBgColorB, opacity });
 
             f32 uvStartX = part->regionX / texW;
             f32 uvStartY = part->regionY / texH;
@@ -288,9 +298,9 @@ void CCellAnim::draw(BOOL forceDraw) {
 
             GXEnd();
 
-            for (CCellAnim *cell = mBaseExtCellFirst; cell != NULL; cell = cell->mBaseExtCellNext) {
-                if (i == cell->mBasePartIndex && cell->mEnabled && cell->mBaseCellDraw) {
-                    cell->draw(true);
+            for (CCellAnim *anim = mBaseExtCellFirst; anim != NULL; anim = anim->mBaseExtCellNext) {
+                if (i == anim->mBasePartIndex && anim->mEnabled && anim->mBaseAnimDraw) {
+                    anim->draw(true);
                 }
             }
         }

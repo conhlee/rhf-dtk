@@ -20,6 +20,8 @@ public:
     }
 
     u8 getID(void) const { return mID; }
+    void setID(u8 id) { mID = id; }
+
     u16 getAnimID(void) const { return mAnimID; }
 
     f32 getFrame(void) const { return mFrame; }
@@ -41,7 +43,14 @@ public:
     void setPosX(f32 x) { mPos.x = x; }
     void setPosY(f32 y) { mPos.y = y; }
 
+    nw4r::math::VEC2 getPos(void) { return mPos; }
     void setPos(f32 x, f32 y) { mPos = nw4r::math::VEC2(x, y); }
+
+    f32 getScaleX(void) const { return mSize.x; }
+    f32 getScaleY(void) const { return mSize.y; }
+
+    nw4r::math::VEC2 getScale(void) { return mSize; }
+    void setScale(f32 x, f32 y) { mSize = nw4r::math::VEC2(x, y); }
 
     f32 getAngle(void) const { return mAngle; }
     void setAngle(f32 angle) { mAngle = angle; }
@@ -60,13 +69,13 @@ public:
 
     bool isReversed(void) const { return mBackward; }
 
-    CCellAnim *getBaseCell(void) const { return mBaseCell; }
+    CCellAnim *getBaseAnim(void) const { return mBaseAnim; }
 
     CCellAnim *getBaseExtCellFirst(void) const { return mBaseExtCellFirst; }
     CCellAnim *getBaseExtCellNext(void) const { return mBaseExtCellNext; }
 
     void clearBase(void) {
-        mBaseCell = NULL;
+        mBaseAnim = NULL;
         mBaseExtCellNext = NULL;
         mBaseExtCell2 = NULL;
     }
@@ -120,12 +129,12 @@ private:
     bool mDestroyAtEnd;
     bool mDisableAtEnd;
     bool mTempoUpdate;
-    CCellAnim *mBaseCell;
+    CCellAnim *mBaseAnim;
     CCellAnim *mBaseExtCellFirst;
     CCellAnim *mBaseExtCellNext; // unsure
     CCellAnim *mBaseExtCell2; // unsure
     u16 mBasePartIndex;
-    bool mBaseCellDraw;
+    bool mBaseAnimDraw;
 };
 
 #endif
