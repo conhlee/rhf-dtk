@@ -47,14 +47,14 @@ bool CTickFlow::fn_801DD9E8(void) {
                     mButtonPromptIsReleased = false;
                     mButtonPromptIsPressed = true;
                     if (mButtonPromptPressSfx >= 0) {
-                        gSoundManager->play((u16)mButtonPromptPressSfx);
+                        gSoundManager->play(mButtonPromptPressSfx);
                     }
                 }
             }
             else if (mButtonPromptIsPressed && (mButtonPromptButton & controller->getUnk1340())) {
                 mButtonPromptIsPressed = false;
                 if (mButtonPromptReleaseSfx >= 0) {
-                    gSoundManager->play((u16)mButtonPromptReleaseSfx);
+                    gSoundManager->play(mButtonPromptReleaseSfx);
                 }
             }
         }
@@ -238,7 +238,7 @@ bool CTickFlow::_1C(u32 opcode, u32 arg0, const s32 *args) {
     } break;
     case TF_TEMPO_WAVE:
         gTickFlowManager->fn_801E2B9C(
-            gSoundManager->fn_801E74EC(gSoundManager->fn_801E73D4((u16)arg0))
+            gSoundManager->fn_801E74EC(gSoundManager->fn_801E73D4(arg0))
         );
         break;
     case TF_SPEED:

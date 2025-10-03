@@ -1070,7 +1070,7 @@ config.libs = [
             Object(NonMatching, "GameUtil/CellAnim.cpp"),
             Object(NonMatching, "GameUtil/TickFlow.cpp"),
             Object(NonMatching, "GameUtil/TickFlowManager.cpp"),
-            Object(NonMatching, "GameUtil/SoundManager.cpp"),
+            Object(Matching, "GameUtil/SoundManager.cpp"),
             Object(NonMatching, "GameUtil/InputChecker.cpp"),
             Object(NonMatching, "GameUtil/InputCheckManager.cpp"),
             Object(NonMatching, "GameUtil/TimeRatio.cpp"),

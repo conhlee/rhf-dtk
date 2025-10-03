@@ -177,7 +177,7 @@ void CSoundManager::_1C(void) {
     mSystemPlayerID = 0;
 
     mVolumeFadeFrames = 0;
-    mVolumeFadeInterval = 0.0f;
+    mVolumeFadeStep = 0.0f;
 
     mSoundCooldown = NULL;
     mSoundCooldownCount = 0;
@@ -210,9 +210,9 @@ void CSoundManager::fn_801E4D60(void) {
     if ((mVolumeFadeFrames > 0) && !gTickFlowManager->getUnk6D()) {
         f32 curVolume = first_player_volume();
 
-        f32 finalVolume = curVolume + mVolumeFadeInterval;
+        f32 finalVolume = curVolume + mVolumeFadeStep;
         if (finalVolume < 0.0) {
-            finalVolume = 0.0f;
+            finalVolume = 0.0;
         }
 
         fn_801E6E4C(finalVolume);
@@ -535,7 +535,9 @@ void CSoundManager::fn_801E7108(void) {
 
 void CSoundManager::fn_801E7114(f32 volume, s32 fadeFrames) {
     mVolumeFadeFrames = fadeFrames;
-    mVolumeFadeInterval = (volume - first_player_volume()) / mVolumeFadeFrames;
+
+    // (end - start) / frames
+    mVolumeFadeStep = (volume - first_player_volume()) / mVolumeFadeFrames;
 }
 
 void CSoundManager::fn_801E71C0(void) {

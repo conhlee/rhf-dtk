@@ -131,7 +131,7 @@ static bool sIs60FPS;
 
 extern char sSndArchivePath[64];
 
-UnkSndTable sndUnkTempo[30] = {
+SoundCooldown sndCooldown[30] = {
 
 };
 
@@ -378,7 +378,7 @@ void fn_80038AE4(void) {
 
     gSoundManager->fn_801E6E00(PLAYER_SE_SYSTEM);
 
-    gSoundManager->fn_801E60D4(sndUnkTempo, ARRAY_LENGTH(sndUnkTempo));
+    gSoundManager->fn_801E60D4(sndCooldown, ARRAY_LENGTH(sndCooldown));
     gSoundManager->fn_801E73C8(sndWaveInfo, ARRAY_LENGTH(sndWaveInfo));
     gSoundManager->fn_801E75B4(sndSeqAndSETempo, ARRAY_LENGTH(sndSeqAndSETempo));
 
