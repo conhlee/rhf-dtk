@@ -120,16 +120,16 @@ void CGraphicManager::fn_801D6514(GXRenderModeObj *renderMode) {
     else {
         u32 tvFormat = VIGetTvFormat();
         switch (tvFormat) {
-        case VI_TV_FMT_NTSC:
+        case VI_TVFORMAT_NTSC:
             mRenderMode = &GXNtsc480IntDf;
             break;
-        case VI_TV_FMT_PAL:
+        case VI_TVFORMAT_PAL:
             mRenderMode = &GXPal528IntDf;
             break;
-        case VI_TV_FMT_EURGB60:
+        case VI_TVFORMAT_EURGB60:
             mRenderMode = &GXEurgb60Hz480IntDf;
             break;
-        case VI_TV_FMT_MPAL:
+        case VI_TVFORMAT_MPAL:
             mRenderMode = &GXMpal480IntDf;
             break;
         }
