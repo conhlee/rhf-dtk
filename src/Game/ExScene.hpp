@@ -28,6 +28,8 @@ public:
 
     void fn_80008FC0(bool, u32);
 
+    bool fn_80009AA0(void);
+
 protected:
     CPauseLayout *mPauseLayout;
     u32 unk14;
