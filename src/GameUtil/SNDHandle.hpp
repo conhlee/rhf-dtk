@@ -5,9 +5,10 @@
 
 #include <nw4r/snd.h>
 
+// TODO: maybe move this into SoundManager, since that's where the dtor impl is?
 class SNDHandle : public nw4r::snd::SoundHandle {
 public:
-    virtual ~SNDHandle();
+    virtual ~SNDHandle(void);
 };
 
 #endif

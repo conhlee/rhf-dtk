@@ -47,14 +47,14 @@ bool CTickFlow::fn_801DD9E8(void) {
                     mButtonPromptIsReleased = false;
                     mButtonPromptIsPressed = true;
                     if (mButtonPromptPressSfx >= 0) {
-                        gSoundManager->fn_801E4F60((u16)mButtonPromptPressSfx);
+                        gSoundManager->play((u16)mButtonPromptPressSfx);
                     }
                 }
             }
             else if (mButtonPromptIsPressed && (mButtonPromptButton & controller->getUnk1340())) {
                 mButtonPromptIsPressed = false;
                 if (mButtonPromptReleaseSfx >= 0) {
-                    gSoundManager->fn_801E4F60((u16)mButtonPromptReleaseSfx);
+                    gSoundManager->play((u16)mButtonPromptReleaseSfx);
                 }
             }
         }
@@ -226,7 +226,7 @@ bool CTickFlow::_1C(u32 opcode, u32 arg0, const s32 *args) {
         gTickFlowManager->fn_801E2B9C((u16)arg0);
         break;
     case TF_TEMPO_SEQ: {
-        f32 seqTempo = gSoundManager->fn_801E75C0((u16)arg0);
+        f32 seqTempo = gSoundManager->fn_801E75C0(arg0);
         u32 setTempo = seqTempo;
         if ((u16)setTempo == 0) {
             setTempo = 120;

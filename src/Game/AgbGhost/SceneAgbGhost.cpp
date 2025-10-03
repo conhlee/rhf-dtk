@@ -45,7 +45,7 @@ void CSceneAgbGhost::fn_800A75DC(u32 button) {
             arrowMissAnim->setPos(-147.0f, -70.0f);
             arrowMissAnim->fn_801DD184(5);
 
-            gSoundManager->fn_801E4F60(SE_AGB_AIM_DOOR, 0.0f, NULL);
+            gSoundManager->play(SE_AGB_AIM_DOOR, 0.0f, NULL);
         }
     }
 }
@@ -55,7 +55,7 @@ SCENE_IMPL_CREATE_FN(CSceneAgbGhost)
 void CSceneAgbGhost::fn_800A772C(void) {
     fn_801D369C(eHeapGroup_SceneAsset);
     if (gFileManager->fn_801D42E0(2)) {
-        gFileManager->fn_801D3F94(2, "content2/cellanim/agbGhost/ver0/cellanim.szs", eHeap_MEM2, 32);
+        gFileManager->fn_801D3F94(2, "content2/cellanim/agbGhost/ver0/cellanim.szs");
     }
     fn_801D3644();
 }
@@ -155,7 +155,7 @@ void CSceneAgbGhost::_14(void) {
     mUnk110.setEasing(0, 1);
     mUnk168.setEasing(3, 2);
 
-    gSoundManager->fn_801E4F60(SE_AGB_AIM_KANKYO, 0.0f, &mUnk19C);
+    gSoundManager->play(SE_AGB_AIM_KANKYO, 0.0f, &mUnk19C);
 
     mGhostHeight = 0x100;
 
@@ -252,7 +252,7 @@ void CSceneAgbGhost::fn_800A7FA8(u32 button, u32 type) {
                 arrowMissAnim->setPos(-147.0f, -70.0f);
                 arrowMissAnim->fn_801DD184(5);
 
-                gSoundManager->fn_801E4F60(SE_AGB_AIM_DOOR, 0.0f, NULL);
+                gSoundManager->play(SE_AGB_AIM_DOOR, 0.0f, NULL);
             }
         }
     }
@@ -294,7 +294,7 @@ void CSceneAgbGhost::fn_800A81A8(u32 pos) {
     );
     mGhostAnim->fn_801DD118(6);
 
-    gSoundManager->fn_801E4F60(SE_AGB_AIM_WALK, 0.0f);
+    gSoundManager->play(SE_AGB_AIM_WALK, 0.0f);
     gSoundManager->fn_801E65F4((mGhostHeight / 2.13333333f) * (1.0f / 256.0f));
 }
 
@@ -321,8 +321,8 @@ void CSceneAgbGhost::fn_800A8348(void) {
 
     fn_800A8788(true);
 
-    gSoundManager->fn_801E4F60(SE_AGB_AIM_JUST_HIT);
-    gSoundManager->fn_801E4F60(SE_AGB_AIM_JUST_HIT_VOICE);
+    gSoundManager->play(SE_AGB_AIM_JUST_HIT);
+    gSoundManager->play(SE_AGB_AIM_JUST_HIT_VOICE);
 }
 
 void CSceneAgbGhost::fn_800A84A8(bool through) {
@@ -336,7 +336,7 @@ void CSceneAgbGhost::fn_800A84A8(bool through) {
     s16 animIndex = through ? 10 : 9;
     ghostMissAnim->fn_801DD184(animIndex);
 
-    gSoundManager->fn_801E4F60(SE_AGB_AIM_OSII);
+    gSoundManager->play(SE_AGB_AIM_OSII);
 }
 
 void CSceneAgbGhost::fn_800A854C(bool late) {
@@ -347,10 +347,10 @@ void CSceneAgbGhost::fn_800A854C(bool late) {
     ghostMissAnim->setPos(0.0f, 0.0f);
     ghostMissAnim->fn_801DD184(10);
 
-    gSoundManager->fn_801E4F60(SE_AGB_AIM_DASH);
+    gSoundManager->play(SE_AGB_AIM_DASH);
     if (late) {
         ghostMissAnim->fn_801DCEE8(11, NULL);
-        gSoundManager->fn_801E4F60(SE_AGB_AIM_WARAI, -30.0f);
+        gSoundManager->play(SE_AGB_AIM_WARAI, -30.0f);
     }
 }
 
@@ -367,7 +367,7 @@ void CSceneAgbGhost::fn_800A8658(void) {
     ghostMissAnim->setPos(0.0f, 0.0f);
     ghostMissAnim->fn_801DD184(10);
 
-    gSoundManager->fn_801E4F60(SE_AGB_AIM_DASH);
+    gSoundManager->play(SE_AGB_AIM_DASH);
 }
 
 void CSceneAgbGhost::fn_800A86E0(void) {

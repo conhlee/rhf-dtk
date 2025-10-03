@@ -247,7 +247,7 @@ void CSceneMenu::fn_800077A8(u8 arg1) {
         menuLayout->getCommentPane()->SetString(sTextBuffer);
         menuLayout->getCommentPane()->SetVisible(true);
     }
-    gSoundManager->fn_801E4F60(SE_CURSOR);
+    gSoundManager->play(SE_CURSOR);
 }
 
 void CMenuLayout::_14(void) {
