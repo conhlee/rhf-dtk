@@ -5,14 +5,14 @@
 #include <string.h>
 #include <stdio.h>
 
-char CFileManager::sFilePathBuffer[64];
+char CFileManager::sDVDPathBuffer[64];
 
 void CFileManager::fn_801D392C(s32 result, DVDFileInfo *fileInfo) {
     s32 index = gFileManager->getFileInfoIdx(fileInfo);
     if (result == -1) {
         return;
     }
-    gFileManager->mDvdFileInfoActive[index] = false;
+    gFileManager->mDVDFileInfoActive[index] = false;
 }
 
 void CFileManager::fn_801D3988(s32 result, DVDFileInfo *fileInfo) {
@@ -24,38 +24,43 @@ CFileManager::~CFileManager(void) {
     _08();
 }
 
-#define THREAD_STACK_SIZE (0xA00)
+#define THREAD_STACK_SIZE (0xA00) // In words.
 
-void CFileManager::_10(s32 fileCount, s32 archiveCount) {
-    mArchiveInfoCount = archiveCount;
-    mFileCount = fileCount;
+void CFileManager::_10(s32 maxFileCount, s32 maxArchiveCount) {
+    mMaxArchiveCount = maxArchiveCount;
+    mMaxFileCount = maxFileCount;
 
-    mDvdFileInfo = new (eHeap_MEM2, 32) DVDFileInfo[mFileCount];
-    mUnusedFileSub = new (eHeap_MEM2, 32) UnusedFileSub[mFileCount];
-    mDvdFileInfoActive = new (eHeap_MEM2, 32) bool[mFileCount];
-    mArchiveInfo = new (eHeap_MEM2, 32) ArchiveInfo[mArchiveInfoCount];
+    mDVDFileInfo = new (eHeap_MEM2, 32) DVDFileInfo[mMaxFileCount];
+    mUnusedFileSub = new (eHeap_MEM2, 32) UnusedFileSub[mMaxFileCount];
+    mDVDFileInfoActive = new (eHeap_MEM2, 32) bool[mMaxFileCount];
+    mArchiveInfo = new (eHeap_MEM2, 32) ArchiveInfo[mMaxArchiveCount];
     mThreadStack = new (eHeap_MEM2, 32) u32[THREAD_STACK_SIZE];
 }
 
 void CFileManager::_08(void) {
-    delete[] mDvdFileInfo;
+    delete[] mDVDFileInfo;
     delete[] mUnusedFileSub;
-    delete[] mDvdFileInfoActive;
+    delete[] mDVDFileInfoActive;
     delete[] mArchiveInfo;
+
+    // @bug mThreadStack is never freed!
+    // delete[] mThreadStack;
 }
 
 void CFileManager::_14(void) {
     DVDInit();
-    for (s32 i = 0; i < mFileCount; i++) {
-        mDvdFileInfoActive[i] = false;
+
+    for (s32 i = 0; i < mMaxFileCount; i++) {
+        mDVDFileInfoActive[i] = false;
     }
-    for (s32 i = 0; i < mArchiveInfoCount; i++) {
-        mArchiveInfo[i].mDvdFileInfo = NULL;
-        mArchiveInfo[i].mArcData = NULL;
-        mArchiveInfo[i].mState = eArchiveInfoState_Free;
+    for (s32 i = 0; i < mMaxArchiveCount; i++) {
+        mArchiveInfo[i].dvdFileInfo = NULL;
+        mArchiveInfo[i].data = NULL;
+        mArchiveInfo[i].state = eArchiveInfoState_Free;
     }
-    unk34C = 0;
-    unk350 = 0;
+
+    mDVDErrorFuncF = NULL;
+    mDVDErrorFuncB = NULL;
 }
 
 void CFileManager::fn_801D3C2C(const char *localeDir) {
@@ -66,91 +71,85 @@ char *CFileManager::fn_801D3C44(void) {
     return mLocaleDir;
 }
 
-void *CFileManager::fn_801D3C4C(const char *file, EHeapMEM heap, s32 alignment) {
-    sprintf(sFilePathBuffer, "%s%s", gFileManager->fn_801D3C44(), file);
+void *CFileManager::fn_801D3C4C(const char *path, EHeapMEM heap, s32 alignment) {
+    sprintf(sDVDPathBuffer, "%s%s", gFileManager->fn_801D3C44(), path);
+
     s32 dfiIndex = -1;
-    for (s32 i = 0; i < mFileCount; i++) {
-        if (mDvdFileInfoActive[i] == false) {
+    for (s32 i = 0; i < mMaxFileCount; i++) {
+        if (mDVDFileInfoActive[i] == false) {
             dfiIndex = i;
             break;
         }
     }
 
-    DVDOpen(sFilePathBuffer, &mDvdFileInfo[dfiIndex]);
+    DVDOpen(sDVDPathBuffer, &mDVDFileInfo[dfiIndex]);
 
-    s32 size = ROUND_UP(mDvdFileInfo[dfiIndex].length, 32);
-    void *alloc = new (heap, alignment) u8[size];
-    DCInvalidateRange(alloc, size);
+    u32 allocSize = ROUND_UP(mDVDFileInfo[dfiIndex].length, 32);
+    void *alloc = new (heap, alignment) u8[allocSize];
+    DCInvalidateRange(alloc, allocSize);
 
-    DVDReadAsyncPrio(&mDvdFileInfo[dfiIndex], alloc, size, 0, CFileManager::fn_801D392C, 2);
-    mDvdFileInfoActive[dfiIndex] = true;
+    DVDReadAsyncPrio(&mDVDFileInfo[dfiIndex], alloc, allocSize, 0, fn_801D392C, 2);
+    mDVDFileInfoActive[dfiIndex] = true;
 
     return alloc;
 }
 
 bool CFileManager::fn_801D3D58(void) {
-    for (s32 i = 0; i < mFileCount; i++) {
-        if (mDvdFileInfoActive[i]) {
+    for (s32 i = 0; i < mMaxFileCount; i++) {
+        if (mDVDFileInfoActive[i]) {
             return true;
         }
     }
     return false;
 }
 
-static inline void runArcUpdateTick() {
-    gFileManager->fn_801D49D4();
-    gFileManager->fn_801D4544();
-    OSSleepTicks(OS_MSEC_TO_TICKS(10ll));
-}
-
 void CFileManager::fn_801D3D94(void) {
     while (fn_801D3D58()) {
-        runArcUpdateTick();
+        waitLoadFinalizeTick();
     }
 }
 
 void CFileManager::fn_801D3E94(void) {
     while (fn_801D3D58()) {
-        runArcUpdateTick();
+        waitLoadFinalizeTick();
     }
 }
 
-void CFileManager::fn_801D3F94(s32 idx, const char *file, EHeapMEM heap, s32 alignment) {
-    sprintf(sFilePathBuffer, "%s%s", gFileManager->fn_801D3C44(), file);
+void CFileManager::fn_801D3F94(s32 arcIndex, const char *path, EHeapMEM heap, s32 alignment) {
+    sprintf(sDVDPathBuffer, "%s%s", gFileManager->fn_801D3C44(), path);
 
     s32 dfiIndex = -1;
-    for (s32 i = 0; i < mFileCount; i++) {
-        if (mDvdFileInfoActive[i] == false) {
+    for (s32 i = 0; i < mMaxFileCount; i++) {
+        if (mDVDFileInfoActive[i] == false) {
             dfiIndex = i;
             break;
         }
     }
 
-    mArchiveInfo[idx].mDvdFileInfo = &mDvdFileInfo[dfiIndex];
-    mArchiveInfo[idx].mHeapMode = heap;
-    mArchiveInfo[idx].mHeapId = fn_801D363C();
+    mArchiveInfo[arcIndex].dvdFileInfo = &mDVDFileInfo[dfiIndex];
+    mArchiveInfo[arcIndex].heapType = heap;
+    mArchiveInfo[arcIndex].heapGroup = fn_801D363C();
 
-    const char *szsExtension = ".szs";
-    mArchiveInfo[idx].mIsCompressed = strstr(sFilePathBuffer, szsExtension) != 0;
+    const char *compressedExt = ".szs";
+    mArchiveInfo[arcIndex].compressed = strstr(sDVDPathBuffer, compressedExt) != NULL;
 
-    mArchiveInfo[idx].mState = eArchiveInfoState_Loading;
+    mArchiveInfo[arcIndex].state = eArchiveInfoState_Loading;
 
-    DVDOpen(sFilePathBuffer, &mDvdFileInfo[dfiIndex]);
+    DVDOpen(sDVDPathBuffer, &mDVDFileInfo[dfiIndex]);
 
-    u32 size = ROUND_UP(mDvdFileInfo[dfiIndex].length, 32);
-    mArchiveInfo[idx].mArcData = new (mArchiveInfo[idx].mHeapMode, alignment) u8[size];
-    DCInvalidateRange(mArchiveInfo[idx].mArcData, size);
+    u32 allocSize = ROUND_UP(mDVDFileInfo[dfiIndex].length, 32);
+    mArchiveInfo[arcIndex].data = new (mArchiveInfo[arcIndex].heapType, alignment) u8[allocSize];
+    DCInvalidateRange(mArchiveInfo[arcIndex].data, allocSize);
 
-    DVDReadAsyncPrio(&mDvdFileInfo[dfiIndex], mArchiveInfo[idx].mArcData, size, 0, CFileManager::fn_801D3988, 2);
-    mDvdFileInfoActive[dfiIndex] = true;
+    DVDReadAsyncPrio(&mDVDFileInfo[dfiIndex], mArchiveInfo[arcIndex].data, allocSize, 0, fn_801D3988, 2);
+    mDVDFileInfoActive[dfiIndex] = true;
 }
 
 void CFileManager::fn_801D412C(s32 result, DVDFileInfo *fileInfo) {
-    // NOTE: doesn't match with inlined ver
-    s32 dfiIndex = -1;
-    for (s32 i = 0; i < mFileCount; i++) {
-        if ((mDvdFileInfo + i) == fileInfo) {
-            dfiIndex = i;
+    s32 index = -1;
+    for (s32 i = 0; i < mMaxFileCount; i++) {
+        if (&mDVDFileInfo[i] == fileInfo) {
+            index = i;
             break;
         }
     }
@@ -159,34 +158,36 @@ void CFileManager::fn_801D412C(s32 result, DVDFileInfo *fileInfo) {
         return;
     }
 
-    mDvdFileInfoActive[dfiIndex] = false;
-    for (s32 i = 0; i < mArchiveInfoCount; i++) {
-        if (mArchiveInfo[i].mDvdFileInfo == fileInfo) {
-            mArchiveInfo[i].mState = eArchiveInfoState_Loaded;
+    mDVDFileInfoActive[index] = false;
+    for (s32 i = 0; i < mMaxArchiveCount; i++) {
+        if (mArchiveInfo[i].dvdFileInfo == fileInfo) {
+            mArchiveInfo[i].state = eArchiveInfoState_Loaded;
             return;
         }
     }
 }
 
-void CFileManager::fn_801D41CC(s32 idx) {
-    delete[] mArchiveInfo[idx].mArcData;
-    mArchiveInfo[idx].mArcData = NULL;
-    mArchiveInfo[idx].mState = eArchiveInfoState_Free;
+void CFileManager::fn_801D41CC(s32 arcIndex) {
+    delete[] mArchiveInfo[arcIndex].data;
+    mArchiveInfo[arcIndex].data = NULL;
+
+    mArchiveInfo[arcIndex].state = eArchiveInfoState_Free;
 }
 
-u32 CFileManager::fn_801D422C(s32 idx, const char *file) {
+u32 CFileManager::fn_801D422C(s32 arcIndex, const char *path) {
     ARCFileInfo fileInfo;
-    ARCOpen(&mArchiveInfo[idx].mArcHandle, file, &fileInfo);
+    ARCOpen(&mArchiveInfo[arcIndex].arcHandle, path, &fileInfo);
 
     u32 length = ARCGetLength(&fileInfo);
 
-    // ARCClose(&fileInfo); // BUG: ARCClose missing here
+    // ARCClose call is missing here! Luckily, ARCClose doesn't actually do anything ..
+    // ARCClose(&fileInfo);
     return length;
 }
 
-void *CFileManager::fn_801D4270(s32 idx, const char *file) {
+void *CFileManager::fn_801D4270(s32 arcIndex, const char *path) {
     ARCFileInfo fileInfo;
-    ARCOpen(&mArchiveInfo[idx].mArcHandle, file, &fileInfo);
+    ARCOpen(&mArchiveInfo[arcIndex].arcHandle, path, &fileInfo);
 
     void *startAddr = ARCGetStartAddrInMem(&fileInfo);
 
@@ -194,67 +195,70 @@ void *CFileManager::fn_801D4270(s32 idx, const char *file) {
     return startAddr;
 }
 
-void *CFileManager::fn_801D42CC(s32 idx) {
-    return mArchiveInfo[idx].mArcData;
+void *CFileManager::fn_801D42CC(s32 arcIndex) {
+    return mArchiveInfo[arcIndex].data;
 }
 
-bool CFileManager::fn_801D42E0(s32 idx) {
-    return mArchiveInfo[idx].mState == eArchiveInfoState_Free;
+bool CFileManager::fn_801D42E0(s32 arcIndex) {
+    return mArchiveInfo[arcIndex].state == eArchiveInfoState_Free;
 }
 
-bool CFileManager::fn_801D42FC(s32 idx) {
-    return mArchiveInfo[idx].mState == eArchiveInfoState_Ready;
+bool CFileManager::fn_801D42FC(s32 arcIndex) {
+    return mArchiveInfo[arcIndex].state == eArchiveInfoState_Ready;
 }
 
 bool CFileManager::fn_801D431C(void) {
     bool isIdle = true;
-    for (s32 i = 0; i < mFileCount; i++) {
-        if ((mArchiveInfo[i].mState != eArchiveInfoState_Free) && (mArchiveInfo[i].mState != eArchiveInfoState_Ready)) {
+    for (s32 i = 0; i < mMaxFileCount; i++) {
+        if (
+            (mArchiveInfo[i].state != eArchiveInfoState_Free) &&
+            (mArchiveInfo[i].state != eArchiveInfoState_Ready)
+        ) {
             isIdle = false;
         }
     }
     return isIdle;
 }
 
-void CFileManager::fn_801D4364(s32 idx) {
-    while (mArchiveInfo[idx].mState != eArchiveInfoState_Ready) {
-        runArcUpdateTick();
+void CFileManager::fn_801D4364(s32 arcIndex) {
+    while (mArchiveInfo[arcIndex].state != eArchiveInfoState_Ready) {
+        waitLoadFinalizeTick();
     }
 }
 
 void CFileManager::fn_801D443C(void) {
     while (!fn_801D431C()) {
-        runArcUpdateTick();
+        waitLoadFinalizeTick();
     }
 }
 
 void CFileManager::fn_801D4544(void) {
-    for (s16 i = 0; i < mArchiveInfoCount; i++) {
-        ArchiveInfo* archiveInfo = &mArchiveInfo[i];
-        bool isArchiveReady = false;
+    for (s16 i = 0; i < mMaxArchiveCount; i++) {
+        ArchiveInfo *archiveInfo = &mArchiveInfo[i];
+        bool shouldArcInit = false;
 
-        if (archiveInfo->mState == eArchiveInfoState_Loaded) {
-            if (archiveInfo->mIsCompressed) {
+        if (archiveInfo->state == eArchiveInfoState_Loaded) {
+            if (archiveInfo->compressed) {
                 // NOTE: this gets the decompressed buffer before the decompression is actually finished.
-                //       if NULL is returned, the decompression thread is still busy; we'll try again next frame.
-                void *decompressed = fn_801D46A4(archiveInfo->mArcData, TRUE, i, archiveInfo->mHeapMode, -32);
-                if (decompressed) {
-                    archiveInfo->mArcData = (u8 *)decompressed;
-                    archiveInfo->mState = eArchiveInfoState_Decompressing;
+                //       if NULL is returned, the decompression thread is still busy; we'll try again next time.
+                void *decompDst = fn_801D46A4(archiveInfo->data, TRUE, i, archiveInfo->heapType, -32);
+                if (decompDst) {
+                    archiveInfo->data = static_cast<u8 *>(decompDst);
+                    archiveInfo->state = eArchiveInfoState_Decompressing;
                 }
             }
             else {
-                isArchiveReady = true;
+                shouldArcInit = true;
             }
         }
-        else if (archiveInfo->mState == eArchiveInfoState_Decompressed) {
-            isArchiveReady = true;
+        else if (archiveInfo->state == eArchiveInfoState_Decompressed) {
+            shouldArcInit = true;
         }
 
-        if (isArchiveReady) {
-            ARCInitHandle(archiveInfo->mArcData, &archiveInfo->mArcHandle);
-            archiveInfo->mDvdFileInfo = NULL;
-            archiveInfo->mState = eArchiveInfoState_Ready;
+        if (shouldArcInit) {
+            ARCInitHandle(archiveInfo->data, &archiveInfo->arcHandle);
+            archiveInfo->dvdFileInfo = NULL;
+            archiveInfo->state = eArchiveInfoState_Ready;
         }
     }
 }
@@ -268,9 +272,9 @@ void *CFileManager::fn_801D461C(void *data, BOOL deleteSrc, EHeapMEM heap, s32 a
     s32 expandSize = getSZSExpandSize(data);
 
     u32 dstSize = ROUND_UP(expandSize, 32);
-    void *dst = new (heap, alignment) u8[dstSize];
+    u8 *dst = new (heap, alignment) u8[dstSize];
 
-    fn_801D47F8((u8 *)data, (u8 *)dst, expandSize, dstSize, -1, deleteSrc);
+    fn_801D47F8(static_cast<u8 *>(data), dst, expandSize, dstSize, -1, deleteSrc);
     return dst;
 }
 
@@ -291,7 +295,7 @@ void *CFileManager::fn_801D46A4(void *data, BOOL deleteSrc, s32 arcInfoIdx, EHea
         u32 dstSize = ROUND_UP(expandSize, 32);
 
         if (arcInfoIdx >= 0) {
-            fn_801D369C(gFileManager->mArchiveInfo[arcInfoIdx].mHeapId);
+            fn_801D369C(gFileManager->mArchiveInfo[arcInfoIdx].heapGroup);
         }
         void *dst = new (heap, alignment) u8[dstSize];
         if (arcInfoIdx >= 0) {
@@ -307,9 +311,9 @@ void *CFileManager::fn_801D46A4(void *data, BOOL deleteSrc, s32 arcInfoIdx, EHea
 
         OSCreateThread(
             &gFileManager->mThread,
-            CFileManager::fn_801D47B8, &sDecompThreadData,
+            fn_801D47B8, &sDecompThreadData,
             &gFileManager->mThreadStack[THREAD_STACK_SIZE], THREAD_STACK_SIZE * sizeof(u32),
-            31, 1
+            OS_PRIORITY_MAX, OS_THREAD_DETACHED
         );
         OSResumeThread(&gFileManager->mThread);
 
@@ -320,13 +324,16 @@ void *CFileManager::fn_801D46A4(void *data, BOOL deleteSrc, s32 arcInfoIdx, EHea
 }
 
 void *CFileManager::fn_801D47B8(void *arg) {
-    DecompThreadData *data = (DecompThreadData *)arg;
+    DecompThreadData *data = static_cast<DecompThreadData *>(arg);
 
-    fn_801D47F8((u8 *)data->src, (u8 *)data->dst, data->expandSize, data->dstSize, data->arcInfoIdx, data->deleteSrc);
+    fn_801D47F8(
+        static_cast<u8 *>(data->src), static_cast<u8 *>(data->dst),
+        data->expandSize, data->dstSize, data->arcInfoIdx, data->deleteSrc
+    );
     return NULL;
 }
 
-// Yaz0 decompression.
+// Yaz0 (SZS) decompression.
 bool CFileManager::fn_801D47F8(u8 *src, u8 *dst, u32 expandSize, u32 dstSize, s32 arcInfoIdx, BOOL deleteSrc) {
     DCInvalidateRange(dst, dstSize);
 
@@ -336,7 +343,7 @@ bool CFileManager::fn_801D47F8(u8 *src, u8 *dst, u32 expandSize, u32 dstSize, s3
 
     for (s32 dstIdx = 0; dstIdx < expandSize; mask >>= 1) {
         if (mask == 0) {
-            mask = 0b10000000;
+            mask = (1 << 7);
             opByte = src[srcIdx++];
         }
 
@@ -365,7 +372,7 @@ bool CFileManager::fn_801D47F8(u8 *src, u8 *dst, u32 expandSize, u32 dstSize, s3
     DCFlushRange(dst, dstSize);
 
     if (arcInfoIdx >= 0) {
-        gFileManager->mArchiveInfo[arcInfoIdx].mState = eArchiveInfoState_Decompressed;
+        gFileManager->mArchiveInfo[arcInfoIdx].state = eArchiveInfoState_Decompressed;
     }
 
     return false;
@@ -374,16 +381,19 @@ bool CFileManager::fn_801D47F8(u8 *src, u8 *dst, u32 expandSize, u32 dstSize, s3
 void CFileManager::fn_801D49D4(void) {
     s32 driveStatus = DVDGetDriveStatus();
     switch (driveStatus) {
-        case DVD_STATE_NO_DISK:
-        case DVD_STATE_WRONG_DISK:
-        case DVD_STATE_RETRY:
-            if (unk34C) {
-                unk34C();
-            }
-            CGameManager::fn_801D7538(driveStatus);
-            if (unk350) {
-                unk350();
-            }
-            break;
+    case DVD_STATE_NO_DISK:
+    case DVD_STATE_WRONG_DISK:
+    case DVD_STATE_RETRY:
+        if (mDVDErrorFuncF) {
+            mDVDErrorFuncF();
+        }
+        CGameManager::fn_801D7538(driveStatus);
+        if (mDVDErrorFuncB) {
+            mDVDErrorFuncB();
+        }
+        break;
+
+    default:
+        break;
     }
 }
