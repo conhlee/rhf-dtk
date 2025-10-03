@@ -8,11 +8,11 @@
 enum {
     /*   Prologue MyFlow opcodes (0x200)  */
 
-    TF_PROLOGUE_START_ANIM = 0x200, ///< Start playing the prologue animation.
+    TF_PROLOGUE_START_ANIM = 0x200, ///< Start playing an animation. Args: animation index
 };
 
 // command macros
 
-#define TFC_PROLOGUE_START_ANIM() TFD_CMD(TF_PROLOGUE_START_ANIM, 0, 0),
+#define TFC_PROLOGUE_START_ANIM(animIdx) TFD_CMD(TF_PROLOGUE_START_ANIM, 1, 0), (TickFlowCode)(animIdx),
 
 #endif
