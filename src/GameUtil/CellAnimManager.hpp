@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CCELLANIMMANAGER_HPP
-#define GAMEUTIL_CCELLANIMMANAGER_HPP
+#ifndef GAMEUTIL_CELLANIMMANAGER_HPP
+#define GAMEUTIL_CELLANIMMANAGER_HPP
 
 #include <revolution/types.h>
 #include "Singleton.hpp"
@@ -57,7 +57,7 @@ public:
 
 private:
     void insertCellAnim(CCellAnim *cellAnim) {
-        CCellAnim *insertCell = mCellAnimFirst;
+        CCellAnim *insertCell = mCellAnimHead;
         CCellAnim *prevCell = NULL;
 
         while (insertCell != NULL) {
@@ -70,8 +70,8 @@ private:
             }
         }
 
-        if (insertCell == mCellAnimFirst) {
-            mCellAnimFirst = cellAnim;
+        if (insertCell == mCellAnimHead) {
+            mCellAnimHead = cellAnim;
         }
 
         if (insertCell != NULL) {
@@ -83,7 +83,7 @@ private:
     }
 
     bool containsCellAnim(CCellAnim *cellAnim) {
-        CCellAnim *current = mCellAnimFirst;
+        CCellAnim *current = mCellAnimHead;
         while (current != NULL) {
             if (current == cellAnim) {
                 return true;
@@ -95,7 +95,7 @@ private:
         return false;
     }
 
-    void setupProjection() {
+    void setupProjection(void) {
         // TODO: nonmatch
         Mtx44 projMtx;
 
@@ -132,8 +132,7 @@ private:
     }
 
 private:
-    class CCellAnimData {
-    public:
+    struct CellAnimData {
         TPLPalette *texPalette;
         GXTexObj *texObj;
 
@@ -150,8 +149,8 @@ private:
         CellAnimAnimation* anims;
     };
 
-    CCellAnimData mCellAnimData[256];
-    CCellAnim *mCellAnimFirst;
+    CellAnimData mCellAnimData[256];
+    CCellAnim *mCellAnimHead;
 
     CCellAnim *mCellAnimBase;
     BaseUpdateCallbackFn mCellAnimBaseCallback;

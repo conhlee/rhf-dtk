@@ -41,7 +41,7 @@ void CSceneMenu::fn_80006FA4(void) {
     fn_80008EFC();
     fn_801D369C(eHeapGroup_SceneAsset);
     if (gFileManager->fn_801D42E0(55)) {
-        gFileManager->fn_801D3F94(55, "content2/layout/layout_msg.szs", eHeap_MEM2, 32);
+        gFileManager->fn_801D3F94(55, "content2/layout/layout_msg.szs");
     }
     fn_801D3644();
 
@@ -70,7 +70,7 @@ public:
     virtual void _14(void);
     virtual void _20(void);
 
-    CMenuLayout() {
+    CMenuLayout(void) {
         setAnimationCount(0);
     }
 
@@ -163,12 +163,12 @@ void CSceneMenu::_28(void) {
     }
     if (((controller->getUnk133C() & 8) || (controller->getUnk1368() & 8)) 
     || ((gcController->unkInputCheck(8) || (gcController->getUnk14() & 8)))) {
-        fn_800077A8((lbl_80320143 + 105) % 106);
+        fn_800077A8((lbl_80320143 + ARRAY_LENGTH(lbl_801F8460) - 1) % ARRAY_LENGTH(lbl_801F8460));
         return;
     }
     if (((controller->getUnk133C() & 4) || (controller->getUnk1368() & 4)) 
     || ((gcController->unkInputCheck(4) || (gcController->getUnk14() & 4)))) {
-        fn_800077A8((lbl_80320143 + 1) % 106);
+        fn_800077A8((lbl_80320143 + 1) % ARRAY_LENGTH(lbl_801F8460));
         return;
     }
     if (((controller->getUnk133C() & 1) || (controller->getUnk1368() & 1)) 
@@ -177,8 +177,8 @@ void CSceneMenu::_28(void) {
             fn_800077A8(lbl_80320143 - 20);
             return;
         }
-        if (((lbl_80320143 % 20) + 100) >= 106) {
-            fn_800077A8(105);
+        if (((lbl_80320143 % 20) + 100) >= ARRAY_LENGTH(lbl_801F8460)) {
+            fn_800077A8(ARRAY_LENGTH(lbl_801F8460) - 1);
             return;
         }
         fn_800077A8((lbl_80320143 % 20) + 100);
@@ -186,14 +186,14 @@ void CSceneMenu::_28(void) {
     }
     if (((controller->getUnk133C() & 2) || (controller->getUnk1368() & 2)) 
     || ((gcController->unkInputCheck(2) || (gcController->getUnk14() & 2)))) {
-        if ((lbl_80320143 + 20) < 106) {
+        if ((lbl_80320143 + 20) < ARRAY_LENGTH(lbl_801F8460)) {
             fn_800077A8(lbl_80320143 + 20);
             return;
         }
         s32 temp = ((lbl_80320143) / 20);
         s32 temp1 = ((lbl_80320143) % 20);
         if (temp < 5) {
-            fn_800077A8(105);
+            fn_800077A8(ARRAY_LENGTH(lbl_801F8460) - 1);
             return;
         }
         fn_800077A8(temp1);

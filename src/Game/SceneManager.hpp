@@ -79,12 +79,13 @@ enum eSceneID { // TODO: move this somewhere else
 
 class CSceneManager : public TSingleton<CSceneManager> {
 public:
-
     virtual void _08(void);
     virtual ~CSceneManager(void);
     virtual void _10(void);
     virtual void _14(void);
     virtual void _18(void);
+
+    CSceneManager(void);
 
     void fn_80089FE0(eSceneID sceneID, const TickFlowCode *tickFlowCode);
     void fn_8008A4DC(eSceneID sceneID, u32 ver);
@@ -96,8 +97,6 @@ public:
     bool fn_8008B0FC(s32 idx, u32 sceneID);
     bool fn_8008B118(eSceneID sceneID);
     bool fn_8008B27C(void);
-
-    CSceneManager(void);
 
     s32 sceneIdx(eSceneID sceneID) {
         int i;

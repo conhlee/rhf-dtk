@@ -25,7 +25,7 @@ CDynTex::CDynTex(DrwUpdateFn drwUpdateFn) {
     GXInitTexObj(&mTexObj, mTexData, mWidth, mHeight, MY_TEX_FORMAT, GX_CLAMP, GX_CLAMP, FALSE);
 }
 
-CDynTex::~CDynTex() {
+CDynTex::~CDynTex(void) {
     delete[] static_cast<u8 *>(mTexData);
 }
 

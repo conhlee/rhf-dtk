@@ -25,7 +25,7 @@ namespace Strap {
 
 s32 sceneVer;
 
-}
+} // namespace Strap
 
 void CSceneStrap::fn_8007B270(u32) {}
 
@@ -37,13 +37,13 @@ void CSceneStrap::fn_8007B2D8(void) {
     if (gFileManager->fn_801D42E0(2)) {
         switch (SCGetLanguage()) {
         case SC_LANG_FR:
-            gFileManager->fn_801D3F94(2, "content2/cellanim/strap/verF/cellanim.szs", eHeap_MEM2, 32);
+            gFileManager->fn_801D3F94(2, "content2/cellanim/strap/verF/cellanim.szs");
             break;
         case SC_LANG_SP:
-            gFileManager->fn_801D3F94(2, "content2/cellanim/strap/verS/cellanim.szs", eHeap_MEM2, 32);
+            gFileManager->fn_801D3F94(2, "content2/cellanim/strap/verS/cellanim.szs");
             break;
         default:
-            gFileManager->fn_801D3F94(2, "content2/cellanim/strap/verE/cellanim.szs", eHeap_MEM2, 32);
+            gFileManager->fn_801D3F94(2, "content2/cellanim/strap/verE/cellanim.szs");
             break;
         }
     }

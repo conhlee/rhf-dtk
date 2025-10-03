@@ -5,19 +5,21 @@
 
 #include "TickFlowDecl.hpp"
 
+#include "SNDHeap.hpp"
+
 enum {
     /*   ExFlow opcodes (0x100 to 0x141)  */
 
-    TF_SET_SCENE = 0x100,       ///< Set the current scene. Args: scene ID, tickflow *
+    TF_SET_SCENE = 0x100,       ///< Set the current scene. Args: scene ID, TickFlowCode *
     TF_SET_SCENE_VER,           ///< Set a scene's version. Args: scene ID, version
-    TF_SCENE_DATA,              ///< (Un)load a scene's data (cellanim data & layouts). Arg0: 0 for load, 1 for unload; Args: scene ID
+    TF_SCENE_ASSETS,            ///< (Un)load a scene's assets (cellanim data & layouts). Arg0: 0 for load, 1 for unload; Args: scene ID
     TF_103,
-    TF_104,
+    TF_GET_SCENE_RUNNING,       ///< Set condvar to 1 if the current scene is running, and 0 if not.
     TF_SET_PROLOGUE,            ///< Set the prologue. Arg0: is 2P; Args: name, version
     TF_SET_EPILOGUE,            ///< Set the epilogue. Args: name, version
     TF_SET_EPILOGUE_MSG,        ///< Set a epilogue message. Arg0: type: 0 for OK, 1 for Try Again, 2 for Superb; Args: mesg ID string
     TF_SET_GRADING_CAPTION,     ///< Set the grading caption. Args: mesg ID string
-    TF_109,
+    TF_PROLOGUE_JINGLE,         ///< Set/get the prologue jingle. Arg0: 0 for set (arg will be jingle num), 1 for get (condvar will be jingle num).
     TF_FADE,                    ///< Fade the screen in/out. Arg0: 0 for fade out, 1 for fade in; Args: time is in frames, time (in ticks or frames).
     TF_10B,
     TF_UI_SKIP_POS,             ///< Set the "(-) Skip" graphic's position.
@@ -58,7 +60,7 @@ enum {
     TF_UNLOAD_SND_GROUPS,       ///< Unload all groups of a specific type. Arg0: type (1 for music, 2 for sfx)
     TF_RESET_SND_GROUP_HEAP,    ///< Reset a sound group's heap. Arg0: type (1 for music, 2 for sfx)
                                 ///      - Note: this doesn't unload any previously loaded data, but it will be
-                                ///              overwritten by newly allocated data.
+                                ///              overwritten by newly allocated data. TODO this explanation is totally wrong!!!!!!!!!!!!
     TF_12F,
     TF_130,
     TF_131,
@@ -87,6 +89,8 @@ enum {
 
 #define TFC_SET_SCENE_VER(sceneId, ver) TFD_CMD(TF_SET_SCENE_VER, 2, 0), (TickFlowCode)(sceneId), (TickFlowCode)(ver),
 
+#define TFC_GET_SCENE_RUNNING() TFD_CMD(TF_GET_SCENE_RUNNING, 0, 0),
+
 #define TFC_SET_EPILOGUE(nameStr, ver) TFD_CMD(TF_SET_EPILOGUE, 2, 0), TFD_PTR(nameStr), (TickFlowCode)(ver),
 
 #define TFC_SET_EPILOGUE_MSG_OK(mesgIdStr) TFD_CMD(TF_SET_EPILOGUE_MSG, 1, 0), TFD_PTR(mesgIdStr),
@@ -94,6 +98,12 @@ enum {
 #define TFC_SET_EPILOGUE_MSG_SUPERB(mesgIdStr) TFD_CMD(TF_SET_EPILOGUE_MSG, 1, 2), TFD_PTR(mesgIdStr),
 
 #define TFC_SET_GRADING_CAPTION(mesgIdStr) TFD_CMD(TF_SET_GRADING_CAPTION, 1, 0), TFD_PTR(mesgIdStr),
+
+#define TFC_SET_PROLOGUE_JINGLE(jingleNum) TFD_CMD(TF_PROLOGUE_JINGLE, 0, 0), (TickFlowCode)(jingleNum),
+#define TFC_GET_PROLOGUE_JINGLE() TFD_CMD(TF_PROLOGUE_JINGLE, 0, 1),
+
+#define TFC_UI_PAUSE_SHOW() TFD_CMD(TF_UI_PAUSE, 0, 0),
+#define TFC_UI_PAUSE_HIDE() TFD_CMD(TF_UI_PAUSE, 0, 1),
 
 #define TFC_FADE_IN_FRAMES(frames) TFD_CMD(TF_FADE, 2, 1), (TickFlowCode)(1), (TickFlowCode)(frames),
 #define TFC_FADE_OUT_FRAMES(frames) TFD_CMD(TF_FADE, 2, 0), (TickFlowCode)(1), (TickFlowCode)(frames),
@@ -112,9 +122,20 @@ enum {
 #define TFC_MASK01_LAYER(layer) TFD_CMD(TF_MASK01_LAYER, 1, 0), (TickFlowCode)(layer),
 #define TFC_MASK01_FADE(targetOpacity, ticks) TFD_CMD(TF_MASK01_FADE, 2, 1), (TickFlowCode)(targetOpacity), (TickFlowCode)(ticks),
 
+// TODO: replace usage of this with TFC_RESET_SND_GROUP_HEAP_0 and friends?
 #define TFC_RESET_SND_GROUP_HEAP(type) TFD_CMD(TF_RESET_SND_GROUP_HEAP, 0, type),
 
 #define TFC_MESG_PANE_SET_TEXT(accessIdx, mesgIdStr) TFD_CMD(TF_MESG_PANE_SET_TEXT, 1, accessIdx), TFD_PTR(mesgIdStr),
+
+#define TFC_LOAD_SND_GROUP_0(sid) TFD_CMD(TF_LOAD_SND_GROUP, 1, eSoundHeap_0), (TickFlowCode)(sid),
+#define TFC_LOAD_SND_GROUP_1(sid) TFD_CMD(TF_LOAD_SND_GROUP, 1, eSoundHeap_1), (TickFlowCode)(sid),
+#define TFC_LOAD_SND_GROUP_2(sid) TFD_CMD(TF_LOAD_SND_GROUP, 1, eSoundHeap_2), (TickFlowCode)(sid),
+#define TFC_LOAD_SND_GROUP_3(sid) TFD_CMD(TF_LOAD_SND_GROUP, 1, eSoundHeap_3), (TickFlowCode)(sid),
+
+#define TFC_RESET_SND_GROUP_HEAP_0() TFD_CMD(TF_RESET_SND_GROUP_HEAP, 0, eSoundHeap_0),
+#define TFC_RESET_SND_GROUP_HEAP_1() TFD_CMD(TF_RESET_SND_GROUP_HEAP, 0, eSoundHeap_1),
+#define TFC_RESET_SND_GROUP_HEAP_2() TFD_CMD(TF_RESET_SND_GROUP_HEAP, 0, eSoundHeap_2),
+#define TFC_RESET_SND_GROUP_HEAP_3() TFD_CMD(TF_RESET_SND_GROUP_HEAP, 0, eSoundHeap_3),
 
 // TODO
 #define TFC_11A(value) TFD_CMD(TF_11A, 1, 0), (TickFlowCode)(value),

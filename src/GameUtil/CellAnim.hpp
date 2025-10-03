@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CCELLANIM_HPP
-#define GAMEUTIL_CCELLANIM_HPP
+#ifndef GAMEUTIL_CELLANIM_HPP
+#define GAMEUTIL_CELLANIM_HPP
 
 #include <revolution/types.h>
 #include <revolution/MTX.h>

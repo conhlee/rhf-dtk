@@ -30,7 +30,7 @@ CWindParticle::CWindParticle(CExScene *scene, CCellAnim *cellAnim) {
 
 CWindParticle::~CWindParticle(void) {}
 
-void CWindParticle::fn_800C3168() {
+void CWindParticle::fn_800C3168(void) {
     f32 newPosY = mCellAnim->getPosY() + mSpeedY;
     f32 newPosX = mCellAnim->getPosX() + mVelocityX;
 

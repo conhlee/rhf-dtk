@@ -16,14 +16,19 @@ struct SaveDataFile {
 
 class CSaveData : public TSingleton<CSaveData> {
 public:
-
     virtual void _08(void);
     virtual ~CSaveData(void);
 
     CSaveData();
 
+    void fn_80078E04(void);
+    void fn_80078E8C(void);
+
     SaveDataFile *fn_80078F4C(void);
     void fn_80078F68(void);
+
+private:
+    char _pad[0x1448 - 0x4];
 };
 
 extern CSaveData *gSaveData;

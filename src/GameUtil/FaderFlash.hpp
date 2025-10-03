@@ -15,11 +15,11 @@ public:
     virtual void _20(void);
     virtual void _24(u8);
 
-    CFaderFlash() {
+    CFaderFlash(void) {
         mUnk04 = 0;
     }
 
-    s32 getUnk04() const { return mUnk04; }
+    s32 getUnk04(void) const { return mUnk04; }
 
     static CFaderFlash *fn_80007C28(void);
     

@@ -284,7 +284,7 @@ TFD_BEGIN(lbl_801F7858)
     TFC_100_1()
 
     TF_STOP,
-    0, // </3
+    0, // TODO: Probably fake (some kind of padding?)
 TFD_END()
 
 const TickFlowCode *lbl_802E5740[9] = {

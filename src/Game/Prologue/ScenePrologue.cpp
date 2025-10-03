@@ -32,8 +32,8 @@ SCENE_IMPL_CREATE_FN(CScenePrologue)
 void CScenePrologue::fn_8000AD98(void) {
     fn_801D369C(eHeapGroup_SceneAsset);
     if (gFileManager->fn_801D42E0(51)) {
-        gFileManager->fn_801D3F94(51, "content2/cellanim/prologue/cellanim.szs", eHeap_MEM2, 32);
-        gFileManager->fn_801D3F94(91, lbl_8032A278, eHeap_MEM2, 32);
+        gFileManager->fn_801D3F94(51, "content2/cellanim/prologue/cellanim.szs");
+        gFileManager->fn_801D3F94(91, lbl_8032A278);
     }
     fn_801D3644();
 }
@@ -81,9 +81,9 @@ void CScenePrologue::_14(void) {
 
     gCellAnimManager->fn_801DB568(brcadAddr, tplAddr, 0);
 
-    CCellAnim *cellAnim = gCellAnimManager->fn_801DBE7C(0, prologue_mask);
+    CCellAnim *maskAnim = gCellAnimManager->fn_801DBE7C(0, prologue_mask);
 
-    cellAnim->fn_801DCF94(-1);
+    maskAnim->fn_801DCF94(-1);
 
     gLayoutManager->_20(1);
     gLayoutManager->_24(91, "");

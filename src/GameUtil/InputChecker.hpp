@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CINPUTCHECKER_HPP
-#define GAMEUTIL_CINPUTCHECKER_HPP
+#ifndef GAMEUTIL_INPUTCHECKER_HPP
+#define GAMEUTIL_INPUTCHECKER_HPP
 
 #include <revolution/types.h>
 #include "List.hpp"

@@ -41,9 +41,9 @@ void CSceneCredit::fn_800C42AC(void) {
         gFileManager->fn_801D42E0(55) &&
         Credit::sceneVer == 0
     ) {
-        gFileManager->fn_801D3F94(2, "content2/cellanim/credit/ver0/cellanim.szs", eHeap_MEM2, 32);
-        gFileManager->fn_801D3F94(3, "content2/cellanim/navi/ver0/cellanim.szs", eHeap_MEM2, 32);
-        gFileManager->fn_801D3F94(55, "content2/layout/layout_credit.szs", eHeap_MEM2, 32);
+        gFileManager->fn_801D3F94(2, "content2/cellanim/credit/ver0/cellanim.szs");
+        gFileManager->fn_801D3F94(3, "content2/cellanim/navi/ver0/cellanim.szs");
+        gFileManager->fn_801D3F94(55, "content2/layout/layout_credit.szs");
     }
     fn_801D3644();
 }

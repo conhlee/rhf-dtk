@@ -24,12 +24,16 @@ public:
         mUnk416 = value;
     }
 
+    bool getUnk414(void) const { return mUnk414; }
+
 private:
     u8 _pad04[0x412-4];
     bool mUnk412;
-    u8 _pad413[0x3];
+    u8 _pad413;
+    bool mUnk414;
+    u8 _pad415;
     bool mUnk416;
-    u8 _pad417[0x28];
+    u8 _pad417[0x20];
 };
 
 extern CHBMManager *gHBMManager;

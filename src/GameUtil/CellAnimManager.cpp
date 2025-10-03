@@ -12,15 +12,15 @@ CCellAnimManager::~CCellAnimManager(void) {
 }
 
 void CCellAnimManager::_10(s32 cellAnimCount) {
-    u32 size = ROUND_UP(cellAnimCount * sizeof(CCellAnim), 32);
-    u8 *start = new (eHeap_MEM2, 32) u8[size];
+    u32 heapSize = ROUND_UP(cellAnimCount * sizeof(CCellAnim), 32);
+    u8 *heapStart = new (eHeap_MEM2, 32) u8[heapSize];
 
-    mHeapStart = start;
-    mHeap = MEMCreateExpHeap(start, size);
+    mHeapStart = heapStart;
+    mHeap = MEMCreateExpHeap(heapStart, heapSize);
 }
 
 void CCellAnimManager::_08(void) {
-    CCellAnim *current = mCellAnimFirst;
+    CCellAnim *current = mCellAnimHead;
     while (current != NULL) {
         CCellAnim *next = current->getNext();
         fn_801DBFA0(current);
@@ -45,7 +45,7 @@ void CCellAnimManager::_14(void) {
         mCellAnimData[i].usingTexObj = false;
     }
 
-    mCellAnimFirst = NULL;
+    mCellAnimHead = NULL;
     mCellAnimBase = NULL;
     mCellAnimBaseCallback = NULL;
     mCellAnimTempoUpdate = false;
@@ -57,7 +57,7 @@ void CCellAnimManager::_18(void) {
         mCellAnimBaseCallback();
     }
 
-    CCellAnim *current = mCellAnimFirst;
+    CCellAnim *current = mCellAnimHead;
     while (current != NULL) {
         CCellAnim *next = static_cast<CCellAnim *>(current->getNext());
 
@@ -88,8 +88,8 @@ void CCellAnimManager::fn_801DB28C(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_TEV_SCALE_0, 1, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_TEV_SCALE_0, 1, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZMode(0, GX_ALWAYS, 0);
     GXSetCurrentMtx(0);
@@ -104,7 +104,7 @@ void CCellAnimManager::fn_801DB568(void *data, void *tplAddr, u32 id) {
 }
 
 void CCellAnimManager::fn_801DB86C(GXTexObj *texObj, s32 texWidth, s32 texHeight, f32 scaleX, f32 scaleY, u8 id) {
-    CCellAnimData *cellAnimData = mCellAnimData + id;
+    CellAnimData *cellAnimData = mCellAnimData + id;
 
     cellAnimData->texObj = texObj;
     cellAnimData->isLoaded = true;
@@ -200,7 +200,7 @@ CellAnimAnimationKey *CCellAnimManager::fn_801DBC7C(CCellAnim *cellAnim) {
 }
 
 CellAnimSprite *CCellAnimManager::fn_801DBD38(CCellAnim *cellAnim) {
-    CCellAnimData *data = &mCellAnimData[cellAnim->getID()];
+    CellAnimData *data = &mCellAnimData[cellAnim->getID()];
 
     return &data->sprites[lol(cellAnim)->spriteIndex];
 }
@@ -295,7 +295,7 @@ CCellAnim *CCellAnimManager::fn_801DBE7C(u8 id, u16 animId) {
 
 void CCellAnimManager::fn_801DBFA0(CCellAnim* cellAnim) {
     if (containsCellAnim(cellAnim)) {
-        if (cellAnim->getBaseCell() != NULL) {
+        if (cellAnim->getBaseAnim() != NULL) {
             cellAnim->setBase(NULL, 0, false);
         }
 
@@ -306,8 +306,8 @@ void CCellAnimManager::fn_801DBFA0(CCellAnim* cellAnim) {
             current = next;
         }
 
-        if (cellAnim == mCellAnimFirst) {
-            mCellAnimFirst = cellAnim->getNext();
+        if (cellAnim == mCellAnimHead) {
+            mCellAnimHead = cellAnim->getNext();
         }
 
         cellAnim->removeCurrent();
@@ -315,7 +315,7 @@ void CCellAnimManager::fn_801DBFA0(CCellAnim* cellAnim) {
 }
 
 void CCellAnimManager::fn_801DC068(u32 id) {
-    CCellAnim *current = mCellAnimFirst;
+    CCellAnim *current = mCellAnimHead;
     while (current != NULL) {
         CCellAnim *next = current->getNext();
         if (id == current->getID()) {
@@ -331,7 +331,7 @@ void CCellAnimManager::fn_801DC0D4(CCellAnim *cellAnim) {
         prev->setNext(cellAnim->getNext());
     }
     else {
-        mCellAnimFirst = cellAnim->getNext();
+        mCellAnimHead = cellAnim->getNext();
     }
 
     CCellAnim *next = cellAnim->getNext();

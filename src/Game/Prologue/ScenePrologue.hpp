@@ -29,7 +29,7 @@ public:
     virtual bool _24(void);
     virtual void _28(void);
 
-    CScenePrologue() {}
+    CScenePrologue(void) {}
 
     SCENE_DECL_CREATE_FN()
 

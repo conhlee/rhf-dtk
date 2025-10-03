@@ -7,7 +7,7 @@
 
 class CExChecker : public CInputChecker {
 public:
-    virtual ~CExChecker(void) {};
+    virtual ~CExChecker(void) {}
     virtual void _14(void);
     virtual u32 _18(void);
     virtual u32 _20(u8 *, u32, f32);

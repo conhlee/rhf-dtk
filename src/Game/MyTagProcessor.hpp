@@ -9,16 +9,16 @@ class CMyTagProcessor : public nw4r::ut::WideTagProcessor {
 public:
     virtual ~CMyTagProcessor(void);
 
-    virtual Operation Process(u16 ch, ContextType* pCtx);
-    virtual Operation CalcRect(nw4r::ut::Rect* pRect, u16 ch,
-                               ContextType* pCtx);
+    virtual Operation Process(u16 ch, ContextType *pCtx);
+    virtual Operation CalcRect(nw4r::ut::Rect *pRect, u16 ch,
+                               ContextType *pCtx);
 
     CMyTagProcessor(void);
 
 private:
     f32 mRubyScale;
-    nw4r::ut::Color mGradationStartColor;
-    nw4r::ut::Color mGradationEndColor;
+    nw4r::ut::Color mTextColorStart;
+    nw4r::ut::Color mTextColorEnd;
     nw4r::ut::Color mColorMappingMin;
     nw4r::ut::Color mColorMappingMax;
 };

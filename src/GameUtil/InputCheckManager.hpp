@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CINPUTCHECKMANAGER_HPP
-#define GAMEUTIL_CINPUTCHECKMANAGER_HPP
+#ifndef GAMEUTIL_INPUTCHECKMANAGER_HPP
+#define GAMEUTIL_INPUTCHECKMANAGER_HPP
 
 #include <revolution/types.h>
 #include <revolution/MEM.h>
@@ -10,6 +10,7 @@
 
 class CInputCheckManager : public TSingleton<CInputCheckManager> {
 public:
+    typedef void (*FuncUnk414)(void);
     typedef void (*FuncUnk418)(u32);
 
     virtual void _08(void);
@@ -47,8 +48,15 @@ public:
         return unk42E;
     }
 
+    void setUnk414(FuncUnk414 func) {
+        unk414 = func;
+    }
     void setUnk418(FuncUnk418 func) {
         unk418 = func;
+    }
+
+    void setUnk42B(bool value) {
+        unk42B = value;
     }
 
 private:
@@ -62,7 +70,7 @@ private:
         f32 unkC;
     } unk10[0x40];
     u32 unk410;
-    void (*unk414)(void);
+    FuncUnk414 unk414;
     FuncUnk418 unk418;
     u8 unk41C;
     u8 pad41D[0x420 - 0x41d];
@@ -88,6 +96,8 @@ private:
     f32 unk4A0;
     u32 unk4A4[256];
     s32 (*unk8A4)(u32);
+    u32 unk8A8;
+    u32 unk8AC;
 
     static void fn_801E8118(void);
     static void fn_801E8560(void);

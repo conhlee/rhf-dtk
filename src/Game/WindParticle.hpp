@@ -25,10 +25,10 @@ public:
 
     void fn_800C3734(u16, BOOL);
 
-    f32 getShitX() {
+    f32 getShitX(void) {
         return sRandom.nextF32(mAreaWidth) - (0.5f * mAreaWidth);
     }
-    f32 getShitY() {
+    f32 getShitY(void) {
         return sRandom.nextF32(mAreaHeight) - (0.5f * mAreaHeight);
     }
 

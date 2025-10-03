@@ -134,7 +134,7 @@ void CInputCheckManager::fn_801E8BD0(void) {
         }
         u32 temp_r23 = 0;
         u32 temp_r20 = unk4A4[unk10[i].unk4];
-        for (CInputChecker *cur = unk0C, *next; cur != 0; cur = next) {
+        for (CInputChecker *cur = unk0C, *next; cur != NULL; cur = next) {
             next = cur->getNext();
             if (!cur->getUnk71()) {
                 if (!cur->fn_801E7E28(temp_r20)) {
