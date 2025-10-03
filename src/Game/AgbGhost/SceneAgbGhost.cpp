@@ -33,7 +33,7 @@ s32 sceneVer;
 } // namespace AgbGhost
 
 void CSceneAgbGhost::fn_800A75DC(u32 button) {
-    CSceneAgbGhost *scene = static_cast<CSceneAgbGhost *>(gGameManager->getCurrentScene());
+    CSceneAgbGhost *scene = gGameManager->getCurrentScene<CSceneAgbGhost>();
     if (button == 4) {
         bool isArrowReady = (scene->mBowArrowAnim->getAnimID() == 3) &&
                             (scene->mBowArrowAnim->fn_801DD43C() != 0);

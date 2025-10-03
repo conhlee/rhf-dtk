@@ -21,7 +21,7 @@ public:
     virtual u32 _30(u32);
 
     CMyChecker(void) {
-        mScene = static_cast<CSceneLogo *>(gGameManager->getCurrentScene());
+        mScene = gGameManager->getCurrentScene<CSceneLogo>();
     }
 
 private:

@@ -20,7 +20,7 @@ public:
     CMyFlow(const TickFlowCode *code, f32 initRest) :
         CExFlow(code, initRest)
     {
-        mScene = static_cast<CScenePrologue *>(gGameManager->getCurrentScene());
+        mScene = gGameManager->getCurrentScene<CScenePrologue>();
     }
 
     TICKFLOW_DECL_CREATE_FN()
