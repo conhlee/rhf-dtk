@@ -1,5 +1,5 @@
-#ifndef GAMEUTIL_CTICKFLOWMANAGER_HPP
-#define GAMEUTIL_CTICKFLOWMANAGER_HPP
+#ifndef GAMEUTIL_TICKFLOWMANAGER_HPP
+#define GAMEUTIL_TICKFLOWMANAGER_HPP
 
 #include <revolution/types.h>
 #include "Singleton.hpp"
@@ -12,13 +12,19 @@ class CTickFlowManager : public TSingleton<CTickFlowManager> {
 public:
     virtual void _08(void);
     virtual ~CTickFlowManager(void);
-    virtual void _10(void);
-    virtual void _14(void);
+    virtual void _10(s32);
+    virtual void _14(CTickFlow::CreateFn, s32, const TickFlowCode *);
     virtual void _18(void);
     virtual void _1C(CTickFlow::CreateFn, u32);
 
+    CTickFlowManager();
+
     template <typename T>
-    void registerFlow() {
+    void registerFlowInitial(const TickFlowCode *code) {
+        _14(&T::create, sizeof(T), code);
+    }
+    template <typename T>
+    void registerFlow(void) {
         _1C(&T::create, sizeof(T));
     }
 
@@ -36,7 +42,10 @@ public:
     s32 fn_801E4124(void);
     void fn_801E4134(s32, u16);
     u16 fn_801E4144(s32);
+
+    void fn_801E4170(bool);
     bool fn_801E4178(void);
+    u8 fn_801E4180(void);
 
     s32 getUnk1C(void) {
         return unk1C;
@@ -45,12 +54,16 @@ public:
         return unk6D;
     }
 
+    void setUnkF8(const TickFlowCode *code) { mUnkF8 = code; }
+
 private:
     u8 pad04[0x1c-0x04];
     s32 unk1C;
     u8 pad20[0x6C-0x20];
     u8 unk6C;
     u8 unk6D;
+    u8 pad6E[0xF8-0x6E];
+    const TickFlowCode *mUnkF8;
 };
 
 
