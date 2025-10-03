@@ -1,13 +1,13 @@
 #include "List.hpp"
 
-void CList::finalDestroy() {}
-void CList::finalInsert() {}
+void CList::finalDestroy(void) {}
+void CList::finalInsert(void) {}
 
-CList::CList() {
+CList::CList(void) {
     mNext = NULL;
     mPrev = NULL;
 }
-CList::~CList() {}
+CList::~CList(void) {}
 
 void CList::insertBefore(CList *list) {
     mNext = list;
@@ -35,7 +35,7 @@ void CList::insertAfter(CList *list) {
     finalInsert();
 }
 
-void CList::removeCurrent() {
+void CList::removeCurrent(void) {
     if (mNext != NULL) {
         mNext->mPrev = mPrev;
     }
@@ -48,7 +48,7 @@ void CList::removeCurrent() {
     finalDestroy();
 }
 
-void CList::removeAll() {
+void CList::removeAll(void) {
     CList *current = this;
     CList *next;
 

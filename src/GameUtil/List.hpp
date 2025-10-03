@@ -5,9 +5,9 @@
 
 class CList {
 public:
-    virtual ~CList();
-    virtual void finalInsert();
-    virtual void finalDestroy();
+    virtual ~CList(void);
+    virtual void finalInsert(void);
+    virtual void finalDestroy(void);
 
     CList();
 
