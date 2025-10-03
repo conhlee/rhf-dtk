@@ -40,15 +40,39 @@ namespace nw4r { namespace snd
 			return detail::BasicSound::INVALID_ID;
 		}
 
+		void Pause(bool flag, int fadeFrames) const
+		{
+			if (IsAttachedSound())
+				mSound->Pause(flag, fadeFrames);
+		}
+
 		bool IsPause() const
 		{
 			return IsAttachedSound() && mSound->IsPause();
 		}
 
-		void Pause(bool flag, int fadeFrames) const
+		void Stop(int fadeFrames) const
 		{
 			if (IsAttachedSound())
-				mSound->Pause(flag, fadeFrames);
+				mSound->Stop(fadeFrames);
+		}
+
+		void SetVolume(f32 volume, int frames) const
+		{
+			if (IsAttachedSound())
+				mSound->SetVolume(volume, frames);
+		}
+
+		void SetPitch(f32 pitch) const
+		{
+			if (IsAttachedSound())
+				mSound->SetPitch(pitch);
+		}
+
+		void SetPan(f32 pan) const
+		{
+			if (IsAttachedSound())
+				mSound->SetPan(pan);
 		}
 
 		void StartPrepared()

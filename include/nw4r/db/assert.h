@@ -13,9 +13,12 @@ namespace nw4r
         #define NW4R_DB_ASSERT(exp, line, ...) \
             if(!(exp))                \
             nw4r::db::Panic(__FILE__, line, __VA_ARGS__)
-            
+        
         #define NW4R_ASSERT_MSG(x, line, ...)                                                \
             ((x) && 1 || (nw4r::db::Panic(__FILE__, line, __VA_ARGS__), 0))
+
+        #define NW4R_ASSERT(x, line)                                                    \
+            NW4R_ASSERT_MSG((x), line, "NW4R:Failed assertion " #x)
 
         #define NW4R_ASSERT_PTR_NULL(ptr, line)                                                     \
             NW4R_ASSERT_MSG((ptr) != 0, \

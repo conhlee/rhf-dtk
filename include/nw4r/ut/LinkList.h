@@ -395,7 +395,7 @@ namespace nw4r { namespace ut
 		T &GetFront()
 		{
 			// specifically not the header variant
-			NW4RAssert_Line(497, !IsEmpty());
+			NW4R_ASSERT(!IsEmpty(), 497);
 
 			return *GetBeginIter();
 		}
@@ -403,7 +403,7 @@ namespace nw4r { namespace ut
 		T &GetBack()
 		{
 			// specifically not the header variant
-			NW4RAssert_Line(507, !IsEmpty());
+			NW4R_ASSERT(!IsEmpty(), 507);
 
 			return *--GetEndIter();
 		}

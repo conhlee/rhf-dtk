@@ -250,6 +250,7 @@ namespace nw4r { namespace snd { namespace detail
 		void SetInitialVolume(f32 volume);
 		void SetVolume(f32 volume, int frames);
 		void SetPitch(f32 pitch);
+		void SetPan(f32 pan);
 		void SetFxSend(AuxBus bus, f32 send);
 		void SetRemoteFilter(int filter);
 		void SetPanMode(PanMode mode);

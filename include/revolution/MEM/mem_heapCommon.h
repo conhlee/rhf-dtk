@@ -83,6 +83,10 @@ static inline void FillAllocMemory(MEMiHeapHead* heap, void* memBlock,
     }
 }
 
+static inline s32 MEMGetHeapTotalSize(MEMiHeapHead* heap) {
+    return GetOffsetFromPtr(heap, heap->end);
+}
+
 #ifdef __cplusplus
 }
 #endif

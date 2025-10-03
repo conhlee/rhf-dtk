@@ -36,11 +36,23 @@ public:
     f32 Print(u16 ch);
 
     void SetColorMapping(Color min, Color max) {
+        NW4R_ASSERT_PTR(this, 88);
         mColorMapping.min = min;
         mColorMapping.max = max;
     }
 
+    Color GetColorMappingMin() const {
+        NW4R_ASSERT_PTR(this, 95);
+        return mColorMapping.min;
+    }
+
+    Color GetColorMappingMax() const {
+        NW4R_ASSERT_PTR(this, 100);
+        return mColorMapping.max;
+    }
+
     void ResetColorMapping() {
+        NW4R_ASSERT_PTR(this, 105);
         SetColorMapping(DEFAULT_COLOR_MAPPING_MIN, DEFAULT_COLOR_MAPPING_MAX);
     }
 
@@ -67,6 +79,7 @@ public:
     }
 
     void SetTextColor(Color start, Color end) {
+        NW4R_ASSERT_PTR(this, 144);
         mTextColor.start = start;
         mTextColor.end = end;
         UpdateVertexColor();
@@ -77,19 +90,44 @@ public:
         UpdateVertexColor();
     }
 
+    // TODO: fabricated name
+    Color GetTextColor() const {
+        NW4R_ASSERT_PTR(this, 152);
+        return mTextColor.start;
+    }
+    // TODO: fabricated name
+    Color GetTextColorStart() const {
+        NW4R_ASSERT_PTR(this, 157);
+        return mTextColor.start;
+    }
+    // TODO: fabricated name
+    Color GetTextColorEnd() const {
+        NW4R_ASSERT_PTR(this, 162);
+        return mTextColor.end;
+    }
+
     f32 GetScaleH() const {
+        NW4R_ASSERT_PTR(this, 184);
         return mScale.x;
     }
     f32 GetScaleV() const {
+        NW4R_ASSERT_PTR(this, 189);
         return mScale.y;
     }
 
     void SetScale(f32 x, f32 y) {
+        NW4R_ASSERT_PTR(this, 171);
         mScale.x = x;
         mScale.y = y;
     }
+    void SetScale(f32 xy) {
+        NW4R_ASSERT_PTR(this, 178);
+        mScale.x = xy;
+        mScale.y = xy;
+    }
 
     f32 GetCursorX() const {
+        NW4R_ASSERT_PTR(this, 316);
         return mCursorPos.x;
     }
     void SetCursorX(f32 x) {
@@ -97,6 +135,7 @@ public:
     }
 
     f32 GetCursorY() const {
+        NW4R_ASSERT_PTR(this, 321);
         return mCursorPos.y;
     }
     void SetCursorY(f32 y) {
@@ -115,6 +154,7 @@ public:
     }
 
     void MoveCursorX(f32 dx) {
+        NW4R_ASSERT_PTR(this, 301);
         mCursorPos.x += dx;
     }
     void MoveCursorY(f32 dy) {

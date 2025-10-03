@@ -52,16 +52,19 @@ public:
     ~TextWriterBase();
 
     f32 GetWidthLimit() const {
+        NW4R_ASSERT_PTR(this, 132);
         return mWidthLimit;
     }
     void SetWidthLimit(f32 limit) {
+        NW4R_ASSERT_PTR(this, 123);
         mWidthLimit = limit;
     }
     void ResetWidthLimit() {
-        mWidthLimit = NW4R_MATH_FLT_MAX;
+        SetWidthLimit(NW4R_MATH_FLT_MAX);
     }
 
     f32 GetCharSpace() const {
+        NW4R_ASSERT_PTR(this, 108);
         return mCharSpace;
     }
     void SetCharSpace(f32 space) {
@@ -73,6 +76,7 @@ public:
         return mLineSpace;
     }
     void SetLineSpace(f32 space) {
+        NW4R_ASSERT_PTR(this, 93);
         mLineSpace = space;
     }
 
@@ -84,9 +88,11 @@ public:
     }
 
     u32 GetDrawFlag() const {
+        NW4R_ASSERT_PTR(this, 144);
         return mDrawFlag;
     }
     void SetDrawFlag(u32 flag) {
+        NW4R_ASSERT_PTR(this, 139);
         mDrawFlag = flag;
     }
 

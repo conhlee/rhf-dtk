@@ -23,6 +23,8 @@
 #define DECL_WEAK __declspec(weak)
 #define DONT_INLINE __attribute__((never_inline))
 
+#define ATTR_UNUSED __attribute__((unused))
+
 // Codewarrior tricks for matching decomp
 // (Functions are given prototypes for -requireprotos)
 #ifdef __MWERKS__
