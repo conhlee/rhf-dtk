@@ -18,10 +18,12 @@ public:
 
     void fn_801D63B4(void);
     void fn_801D6478(void);
-    void fn_801D6514(GXRenderModeObj *renderMode);
     void fn_801D6680(void);
 
     GXRenderModeObj *getRenderMode(void) const { return mRenderMode; }
+
+private:
+    void fn_801D6514(GXRenderModeObj *renderMode);
 
 private:
     static GXRenderModeObj sRenderModeObj;
