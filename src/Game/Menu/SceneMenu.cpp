@@ -5,7 +5,7 @@
 #include "FileManager.hpp"
 #include "MessageManager.hpp"
 #include "SceneManager.hpp"
-#include "CanvasManager.hpp"
+#include "MyCanvas.hpp"
 #include "LayoutManager.hpp"
 #include "SoundManager.hpp"
 #include "Controller.hpp"
