@@ -26,7 +26,11 @@
 
 #include <nw4r/db/assert.h>
 
-CGameManager::DvdMessageData CGameManager::sDvdMessageData;
+#include "LayoutManager.hpp"
+
+#include "SNDHeap.hpp"
+
+CGameManager::DVDMessageData CGameManager::sDVDMessageData;
 
 bool CGameManager::sIsPowerOff;
 bool CGameManager::sIsReset;
@@ -48,14 +52,14 @@ void CGameManager::_14(void) {
     mNextSceneCreateFunc = NULL;
     mNextTickFlowCode = NULL;
 
-    sDvdMessageData.font.SetResource(lbl_80316560);
+    sDVDMessageData.font.SetResource(lbl_80316560);
 }
 
 void CGameManager::_18(void) {}
 
-void CGameManager::_1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u16 initSceneHeapId) {
-    MEMGetTotalFreeSizeForExpHeap(lbl_80320F80);
-    MEMGetTotalFreeSizeForExpHeap(lbl_80320F84);
+void CGameManager::_1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u16 initSceneHeapGroup) {
+    MEMGetTotalFreeSizeForExpHeap(lbl_80320F80); // Unused
+    MEMGetTotalFreeSizeForExpHeap(lbl_80320F84); // Unused
 
     mCurrentScene = initSceneCreateFn(initSceneHeapGroup);
     mFader = fader;
@@ -84,7 +88,7 @@ void CGameManager::_1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u
             mCurrentScene = mNextSceneCreateFunc(mNextSceneHeapGroup);
         }
 
-        bool wasLoading = mCurrentScene->getState() == CScene::eState_Preparing;
+        bool wasPreparing = mCurrentScene->getState() == CScene::eState_Preparing;
 
         mCurrentScene->fn_801D83DC();
 
@@ -92,9 +96,9 @@ void CGameManager::_1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u
 
         gSoundManager->fn_801E4D60();
         
-        bool isNowInitialized = mCurrentScene->getState() == CScene::eState_Prepared;
+        bool nowPrepared = mCurrentScene->getState() == CScene::eState_Prepared;
 
-        if (wasLoading && isNowInitialized && mNextTickFlowCode != NULL) {
+        if (wasPreparing && nowPrepared && mNextTickFlowCode != NULL) {
             gTickFlowManager->fn_801E1CC0(mNextTickFlowCode);
             mNextTickFlowCode = NULL;
         }
@@ -111,7 +115,7 @@ void CGameManager::_1C(CScene::CreateFn initSceneCreateFn, CFaderFlash *fader, u
 
         gGraphicManager->fn_801D6478();
 
-        if (mCurrentScene->getState() == 3) {
+        if (mCurrentScene->getState() == CScene::eState_3) {
             gControllerManager->_1C();
         }
     }
@@ -130,16 +134,17 @@ void CGameManager::osResetCallback(void) {
     sIsReset = true;
 }
 
-void CGameManager::fn_801D7538(s32 dvdDriveStatus) {
-    switch (dvdDriveStatus) {
+// Display the DVD error screen & wait for the issue to be resolved.
+void CGameManager::fn_801D7538(s32 driveStatus) {
+    switch (driveStatus) {
     case DVD_STATE_NO_DISK:
-        sDvdMessageData.messageStr = lbl_80316400;
+        sDVDMessageData.messageStr = lbl_80316400;
         break;
     case DVD_STATE_WRONG_DISK:
-        sDvdMessageData.messageStr = lbl_8031645C;
+        sDVDMessageData.messageStr = lbl_8031645C;
         break;
     case DVD_STATE_RETRY:
-        sDvdMessageData.messageStr = lbl_803164B8;
+        sDVDMessageData.messageStr = lbl_803164B8;
         break;
     default:
         break;
@@ -151,14 +156,14 @@ void CGameManager::fn_801D7538(s32 dvdDriveStatus) {
     OSStateCallback prevResetCallback = OSSetResetCallback(osResetCallback);
     OSStateCallback prevPowerCallback = OSSetPowerCallback(osPowerCallback);
 
-    while (dvdDriveStatus == (s32)DVDGetDriveStatus()) {
+    while (driveStatus == static_cast<s32>(DVDGetDriveStatus())) {
         gGraphicManager->fn_801D63B4();
 
         if (CSoundManager::fn_801E4D4C()) {
             gSoundManager->fn_801E4D60();
         }
 
-        sDvdMessageData.fn_801D77A4();
+        sDVDMessageData.fn_801D77A4();
 
         if (sIsReset) {
             VISetBlack(TRUE);
@@ -188,7 +193,7 @@ void CGameManager::fn_801D7538(s32 dvdDriveStatus) {
             gSoundManager->fn_801E4D60();
         }
 
-        sDvdMessageData.fn_801D77A4();
+        sDVDMessageData.fn_801D77A4();
 
         if (sIsReset) {
             VISetBlack(TRUE);
@@ -212,11 +217,11 @@ void CGameManager::fn_801D7538(s32 dvdDriveStatus) {
     OSSetPowerCallback(prevPowerCallback);
 }
 
-CGameManager::DvdMessageData::~DvdMessageData(void) {}
+CGameManager::DVDMessageData::~DVDMessageData(void) {}
 
-void CGameManager::DvdMessageData::fn_801D77A4() {
+void CGameManager::DVDMessageData::fn_801D77A4(void) {
     u32 sc[4];
-    f32 vp[6];
+    f32 vp[GX_VIEWPORT_SZ];
 
     GXGetViewportv(vp);
     GXGetScissor(&sc[0], &sc[1], &sc[2], &sc[3]);
@@ -255,8 +260,8 @@ void CGameManager::DvdMessageData::fn_801D77A4() {
     GXSetTevDirect(GX_TEVSTAGE0);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_RASC,GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA,GX_CA_ZERO);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_TEV_SCALE_0, TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_TEV_SCALE_0, TRUE, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, TRUE, GX_TEVPREV);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetChanCtrl(GX_COLOR0A0, FALSE, GX_SRC_VTX, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
     GXSetColorUpdate(TRUE);
@@ -292,7 +297,7 @@ void CGameManager::DvdMessageData::fn_801D77A4() {
     GXSetScissor(sc[0], sc[1], sc[2], sc[3]);
 }
 
-void CGameManager::DvdMessageData::fn_801D7A74() {
+void CGameManager::DVDMessageData::fn_801D7A74(void) {
     nw4r::ut::WideTextWriter textWriter;
 
     textWriter.SetFont(this->font);

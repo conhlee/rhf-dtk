@@ -35,23 +35,32 @@ public:
 
     CGameManager(void);
 
-    CScene *getCurrentScene(void) const {
-        return mCurrentScene;
+    template <typename T>
+    void startMainLoop(void) {
+        CFaderFlash *fader = CFaderFlash::fn_80007C28();
+        _1C(T::create, fader, eHeapGroup_Scene);
     }
 
-    static void fn_801D7538(s32 dvdDriveStatus);
+    CScene *getCurrentScene(void) const { return mCurrentScene; }
+
+    template <typename T>
+    T *getCurrentScene(void) const {
+        return static_cast<T *>(getCurrentScene());
+    }
+
+    static void fn_801D7538(s32 driveStatus);
 
 private:
-    struct DvdMessageData {
+    struct DVDMessageData {
         nw4r::ut::ResFont font;
         wchar_t *messageStr;
 
-        ~DvdMessageData(void);
+        ~DVDMessageData(void);
 
         void fn_801D77A4();
         void DONT_INLINE fn_801D7A74();
     };
-    static DvdMessageData sDvdMessageData;
+    static DVDMessageData sDVDMessageData;
 
     static bool sIsPowerOff;
     static void osPowerCallback(void);
