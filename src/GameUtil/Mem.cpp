@@ -23,7 +23,7 @@ void *operator new(size_t size) {
         OSReport(" Required : %d B\n", size);
         OSReport(" Free     : %d B\n", MEMGetTotalFreeSizeForExpHeap(lbl_80320F84));
         OSReport(" Max Size : %d B\n", MEMGetAllocatableSizeForExpHeap(lbl_80320F84));
-        OSReport(" Total    : %d B\n", (u8 *)lbl_80320F84->end - (u8 *)lbl_80320F84);
+        OSReport(" Total    : %d B\n", MEMGetHeapTotalSize(lbl_80320F84));
     }
 
     return alloc;
@@ -47,7 +47,7 @@ void *operator new[](size_t size) {
         OSReport(" Required : %d B\n", size);
         OSReport(" Free     : %d B\n", MEMGetTotalFreeSizeForExpHeap(lbl_80320F84));
         OSReport(" Max Size : %d B\n", MEMGetAllocatableSizeForExpHeap(lbl_80320F84));
-        OSReport(" Total    : %d B\n", (u8 *)lbl_80320F84->end - (u8 *)lbl_80320F84);
+        OSReport(" Total    : %d B\n", MEMGetHeapTotalSize(lbl_80320F84));
     }
 
     return alloc;
@@ -199,8 +199,8 @@ static void *fn_801D3784(size_t size, EHeapMEM heap, s32 align) {
         );
         OSReport(" Total    : %d B\n",
             (heap == eHeap_MEM1) ?
-                (u32)(lbl_80320F80->end - (u8 *)lbl_80320F80) :
-                (u32)(lbl_80320F84->end - (u8 *)lbl_80320F84)
+                MEMGetHeapTotalSize(lbl_80320F80) :
+                MEMGetHeapTotalSize(lbl_80320F84)
         );
     }
 
