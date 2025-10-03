@@ -187,7 +187,7 @@ void CCellAnimManager::fn_801DBA98(u8 id) {
     mCellAnimData[id].usingTexObj = false;
 }
 
-s32 CCellAnimManager::fn_801DBB58(CCellAnim *cellAnim) {
+u16 CCellAnimManager::fn_801DBB58(CCellAnim *cellAnim) {
     return 0;
 }
 
@@ -299,9 +299,9 @@ void CCellAnimManager::fn_801DBFA0(CCellAnim* cellAnim) {
             cellAnim->setBase(NULL, 0, false);
         }
 
-        CCellAnim *current = cellAnim->getBaseExtCellFirst();
+        CCellAnim *current = cellAnim->getBaseLinkedHead();
         while (current != NULL) {
-            CCellAnim *next = current->getBaseExtCellNext();
+            CCellAnim *next = current->getBaseLinkedNext();
             current->clearBase();
             current = next;
         }

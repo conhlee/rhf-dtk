@@ -1067,7 +1067,7 @@ config.libs = [
             Object(Matching, "GameUtil/Random.cpp"),
             Object(Matching, "GameUtil/DiscMessages.cpp"),
             Object(NonMatching, "GameUtil/CellAnimManager.cpp"),
-            Object(NonMatching, "GameUtil/CellAnim.cpp"),
+            Object(Matching, "GameUtil/CellAnim.cpp"),
             Object(NonMatching, "GameUtil/TickFlow.cpp"),
             Object(NonMatching, "GameUtil/TickFlowManager.cpp"),
             Object(Matching, "GameUtil/SoundManager.cpp"),

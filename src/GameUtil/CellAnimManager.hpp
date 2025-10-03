@@ -38,7 +38,7 @@ public:
     void fn_801DB86C(GXTexObj *, s32, s32, f32, f32, u8);
     void fn_801DB9C0(GXTexObj *, u8);
     void fn_801DBA98(u8 id);
-    s32 fn_801DBB58(CCellAnim *cellAnim);
+    u16 fn_801DBB58(CCellAnim *cellAnim);
     CellAnimAnimation *fn_801DBC5C(CCellAnim *cellAnim);
     CellAnimAnimationKey *fn_801DBC7C(CCellAnim *cellAnim);
     CellAnimSprite *fn_801DBD38(CCellAnim *cellAnim);
@@ -113,7 +113,7 @@ private:
     }
 
     CellAnimAnimationKey* lol(CCellAnim *cellAnim) {
-        bool isReverse = cellAnim->isReversed();
+        bool isReverse = cellAnim->getPlaybackReverse();
 
         CellAnimAnimation *anim = &mCellAnimData[cellAnim->getID()].anims[cellAnim->getAnimID()];
 

@@ -1,51 +1,72 @@
-#include "CellAnimManager.hpp"
-#include "Mem.hpp"
-#include "TickFlowManager.hpp"
+#include "CellAnim.hpp"
 
 #include <revolution/GX.h>
 
+#include "Mem.hpp"
+
+#include "CellAnimManager.hpp"
+
+#include "TickFlowManager.hpp"
+
 CCellAnim::CCellAnim(void) {}
+
 CCellAnim::~CCellAnim(void) {}
 
 void CCellAnim::init(u8 id, u16 animID) {
     mID = id;
     mAnimID = animID;
+
     mPrepAnimCount = 0;
+
     mTotalFrames = gCellAnimManager->fn_801DBB58(this);
+
     mEnabled = true;
-    mLinear = true;
+
+    mLinearFiltering = true;
+
     mPlaying = false;
+
     mFrame = 0.0f;
+
     mSpeed = 1.0f;
+
     mLooping = false;
-    mBackward = false;
+    mReversePlayback = false;
+
     mDestroyAtEnd = false;
     mDisableAtEnd = false;
+
     mTempoUpdate = false;
     mTempo = 120;
+
     mPos = nw4r::math::VEC2(0.0f, 0.0f);
     mSize = nw4r::math::VEC2(1.0f, 1.0f);
     mAngle = 0.0f;
+
     mLayer = 0;
-    mTexNumber = -1;
+
+    mTextureIndex = -1;
+
     mFgColorR = 0;
     mFgColorG = 0;
     mFgColorB = 0;
+
     mBgColorR = 0xff;
     mBgColorG = 0xff;
     mBgColorB = 0xff;
+
     mOpacity = 0xff;
+
     setNext(NULL);
     setPrev(NULL);
+
     mBaseAnim = NULL;
-    mBaseExtCellFirst = NULL;
-    mBaseExtCellNext = NULL;
-    mBaseExtCell2 = NULL;
+    mBaseLinkedHead = NULL;
+    mBaseLinkedNext = NULL;
+    mBaseLinkedPrev = NULL;
     mBaseAnimDraw = false;
 }
 
-// Returns true if the cellanim needs to be destoryed afterwards
-// regswap between totalFrames and nextAnimID (and inside the prep anim for-loop)
 bool CCellAnim::update(void) {
     if (mPlaying) {
         if (mFrame < 0.0f) {
@@ -55,13 +76,13 @@ bool CCellAnim::update(void) {
             f32 speed;
             if (mTempoUpdate) {
                 f32 currTempo = gTickFlowManager->fn_801E2CA8();
-                f32 cellTempo = mTempo;
-                f32 d = (currTempo - cellTempo);
-                if (((-2.0 < d) && (d < 2.0))) {
+                f32 myTempo = mTempo;
+                f32 d = (currTempo - myTempo);
+                if ((-2.0 < d) && (d < 2.0)) {
                     speed = mSpeed;
                 }
                 else {
-                    speed = (mSpeed * currTempo) / cellTempo;
+                    speed = (mSpeed * currTempo) / myTempo;
                 }
             }
             else {
@@ -73,7 +94,7 @@ bool CCellAnim::update(void) {
                 frame = mFrame + speed;
             }
             else {
-                frame = mFrame + (60.0f / 50.0f) * speed; // (ntsc / pal)
+                frame = mFrame + (60.0f / 50.0f) * speed;
             }
 
             mFrame = frame;
@@ -81,26 +102,15 @@ bool CCellAnim::update(void) {
 
         u16 totalFrames = mTotalFrames;
         while (mFrame >= totalFrames) {
-            // handle overhead frames (only executed when animation has ended)
-            if (mPrepAnimCount) {
-                // prepared animations
-                u16 prevAnimID = mAnimID;
-                u16 nextAnimID = mPrepAnimID[0];
-                if (mPrepAnimCallback[0]) {
-                    mPrepAnimCallback[0](this, prevAnimID, nextAnimID);
-                }
-                mPrepAnimCount--;
-                for (s32 i = 0; i < mPrepAnimCount; i++) {
-                    mPrepAnimID[i + 0] = mPrepAnimID[i + 1];
-                    mPrepAnimCallback[i + 0] = mPrepAnimCallback[i + 1];
-                }
+            if (mPrepAnimCount > 0) {
+                u16 nextAnimID = handlePrepAnim();
+
                 mAnimID = nextAnimID;
                 mTotalFrames = gCellAnimManager->fn_801DBB58(this);
                 mPlaying = true;
                 mFrame = -1.0f;
             }
             else {
-                // finished all animations
                 if (mLooping) {
                     mFrame -= totalFrames;
                     continue;
@@ -148,7 +158,7 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
         MTXConcat(mMtx, transMtx, mMtx);
     }
 
-    f64 myAngle = mAngle; // lmao
+    f64 myAngle = mAngle; // ???
     if (myAngle != 0.0) {
         MTXRotDeg(rotMtx, 'z', mAngle);
         MTXConcat(mMtx, rotMtx, mMtx);
@@ -171,20 +181,20 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
         MTXConcat(mMtx, scaleMtx, mMtx);
     }
 
-    if (mBaseExtCellFirst) {
+    if (mBaseLinkedHead != NULL) {
         u16 texWidth = gCellAnimManager->fn_801DBE04(mID); // unused
         u16 texHeight = gCellAnimManager->fn_801DBE14(mID); // unused
 
         for (s32 i = 0; i < sprite->partCount; i++) {
-            bool haseBaseExt = false;
-            for (CCellAnim *cell = mBaseExtCellFirst; cell != NULL; cell = cell->mBaseExtCellNext) {
-                if (i == cell->mBasePartIndex) {
-                    haseBaseExt = true;
+            bool hasBasePart = false;
+            for (CCellAnim *anim = mBaseLinkedHead; anim != NULL; anim = anim->mBaseLinkedNext) {
+                if (i == anim->mBasePartIndex) {
+                    hasBasePart = true;
                     break;
                 }
             }
-            if (haseBaseExt) {
-                CellAnimSpritePart* part = sprite->parts + i;
+            if (hasBasePart) {
+                CellAnimSpritePart *part = sprite->parts + i;
 
                 f32 width = part->regionW * part->scaleX;
                 f32 height = part->regionH * part->scaleY;
@@ -209,7 +219,7 @@ void CCellAnim::makeMtx(BOOL defMtx, Mtx baseMtx) {
                     MTXConcat(tempMtx, scaleMtx, tempMtx);
                 }
 
-                for (CCellAnim *anim = mBaseExtCellFirst; anim != NULL; anim = anim->mBaseExtCellNext) {
+                for (CCellAnim *anim = mBaseLinkedHead; anim != NULL; anim = anim->mBaseLinkedNext) {
                     if (i == anim->mBasePartIndex) {
                         anim->makeMtx(false, tempMtx);
                     }
@@ -234,7 +244,7 @@ void CCellAnim::draw(BOOL forceDraw) {
 
         for (s32 i = 0; i < sprite->partCount; i++) {
             CellAnimSpritePart *part = sprite->parts + i;
-            gCellAnimManager->fn_801DB3D8(mID, part, mLinear, mTexNumber);
+            gCellAnimManager->fn_801DB3D8(mID, part, mLinearFiltering, mTextureIndex);
 
             f32 sizeX = part->regionW * part->scaleX;
             f32 sizeY = part->regionH * part->scaleY;
@@ -298,11 +308,166 @@ void CCellAnim::draw(BOOL forceDraw) {
 
             GXEnd();
 
-            for (CCellAnim *anim = mBaseExtCellFirst; anim != NULL; anim = anim->mBaseExtCellNext) {
+            for (CCellAnim *anim = mBaseLinkedHead; anim != NULL; anim = anim->mBaseLinkedNext) {
                 if (i == anim->mBasePartIndex && anim->mEnabled && anim->mBaseAnimDraw) {
                     anim->draw(true);
                 }
             }
         }
     }
+}
+
+void CCellAnim::fn_801DCE9C(u16 animID) {
+    mAnimID = animID;
+    mPrepAnimCount = 0;
+    mTotalFrames = gCellAnimManager->fn_801DBB58(this);
+}
+
+void CCellAnim::fn_801DCEE0(u16 animID) {
+    mAnimID = animID;
+}
+
+void CCellAnim::fn_801DCEE8(u16 animID, CellAnimPrepFn callback) {
+    mPrepAnimID[mPrepAnimCount] = animID;
+    mPrepAnimCallback[mPrepAnimCount] = callback;
+    mPrepAnimCount++;
+}
+
+void CCellAnim::fn_801DCF18(void) {
+    mPlaying = true;
+    mFrame = -1.0f;
+}
+
+u16 CCellAnim::fn_801DCF2C(void) {
+    return gCellAnimManager->fn_801DBB58(this);
+}
+
+void CCellAnim::fn_801DCF38(void) {
+    mFrame = gCellAnimManager->fn_801DBB58(this) - 1;
+}
+
+void CCellAnim::fn_801DCF94(s32 layer) {
+    mLayer = layer;
+    gCellAnimManager->fn_801DC0D4(this);
+}
+
+void CCellAnim::setBase(CCellAnim *baseAnim, u16 partIndex, bool drawBase) {
+    if (baseAnim != NULL) {
+        mBaseAnimDraw = drawBase;
+
+        if (mBaseAnim != NULL) {
+            setBase(NULL, 0, false);
+        }
+
+        if (baseAnim->mBaseLinkedHead != NULL) {
+            mBaseLinkedNext = baseAnim->mBaseLinkedHead;
+            mBaseLinkedPrev = NULL;
+            baseAnim->mBaseLinkedHead->mBaseLinkedPrev = this;
+        }
+        else {
+            mBaseLinkedNext = NULL;
+            mBaseLinkedPrev = NULL;
+        }
+
+        mBaseAnim = baseAnim;
+        baseAnim->mBaseLinkedHead = this;
+
+        mBasePartIndex = partIndex;
+    }
+    else if (mBaseAnim != NULL) {
+        if (mBaseLinkedPrev != NULL) {
+            mBaseLinkedPrev->mBaseLinkedNext = mBaseLinkedNext;
+        }
+        else {
+            mBaseAnim->mBaseLinkedHead = mBaseLinkedNext;
+        }
+
+        if (mBaseLinkedNext != NULL) {
+            mBaseLinkedNext->mBaseLinkedPrev = mBaseLinkedPrev;
+        }
+
+        mBaseAnim = NULL;
+        mBaseLinkedNext = NULL;
+        mBaseLinkedPrev = NULL;
+    }
+}
+
+void CCellAnim::finalInsert(void) {}
+
+void CCellAnim::finalDestroy(void) {
+    gCellAnimManager->fn_801DBE24(this);
+}
+
+void CCellAnim::fn_801DD0AC(u16 animID) {
+    mAnimID = animID;
+    mPrepAnimCount = 0;
+    mTotalFrames = gCellAnimManager->fn_801DBB58(this);
+    mLooping = false;
+    mDestroyAtEnd = false;
+    mDisableAtEnd = false;
+    mPlaying = true;
+    mFrame = -1.0f;
+    mEnabled = true;
+}
+
+void CCellAnim::fn_801DD118(u16 animID) {
+    mAnimID = animID;
+    mPrepAnimCount = 0;
+    mTotalFrames = gCellAnimManager->fn_801DBB58(this);
+    mLooping = false;
+    mDestroyAtEnd = false;
+    mPlaying = true;
+    mFrame = -1.0f;
+    mEnabled = true;
+    mDisableAtEnd = true;
+}
+
+void CCellAnim::fn_801DD184(u16 animID) {
+    mAnimID = animID;
+    mPrepAnimCount = 0;
+    mTotalFrames = gCellAnimManager->fn_801DBB58(this);
+    mLooping = false;
+    mDisableAtEnd = false;
+    mPlaying = true;
+    mFrame = -1.0f;
+    mEnabled = true;
+    mDestroyAtEnd = true;
+}
+
+void CCellAnim::fn_801DD1F0(u16 animID) {
+    mAnimID = animID;
+    mPrepAnimCount = 0;
+    mTotalFrames = gCellAnimManager->fn_801DBB58(this);
+    mLooping = true;
+    mPlaying = true;
+    mFrame = -1.0f;
+    mEnabled = true;
+}
+
+void CCellAnim::fn_801DD24C(u16 animID, f32 frame) {
+    mAnimID = animID;
+    mPrepAnimCount = 0;
+    mTotalFrames = gCellAnimManager->fn_801DBB58(this);
+    mFrame = frame;
+    mPlaying = false;
+    mEnabled = true;
+}
+
+void CCellAnim::fn_801DD2B4(u16 keyIndex) {
+    CellAnimAnimation *anim = gCellAnimManager->fn_801DBC5C(this);
+    mFrame = anim->getFrameOfKey(keyIndex);
+}
+
+u16 CCellAnim::fn_801DD43C(void) {
+    CellAnimAnimation *anim = gCellAnimManager->fn_801DBC5C(this);
+    return anim->findKeyAtFrame(getFrame());
+}
+
+u16 CCellAnim::fn_801DD4DC(void) {
+    CellAnimAnimation *anim = gCellAnimManager->fn_801DBC5C(this);
+    return anim->findKeyAtFrame(gCellAnimManager->fn_801DBB58(this));
+}
+
+bool CCellAnim::fn_801DD5A0(void) {
+    return fn_801DD43C() == fn_801DD4DC();
 }

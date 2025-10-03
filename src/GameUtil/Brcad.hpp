@@ -30,7 +30,29 @@ struct CellAnimAnimationKey {
 
 struct CellAnimAnimation {
     u16 keyCount;
-    CellAnimAnimationKey* keys;
+    CellAnimAnimationKey *keys;
+
+    u16 findKeyAtFrame(f32 frame) const {
+        f32 frames = 0.0f;
+
+        for (u16 i = 0; i < keyCount; i++) {
+            frames += keys[i].frameCount;
+            if (frames > frame) {
+                return i;
+            }
+        }
+
+        return keyCount - 1;
+    }
+
+    f32 getFrameOfKey(u16 keyIndex) const {
+        f32 frame = 0.0f;
+        for (u16 i = 0; i < keyIndex; i++) {
+            frame += keys[i].frameCount;
+        }
+
+        return frame;
+    }
 };
 
 #endif
