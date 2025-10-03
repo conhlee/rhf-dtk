@@ -5,6 +5,8 @@
 #include <revolution/OS.h>
 #include <revolution/MEM.h>
 
+#include <new>
+
 enum EHeapMEM {
     eHeap_MEM1 = 0,
     eHeap_MEM2 = 1,
@@ -20,7 +22,6 @@ enum EHeapGroup {
 extern MEMiHeapHead *lbl_80320F80; // gHeapMEM1
 extern MEMiHeapHead *lbl_80320F84; // gHeapMEM2
 
-inline void *operator new(size_t, void *mem) { return mem; }
 void *operator new(size_t);
 void *operator new(size_t, EHeapMEM, s32);
 void *operator new[](size_t);
