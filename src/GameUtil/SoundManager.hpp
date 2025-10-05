@@ -290,8 +290,8 @@ private:
 
     u8 *mMemSoundArchiveData;
 
-    u8 *mPlayerWork;
-    u8 *mPlayerStrmWork;
+    u8 *mSetupBuf;
+    u8 *mSetupStrmBuf;
 
     u8 *mDVDSoundArchiveHeader;
 

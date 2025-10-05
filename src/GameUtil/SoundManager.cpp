@@ -43,15 +43,15 @@ void CSoundManager::_10(void *soundArchiveAddr) {
 
     mSoundArchivePlayer = new nw4r::snd::SoundArchivePlayer;
 
-    u32 playerWorkSize = mSoundArchivePlayer->GetRequiredMemSize(mMemSoundArchive);
-    u32 playerStrmWorkSize = mSoundArchivePlayer->GetRequiredStrmBufferSize(mMemSoundArchive);
+    u32 setupBufSize = mSoundArchivePlayer->GetRequiredMemSize(mMemSoundArchive);
+    u32 setupStrmBufSize = mSoundArchivePlayer->GetRequiredStrmBufferSize(mMemSoundArchive);
 
-    mPlayerWork = new (eHeap_MEM2, 32) u8[playerWorkSize];
-    mPlayerStrmWork = new (eHeap_MEM2, 32) u8[playerStrmWorkSize];
+    mSetupBuf = new (eHeap_MEM2, 32) u8[setupBufSize];
+    mSetupStrmBuf = new (eHeap_MEM2, 32) u8[setupStrmBufSize];
 
     mSoundArchivePlayer->Setup(
         mMemSoundArchive,
-        mPlayerWork, playerWorkSize, mPlayerStrmWork, playerStrmWorkSize
+        mSetupBuf, setupBufSize, mSetupStrmBuf, setupStrmBufSize
     );
 
     fn_801E734C();
@@ -103,15 +103,15 @@ void CSoundManager::fn_801E4988(const char *soundArchivePath) {
 
     mSoundArchivePlayer = new nw4r::snd::SoundArchivePlayer;
 
-    u32 playerWorkSize = mSoundArchivePlayer->GetRequiredMemSize(mDVDSoundArchive);
-    u32 playerStrmWorkSize = mSoundArchivePlayer->GetRequiredStrmBufferSize(mDVDSoundArchive);
+    u32 setupBufSize = mSoundArchivePlayer->GetRequiredMemSize(mDVDSoundArchive);
+    u32 setupStrmBufSize = mSoundArchivePlayer->GetRequiredStrmBufferSize(mDVDSoundArchive);
 
-    mPlayerWork = new (eHeap_MEM2, 32) u8[playerWorkSize];
-    mPlayerStrmWork = new (eHeap_MEM2, 32) u8[playerStrmWorkSize];
+    mSetupBuf = new (eHeap_MEM2, 32) u8[setupBufSize];
+    mSetupStrmBuf = new (eHeap_MEM2, 32) u8[setupStrmBufSize];
 
     mSoundArchivePlayer->Setup(
         mDVDSoundArchive,
-        mPlayerWork, playerWorkSize, mPlayerStrmWork, playerStrmWorkSize
+        mSetupBuf, setupBufSize, mSetupStrmBuf, setupStrmBufSize
     );
 
     fn_801E734C();
@@ -155,8 +155,8 @@ void CSoundManager::_08(void) {
     mSoundArchivePlayer->Shutdown();
     delete mSoundArchivePlayer;
 
-    delete[] mPlayerWork;
-    delete[] mPlayerStrmWork;
+    delete[] mSetupBuf;
+    delete[] mSetupStrmBuf;
 
     if (mFxReverbHi0 != NULL) {
         delete mFxReverbHi0;
