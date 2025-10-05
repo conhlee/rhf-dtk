@@ -6,57 +6,58 @@
 #include <revolution/MEM.h>
 #include <revolution/PAD.h>
 #include <revolution/KPAD.h>
-#include "Singleton.hpp"
-#include "Layout.hpp"
 
+#include <nw4r/ut.h>
+
+#include "Singleton.hpp"
+
+#include "Layout.hpp"
 
 class CController {
 public:
+    typedef CController *(*CreateFn)(s32 channel);
 
-    virtual ~CController(void) {
-
-    }
+public:
+    virtual ~CController(void) {}
     virtual void _0C(void);
     virtual void _10(void);
     virtual void _14(void);
     virtual u8 _18(void) {
-        return 0; // TODO
+        return mCoreStatus[0].dev_type;
     }
-    virtual bool _1C(void) {
-        return false; // TODO
+    virtual s8 _1C(void) {
+        return mCoreStatus[0].wpad_err;
     }
-    virtual bool _20(void) {
-        return false; // TODO
+    virtual s32 _20(void) {
+        return mProbeErrcode;
     }
     virtual bool _24(void) {
-        return false; // TODO
+        return (_20() == WPAD_ERR_OK) && (_18() != WPAD_DEV_NOT_FOUND);
     }
     virtual bool _28(void) {
-        return false; // TODO
+        return (_20() == WPAD_ERR_OK) && (_18() == WPAD_DEV_CORE);
     }
     virtual bool _2C(void) {
-        return false; // TODO
+        return (_20() == WPAD_ERR_OK) && (_18() == WPAD_DEV_FREESTYLE);
     }
     virtual bool _30(void) {
-        return false; // TODO
+        return (_20() == WPAD_ERR_OK) && (_18() == WPAD_DEV_CLASSIC);
     }
     virtual bool _34(void) {
-        return false; // TODO
+        return (_20() == WPAD_ERR_OK) && (_18() == WPAD_DEV_FUTURE);
     }
     virtual bool _38(void) {
-        return false; // TODO
+        return (_20() == WPAD_ERR_OK) && (_18() == WPAD_DEV_NOT_SUPPORTED);
     }
     virtual bool _3C(void) {
-        return false; // TODO
+        return (_20() == WPAD_ERR_OK) && (_18() == WPAD_DEV_UNKNOWN);
     }
     virtual void _40(const char *, bool);
     virtual void _44(void);
-    virtual bool _48(void) {
-        return false; // TODO
-    }
+    virtual bool _48(void) { return mMotorSeqPlaying; }
     virtual void _4C(void);
 
-    CController(s32);
+    CController(s32 channel);
     void fn_801D4DDC(void);
     void fn_801D4E38(u32);
     void fn_801D4EA4(u32, u32);
@@ -75,7 +76,7 @@ public:
     u32 fn_801D58A8(void);
 
     void do801D4EA4(u32 arg0) {
-        u32 temp = unk18[0].hold;
+        u32 temp = mCoreStatus[0].hold;
         if (!_24()) {
             temp = 0;
         }
@@ -94,18 +95,25 @@ public:
     bool unk136CCheck(void) {
         return unk136C && !unk136D;
     }
+
+    Vec2 getCorePos(void) {
+        return mCoreStatus[0].pos;
+    }
+
 private:
+    enum { MOTOR_SEQ_OFF = 0, MOTOR_SEQ_ON = 1, MOTOR_SEQ_END = 0xFF };
+    enum { MOTOR_SEQ_MAXLEN = 32 };
 
     static void fn_801D5830(s32, s32); // WPADCallback
 
-    s32 unk04;
-    s32 unk08;
-    s32 unk0C;
-    s32 unk10;
+    s32 mMyChannel;
+    s32 mKPADReadLength;
+    s32 mProbeType;
+    s32 mProbeErrcode;
     u32 unk14;
-    KPADStatus unk18[16];
+    KPADStatus mCoreStatus[KPAD_MAX_SAMPLES];
     u8 pad858[0xf18 - 0x858];
-    KPADUnifiedWpadStatus unkF18[16];
+    KPADUnifiedWpadStatus mUnifiedStatus[KPAD_MAX_SAMPLES];
     u8 pad1298[0x1338 - 0x1298];
     u32 unk1338;
     u32 unk133C;
@@ -120,21 +128,17 @@ private:
     bool unk136D;
     u32 unk1370;
     u8 unk1374;
-    u8 unk1375;
-    u8 unk1376;
-    u8 unk1377[0x21];
-    bool unk1398;
-    s32 unk139C;
-    WPADInfo unk13A0;
+    bool mMotorSeqPlaying;
+    u8 mMotorSeqPos;
+    u8 mMotorSeq[MOTOR_SEQ_MAXLEN + 1];
+    bool mInfoUpdated;
+    s32 mInfoErrcode;
+    WPADInfo mInfo;
 };
 
 class CNullController : public CController {
 public:
-
-    virtual ~CNullController(void) {
-
-    }
-
+    virtual ~CNullController(void) {}
     virtual u8 _18(void);
     virtual bool _24(void);
     virtual bool _28(void);
@@ -144,115 +148,97 @@ public:
     virtual bool _38(void);
     virtual bool _3C(void);
 
-    CNullController(s32 arg0) : CController(arg0) {
-
-    }
-private:
+    CNullController(s32 channel) :
+        CController(channel)
+    {}
 };
 
 class CGCController {
 public:
-
     virtual ~CGCController(void);
     virtual void _0C(void);
-    virtual void _10(void) {
+    virtual void _10(void) {}
 
-    }
-
-    CGCController(s32 i) {
-        unk04 = i;
+    CGCController(s32 channel) {
+        mMyChannel = channel;
         unk10 = 10;
         unk11 = 4;
     }
 
     void setUnk08(PADStatus *arg0) {
-        unk08 = arg0;
+        mStatus = arg0;
     }
     PADStatus *getUnk08(void) {
-        return unk08;
+        return mStatus;
     }
     void setUnk0C(PADStatus *arg0) {
-        unk0C = arg0;
+        mStatusPrev = arg0;
     }
     PADStatus *getUnk0C(void) {
-        return unk0C;
+        return mStatusPrev;
     }
     u32 getUnk14(void) {
         return unk14;
     }
     bool unkInputCheck(u32 mask) {
-        return (((unk08->err == PAD_ERR_NONE)) && (PADButtonDown(unk0C->button, unk08->button) & mask));
+        return
+            (mStatus->err == PAD_ERR_NONE) && 
+            (PADButtonDown(mStatusPrev->button, mStatus->button) & mask);
     }
-private:
 
-    s32 unk04;
-    PADStatus *unk08;
-    PADStatus *unk0C;
+private:
+    s32 mMyChannel;
+    PADStatus *mStatus;
+    PADStatus *mStatusPrev;
     u8 unk10;
     u8 unk11;
     u8 unk12;
     u32 unk14;
 };
 
-
-// TODO: move this somewhere else
-template <typename T>
-struct Lock {
-    Lock(T arg0) {
-        inter = OSDisableInterrupts();
-    }
-    ~Lock(void) {
-        OSRestoreInterrupts(inter);
-    }
-
-    BOOL inter;
-};
-
 class CControllerManager : public TSingleton<CControllerManager> {
 public:
-
     virtual void _08(void);
     virtual ~CControllerManager(void);
-    virtual void _10(CController *(s32));
+    virtual void _10(CController::CreateFn createFn);
     virtual void _14(void);
     virtual void _18(void);
     virtual void _1C(void);
 
     CControllerManager(void);
 
-    CController *fn_801D5FF0(s32 idx);
-    CGCController *fn_801D6000(s32 idx);
+    CController *fn_801D5FF0(s32 channel);
+    CGCController *fn_801D6000(s32 channel);
 
     void *doAlloc(u32 size) {
         // TODO: doesn't match when using Lock..
         BOOL inter = OSDisableInterrupts();
-        void *alloc = MEMAllocFromAllocator(&unk1C, size);
+        void *alloc = MEMAllocFromAllocator(&mAllocator, size);
         OSRestoreInterrupts(inter);
         return alloc;
     }
 
-    u8 doFree(void *alloc) {
-        Lock<void *> lock(alloc);
-        MEMFreeToAllocator(&unk1C, alloc);
-        return true;
+    BOOL doFree(void *block) {
+        nw4r::ut::AutoInterruptLock lock;
+        MEMFreeToAllocator(&mAllocator, block);
+        return TRUE;
     }
 
-    CController *getController(s32 idx) { // TODO: inline deferred memes
-        return unk04[idx];
-    }
 private:
+    CController *mController[4];
+    CNullController *mNullController;
 
-    CController *unk04[4];
-    CNullController *unk14;
-    MEMiHeapHead *unk18;
-    MEMAllocator unk1C;
-    u8 *unk2C;
-    CGCController *unk30[4];
-    PADStatus unk40[4];
-    PADStatus unk70[4];
+    MEMiHeapHead *mHeap;
+    MEMAllocator mAllocator;
+    u8 *mHeapStart;
 
-    static void *fn_801D5950(u32);
-    static u8 fn_801D59B0(void *);
+    CGCController *mGCController[4];
+
+    PADStatus mPadStatus[4];
+    PADStatus mPadStatusPrev[4];
+
+    static void *fn_801D5950(u32 size);
+    static BOOL fn_801D59B0(void *block);
 };
 
 extern CControllerManager *gControllerManager;

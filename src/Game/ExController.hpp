@@ -7,10 +7,11 @@
 
 class CExController : public CController {
 public:
-    CExController(s32 index);
+    CExController(s32 channel);
 
-    static CController *create(s32 index) {
-        return static_cast<CController *>(new CExController(index));
+    // CController::CreateFn
+    static CController *create(s32 channel) {
+        return static_cast<CController *>(new CExController(channel));
     }
 
 private:

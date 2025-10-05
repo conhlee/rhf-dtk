@@ -7,11 +7,7 @@
 extern "C" {
 #endif
 
-
-typedef struct Vec2 {
-    f32 x;
-    f32 y;
-} Vec2; 
+#define KPAD_MAX_SAMPLES 16
 
 typedef union KPADEXStatus {
   struct {
@@ -65,13 +61,13 @@ typedef struct KPADUnifiedWpadStatus {
   u8 padding;
 } KPADUnifiedWpadStatus;
 
-void KPADInit();
-
-
 void KPADSetPosParam(s32 chan, f32 radius, f32 sensitivity);
 void KPADSetSensorHeight(s32, f32);
-s32 KPADRead(s32 chan, KPADStatus status[], u32 size);
 void KPADGetUnifiedWpadStatus(s32 chan, KPADUnifiedWpadStatus status[], u32 size);
+
+s32 KPADRead(s32 chan, KPADStatus *status, u32 size);
+
+void KPADInit();
 
 #ifdef __cplusplus
 }
