@@ -23,7 +23,7 @@ void CSceneManager::_08(void) {}
 void CSceneManager::_14(void) {
     unk404 = 0;
     for (s32 i = 0; i < (s32)ARRAY_LENGTH(mSceneHist); i++) {
-        mSceneHist[i] = EScene_Invalid;
+        mSceneHist[i] = eScene_Null;
     }
 }
 
@@ -164,7 +164,7 @@ const char lbl_80325318[] = "Reading";
 const char lbl_80325320[] = "Credit";
 const char lbl_80325328[] = "XXX";
 
-const char *lbl_802ECE20[] = {
+const char *lbl_802ECE20[eScene_Count + 1] = {
     lbl_803251B8, lbl_80255710, lbl_8025571C, lbl_803251C0, lbl_803251C8, lbl_803251D0, lbl_803251D8, lbl_803251E0, 
     lbl_803251E8, lbl_803251F0, lbl_803251F8, lbl_80325200, lbl_80255728, lbl_80255734, lbl_80325208, lbl_80325210, 
     lbl_80325218, lbl_80325220, lbl_80325228, lbl_80325230, lbl_80255740, lbl_80325238, lbl_80325240, lbl_80325248, 
@@ -176,203 +176,203 @@ const char *lbl_802ECE20[] = {
     lbl_80325320, lbl_80325328, 
 };
 
-void CSceneManager::fn_80089FE0(eSceneID sceneID, const TickFlowCode *tickFlowCode) {
+void CSceneManager::fn_80089FE0(ESceneID sceneID, const TickFlowCode *tickFlowCode) {
     CScene::CreateFn fn = NULL;
 
     switch (sceneID) {
-    case EScene_0:
+    case eScene_Menu:
         fn = CSceneMenu::create;
         break;
-    case EScene_5:
+    case eScene_Bun:
         fn = (CScene::CreateFn)fn_800136F4;
         break;
-    case EScene_4:
+    case eScene_Birds:
         fn = (CScene::CreateFn)fn_800204F0;
         break;
-    case EScene_F:
+    case eScene_Panel:
         fn = (CScene::CreateFn)fn_80022D8C;
         break;
-    case EScene_7:
+    case eScene_Date:
         fn = (CScene::CreateFn)fn_80027FB8;
         break;
-    case EScene_13:
+    case eScene_Rocket:
         fn = (CScene::CreateFn)fn_8002A5B4;
         break;
-    case EScene_17:
+    case eScene_Seesaw:
         fn = (CScene::CreateFn)fn_8002CF84;
         break;
-    case EScene_E:
+    case eScene_Muscle:
         fn = (CScene::CreateFn)fn_80034354;
         break;
-    case EScene_6:
+    case eScene_Concons:
         fn = (CScene::CreateFn)fn_800302A8;
         break;
-    case EScene_18:
+    case eScene_Shrimp:
         fn = (CScene::CreateFn)fn_80036734;
         break;
-    case EScene_1B:
+    case eScene_Tap:
         fn = (CScene::CreateFn)fn_8005CF38;
         break;
-    case EScene_11:
+    case eScene_Receive:
         fn = (CScene::CreateFn)fn_800535D4;
         break;
-    case EScene_19:
+    case eScene_Sort:
         fn = (CScene::CreateFn)fn_80059D3C;
         break;
-    case EScene_3:
+    case eScene_Batting:
         fn = (CScene::CreateFn)fn_8003BE58;
         break;
-    case EScene_8:
+    case eScene_Fishing:
         fn = (CScene::CreateFn)fn_800454B0;
         break;
-    case EScene_14:
+    case eScene_Rotation:
         fn = (CScene::CreateFn)fn_80056CF0;
         break;
-    case EScene_10:
+    case eScene_Rap:
         fn = (CScene::CreateFn)fn_8005029C;
         break;
-    case EScene_16:
+    case eScene_Seal:
         fn = (CScene::CreateFn)fn_80057D58;
         break;
-    case EScene_A:
+    case eScene_Fork:
         fn = (CScene::CreateFn)fn_8004BE50;
         break;
-    case EScene_9:
+    case eScene_Flea:
         fn = (CScene::CreateFn)fn_80047AEC;
         break;
-    case EScene_B:
+    case eScene_Goma:
         fn = (CScene::CreateFn)fn_8004DDC4;
         break;
-    case EScene_D:
+    case eScene_Karateman:
         fn = (CScene::CreateFn)fn_80069814;
         break;
-    case EScene_1A:
+    case eScene_Tambourine:
         fn = (CScene::CreateFn)fn_8006D5C0;
         break;
-    case EScene_2:
+    case eScene_Baseball:
         fn = (CScene::CreateFn)fn_800657B4;
         break;
-    case EScene_1:
+    case eScene_Badminton:
         fn = (CScene::CreateFn)fn_80060534;
         break;
-    case EScene_1C:
+    case eScene_Watch:
         fn = (CScene::CreateFn)fn_8006F390;
         break;
-    case EScene_12:
+    case eScene_Robot:
         fn = (CScene::CreateFn)fn_8006C6DC;
         break;
-    case EScene_15:
+    case eScene_Samurai:
         fn = (CScene::CreateFn)fn_800759C4;
         break;
-    case EScene_C:
+    case eScene_Interview:
         fn = (CScene::CreateFn)fn_800B5460;
         break;
-    case EScene_1D:
+    case eScene_Alarm:
         fn = (CScene::CreateFn)fn_800BC6DC;
         break;
-    case EScene_1E:
+    case eScene_Eatmen:
         fn = (CScene::CreateFn)fn_800B956C;
         break;
-    case EScene_1F:
+    case eScene_Metroman:
         fn = (CScene::CreateFn)fn_800D7F70;
         break;
-    case EScene_20:
+    case eScene_Shooting:
         fn = (CScene::CreateFn)fn_800C6114;
         break;
-    case EScene_21:
+    case eScene_Boat:
         fn = (CScene::CreateFn)fn_8003F2F8;
         break;
-    case EScene_22:
+    case eScene_Kungfu:
         fn = (CScene::CreateFn)fn_80015AFC;
         break;
-    case EScene_23:
+    case eScene_Omochi:
         fn = (CScene::CreateFn)fn_800D5294;
         break;
-    case EScene_24:
+    case eScene_Sword:
         fn = (CScene::CreateFn)fn_800AD4F8;
         break;
-    case EScene_25:
+    case eScene_Basket:
         fn = (CScene::CreateFn)fn_8000F838;
         break;
-    case EScene_26:
+    case eScene_Tutorial:
         fn = (CScene::CreateFn)fn_80090A54;
         break;
-    case EScene_27:
+    case eScene_Frog:
         fn = (CScene::CreateFn)fn_8001DCD8;
         break;
-    case EScene_28:
+    case eScene_Choro:
         fn = (CScene::CreateFn)fn_800107C0;
         break;
-    case EScene_29:
+    case eScene_Hihat:
         fn = (CScene::CreateFn)fn_8009E9C8;
         break;
-    case EScene_2A:
+    case eScene_Mail:
         fn = (CScene::CreateFn)fn_800C86EC;
         break;
-    case EScene_2B:
+    case eScene_RhythmFighterVS:
         fn = (CScene::CreateFn)fn_800CB2B8;
         break;
-    case EScene_2C:
+    case eScene_AgbClap:
         fn = (CScene::CreateFn)fn_8009D6B4;
         break;
-    case EScene_2D:
+    case eScene_AgbGhost:
         fn = CSceneAgbGhost::create;
         break;
-    case EScene_2E:
+    case eScene_AgbKanji:
         fn = (CScene::CreateFn)fn_800A5B24;
         break;
-    case EScene_2F:
+    case eScene_AgbTap:
         fn = (CScene::CreateFn)fn_800A8FB8;
         break;
-    case EScene_30:
+    case eScene_NightWalk:
         fn = (CScene::CreateFn)fn_800AB9C8;
         break;
-    case EScene_31:
+    case eScene_Error:
         fn = CSceneError::create;
         break;
-    case EScene_32:
+    case eScene_Strap:
         fn = CSceneStrap::create;
         break;
-    case EScene_33:
+    case eScene_Logo:
         fn = CSceneLogo::create;
         break;
-    case EScene_34:
+    case eScene_Title:
         fn = (CScene::CreateFn)fn_80092098;
         break;
-    case EScene_35:
+    case eScene_GameSelect:
         fn = (CScene::CreateFn)fn_8000EC28;
         break;
-    case EScene_36:
+    case eScene_BonusSelect:
         fn = (CScene::CreateFn)fn_800A4674;
         break;
-    case EScene_37:
+    case eScene_Prologue:
         fn = CScenePrologue::create;
         break;
-    case EScene_38:
+    case eScene_Epilogue:
         fn = (CScene::CreateFn)fn_8000B4B4;
         break;
-    case EScene_39:
+    case eScene_Grading:
         fn = (CScene::CreateFn)fn_8000C2E4;
         break;
-    case EScene_3A:
+    case eScene_Grading2P:
         fn = (CScene::CreateFn)fn_800CF810;
         break;
-    case EScene_3B:
+    case eScene_Perfect:
         fn = (CScene::CreateFn)fn_80082FB0;
         break;
-    case EScene_3C:
+    case eScene_Navi:
         fn = (CScene::CreateFn)fn_8009B39C;
         break;
-    case EScene_3D:
+    case eScene_Cafe:
         fn = (CScene::CreateFn)fn_8009A1C8;
         break;
-    case EScene_3E:
+    case eScene_CafeMenu:
         fn = (CScene::CreateFn)fn_800B2918;
         break;
-    case EScene_3F:
+    case eScene_Reading:
         fn = (CScene::CreateFn)fn_800B3FBC;
         break;
-    case EScene_40:
+    case eScene_Credit:
         fn = CSceneCredit::create;
         break;
     }
@@ -385,7 +385,7 @@ void CSceneManager::fn_80089FE0(eSceneID sceneID, const TickFlowCode *tickFlowCo
     }
 
     mSceneHist[0] = sceneID;
-    if (mSceneHist[1] == EScene_Invalid) {
+    if (mSceneHist[1] == eScene_Null) {
         OSReport("Scene Change [ NULL ] → [ %s ]\n", lbl_802ECE20[mSceneHist[0]]);
     }
     else {
@@ -455,201 +455,201 @@ extern s32 lbl_803204B8;
 extern s32 lbl_80320528;
 extern s32 lbl_80320530;
 
-void CSceneManager::fn_8008A4DC(eSceneID sceneID, u32 ver) {
+void CSceneManager::fn_8008A4DC(ESceneID sceneID, s32 ver) {
     switch (sceneID) {
-    case EScene_0:
+    case eScene_Menu:
         Menu::sceneVer = ver;
         break;
-    case EScene_1:
+    case eScene_Badminton:
         lbl_80320378 = ver;
         break;
-    case EScene_2:
+    case eScene_Baseball:
         lbl_80320380 = ver;
         break;
-    case EScene_3:
+    case eScene_Batting:
         lbl_80320308 = ver;
         break;
-    case EScene_4:
+    case eScene_Birds:
         lbl_803202AC = ver;
         break;
-    case EScene_5:
+    case eScene_Bun:
         lbl_80320288 = ver;
         break;
-    case EScene_6:
+    case eScene_Concons:
         lbl_803202D0 = ver;
         break;
-    case EScene_7:
+    case eScene_Date:
         lbl_803202B8 = ver;
         break;
-    case EScene_8:
+    case eScene_Fishing:
         lbl_80320328 = ver;
         break;
-    case EScene_9:
+    case eScene_Flea:
         lbl_80320330 = ver;
         break;
-    case EScene_A:
+    case eScene_Fork:
         lbl_80320338 = ver;
         break;
-    case EScene_B:
+    case eScene_Goma:
         lbl_80320340 = ver;
         break;
-    case EScene_C:
+    case eScene_Interview:
         lbl_80320538 = ver;
         break;
-    case EScene_D:
+    case eScene_Karateman:
         lbl_80320388 = ver;
         break;
-    case EScene_E:
+    case eScene_Muscle:
         lbl_803202D8 = ver;
         break;
-    case EScene_F:
+    case eScene_Panel:
         lbl_803202B0 = ver;
         break;
-    case EScene_10:
+    case eScene_Rap:
         lbl_80320348 = ver;
         break;
-    case EScene_11:
+    case eScene_Receive:
         lbl_80320350 = ver;
         break;
-    case EScene_12:
+    case eScene_Robot:
         lbl_80320390 = ver;
         break;
-    case EScene_13:
+    case eScene_Rocket:
         lbl_803202C0 = ver;
         break;
-    case EScene_14:
+    case eScene_Rotation:
         lbl_80320358 = ver;
         break;
-    case EScene_15:
+    case eScene_Samurai:
         lbl_803203B0 = ver;
         break;
-    case EScene_16:
+    case eScene_Seal:
         lbl_80320360 = ver;
         break;
-    case EScene_17:
+    case eScene_Seesaw:
         lbl_803202C8 = ver;
         break;
-    case EScene_18:
+    case eScene_Shrimp:
         lbl_803202E0 = ver;
         break;
-    case EScene_19:
+    case eScene_Sort:
         lbl_80320368 = ver;
         break;
-    case EScene_1A:
+    case eScene_Tambourine:
         lbl_80320398 = ver;
         break;
-    case EScene_1B:
+    case eScene_Tap:
         lbl_80320370 = ver;
         break;
-    case EScene_1C:
+    case eScene_Watch:
         lbl_803203A0 = ver;
         break;
-    case EScene_1D:
+    case eScene_Alarm:
         lbl_80320568 = ver;
         break;
-    case EScene_1E:
+    case eScene_Eatmen:
         lbl_80320540 = ver;
         break;
-    case EScene_1F:
+    case eScene_Metroman:
         lbl_803205E8 = ver;
         break;
-    case EScene_20:
+    case eScene_Shooting:
         lbl_80320580 = ver;
         break;
-    case EScene_21:
+    case eScene_Boat:
         lbl_80320324 = ver;
         break;
-    case EScene_22:
+    case eScene_Kungfu:
         lbl_80320290 = ver;
         break;
-    case EScene_23:
+    case eScene_Omochi:
         lbl_803205E0 = ver;
         break;
-    case EScene_24:
+    case eScene_Sword:
         lbl_80320520 = ver;
         break;
-    case EScene_25:
+    case eScene_Basket:
         lbl_80320278 = ver;
         break;
-    case EScene_26:
+    case eScene_Tutorial:
         lbl_803204A0 = ver;
         break;
-    case EScene_27:
+    case eScene_Frog:
         lbl_80320298 = ver;
         break;
-    case EScene_28:
+    case eScene_Choro:
         lbl_80320280 = ver;
         break;
-    case EScene_29:
+    case eScene_Hihat:
         lbl_803204E0 = ver;
         break;
-    case EScene_2A:
+    case eScene_Mail:
         lbl_80320590 = ver;
         break;
-    case EScene_2B:
+    case eScene_RhythmFighterVS:
         lbl_80320598 = ver;
         break;
-    case EScene_2C:
+    case eScene_AgbClap:
         lbl_803204D0 = ver;
         break;
-    case EScene_2D:
+    case eScene_AgbGhost:
         lbl_80320508 = ver;
         break;
-    case EScene_2E:
+    case eScene_AgbKanji:
         lbl_80320500 = ver;
         break;
-    case EScene_2F:
+    case eScene_AgbTap:
         lbl_80320510 = ver;
         break;
-    case EScene_30:
+    case eScene_NightWalk:
         lbl_80320518 = ver;
         break;
-    case EScene_31:
+    case eScene_Error:
         Error::sceneVer = ver;
         break;
-    case EScene_32:
+    case eScene_Strap:
         Strap::sceneVer = ver;
         break;
-    case EScene_33:
+    case eScene_Logo:
         Logo::sceneVer = ver;
         break;
-    case EScene_34:
+    case eScene_Title:
         lbl_803204A8 = ver;
         break;
-    case EScene_35:
+    case eScene_GameSelect:
         lbl_80320270 = ver;
         break;
-    case EScene_36:
+    case eScene_BonusSelect:
         lbl_803204F8 = ver;
         break;
-    case EScene_37:
+    case eScene_Prologue:
         Prologue::sceneVer = ver;
         break;
-    case EScene_38:
+    case eScene_Epilogue:
         lbl_80320250 = ver;
         break;
-    case EScene_39:
+    case eScene_Grading:
         lbl_80320260 = ver;
         break;
-    case EScene_3A:
+    case eScene_Grading2P:
         lbl_803205A0 = ver;
         break;
-    case EScene_3B:
+    case eScene_Perfect:
         lbl_80320438 = ver;
         break;
-    case EScene_3C:
+    case eScene_Navi:
         lbl_803204C8 = ver;
         break;
-    case EScene_3D:
+    case eScene_Cafe:
         lbl_803204B8 = ver;
         break;
-    case EScene_3E:
+    case eScene_CafeMenu:
         lbl_80320528 = ver;
         break;
-    case EScene_3F:
+    case eScene_Reading:
         lbl_80320530 = ver;
         break;
-    case EScene_40:
+    case eScene_Credit:
         Credit::sceneVer = ver;
         break;
     }
@@ -717,201 +717,201 @@ extern "C" void fn_8009A22C(void);
 extern "C" void fn_800B297C(void);
 extern "C" void fn_800B4020(void);
 
-void CSceneManager::fn_8008A704(eSceneID sceneID) {
+void CSceneManager::fn_8008A704(ESceneID sceneID) {
     switch (sceneID) {
-    case EScene_0:
+    case eScene_Menu:
         CSceneMenu::fn_80006FA4();
         break;
-    case EScene_1:
+    case eScene_Badminton:
         fn_800606E4();
         break;
-    case EScene_2:
+    case eScene_Baseball:
         fn_800658F8();
         break;
-    case EScene_3:
+    case eScene_Batting:
         fn_8003BEE4();
         break;
-    case EScene_4:
+    case eScene_Birds:
         fn_8002055C();
         break;
-    case EScene_5:
+    case eScene_Bun:
         fn_80013768();
         break;
-    case EScene_6:
+    case eScene_Concons:
         fn_80030434();
         break;
-    case EScene_7:
+    case eScene_Date:
         fn_800281D0();
         break;
-    case EScene_8:
+    case eScene_Fishing:
         fn_8004553C();
         break;
-    case EScene_9:
+    case eScene_Flea:
         fn_80047D08();
         break;
-    case EScene_A:
+    case eScene_Fork:
         fn_8004BEB4();
         break;
-    case EScene_B:
+    case eScene_Goma:
         fn_8004DE50();
         break;
-    case EScene_C:
+    case eScene_Interview:
         fn_800B5508();
         break;
-    case EScene_D:
+    case eScene_Karateman:
         fn_80069878();
         break;
-    case EScene_E:
+    case eScene_Muscle:
         fn_800344C0();
         break;
-    case EScene_F:
+    case eScene_Panel:
         fn_80022F74();
         break;
-    case EScene_10:
+    case eScene_Rap:
         fn_80050340();
         break;
-    case EScene_11:
+    case eScene_Receive:
         fn_8005380C();
         break;
-    case EScene_12:
+    case eScene_Robot:
         fn_8006C740();
         break;
-    case EScene_13:
+    case eScene_Rocket:
         fn_8002A770();
         break;
-    case EScene_14:
+    case eScene_Rotation:
         fn_80056D80();
         break;
-    case EScene_15:
+    case eScene_Samurai:
         fn_80075A68();
         break;
-    case EScene_16:
+    case eScene_Seal:
         fn_80057E80();
         break;
-    case EScene_17:
+    case eScene_Seesaw:
         fn_8002D0B8();
         break;
-    case EScene_18:
+    case eScene_Shrimp:
         fn_80036798();
         break;
-    case EScene_19:
+    case eScene_Sort:
         fn_80059EA8();
         break;
-    case EScene_1A:
+    case eScene_Tambourine:
         fn_8006D644();
         break;
-    case EScene_1B:
+    case eScene_Tap:
         fn_8005D04C();
         break;
-    case EScene_1C:
+    case eScene_Watch:
         fn_8006F4B4();
         break;
-    case EScene_1D:
+    case eScene_Alarm:
         fn_800BC830();
         break;
-    case EScene_1E:
+    case eScene_Eatmen:
         fn_800B95F4();
         break;
-    case EScene_1F:
+    case eScene_Metroman:
         fn_800D7FDC();
         break;
-    case EScene_20:
+    case eScene_Shooting:
         fn_800C6180();
         break;
-    case EScene_21:
+    case eScene_Boat:
         fn_8003F550();
         break;
-    case EScene_22:
+    case eScene_Kungfu:
         fn_80015F10();
         break;
-    case EScene_23:
+    case eScene_Omochi:
         fn_800D5308();
         break;
-    case EScene_24:
+    case eScene_Sword:
         fn_800AD578();
         break;
-    case EScene_25:
+    case eScene_Basket:
         fn_8000F8A4();
         break;
-    case EScene_26:
+    case eScene_Tutorial:
         fn_80090AD8();
         break;
-    case EScene_27:
+    case eScene_Frog:
         fn_8001DD54();
         break;
-    case EScene_28:
+    case eScene_Choro:
         fn_80010840();
         break;
-    case EScene_29:
+    case eScene_Hihat:
         fn_8009EA84();
         break;
-    case EScene_2A:
+    case eScene_Mail:
         fn_800C8810();
         break;
-    case EScene_2B:
+    case eScene_RhythmFighterVS:
         fn_800CB354();
         break;
-    case EScene_2C:
+    case eScene_AgbClap:
         fn_8009D718();
         break;
-    case EScene_2D:
+    case eScene_AgbGhost:
         CSceneAgbGhost::fn_800A772C();
         break;
-    case EScene_2E:
+    case eScene_AgbKanji:
         fn_800A5BA4();
         break;
-    case EScene_2F:
+    case eScene_AgbTap:
         fn_800A9034();
         break;
-    case EScene_30:
+    case eScene_NightWalk:
         fn_800ABBC8();
         break;
-    case EScene_31:
+    case eScene_Error:
         fn_8007963C();
         break;
-    case EScene_32:
+    case eScene_Strap:
         CSceneStrap::fn_8007B2D8();
         break;
-    case EScene_33:
+    case eScene_Logo:
         CSceneLogo::fn_800A0BC4();
         break;
-    case EScene_34:
+    case eScene_Title:
         fn_80092104();
         break;
-    case EScene_35:
+    case eScene_GameSelect:
         fn_8000EC8C();
         break;
-    case EScene_36:
+    case eScene_BonusSelect:
         fn_800A46D8();
         break;
-    case EScene_37:
+    case eScene_Prologue:
         CScenePrologue::fn_8000AD98();
         break;
-    case EScene_38:
+    case eScene_Epilogue:
         fn_8000B518();
         break;
-    case EScene_39:
+    case eScene_Grading:
         fn_8000C348();
         break;
-    case EScene_3A:
+    case eScene_Grading2P:
         fn_800CF884();
         break;
-    case EScene_3B:
+    case eScene_Perfect:
         fn_80083014();
         break;
-    case EScene_3C:
+    case eScene_Navi:
         fn_8009B458();
         break;
-    case EScene_3D:
+    case eScene_Cafe:
         fn_8009A22C();
         break;
-    case EScene_3E:
+    case eScene_CafeMenu:
         fn_800B297C();
         break;
-    case EScene_3F:
+    case eScene_Reading:
         fn_800B4020();
         break;
-    case EScene_40:
+    case eScene_Credit:
         CSceneCredit::fn_800C42AC();
         break;
     }
@@ -954,120 +954,120 @@ extern "C" void fn_8000F954(void);
 extern "C" void fn_80090B88(void);
 extern "C" void fn_8001DE04(void);
 
-void CSceneManager::fn_8008A82C(eSceneID sceneID) {
+void CSceneManager::fn_8008A82C(ESceneID sceneID) {
     switch (sceneID) {
-    case EScene_0:
+    case eScene_Menu:
         break;
-    case EScene_1:
+    case eScene_Badminton:
         fn_800607D0();
         break;
-    case EScene_2:
+    case eScene_Baseball:
         fn_80065A94();
         break;
-    case EScene_3:
+    case eScene_Batting:
         fn_8003BFD0();
         break;
-    case EScene_4:
+    case eScene_Birds:
         fn_800208B4();
         break;
-    case EScene_5:
+    case eScene_Bun:
         fn_80013880();
         break;
-    case EScene_6:
+    case eScene_Concons:
         fn_800305AC();
         break;
-    case EScene_7:
+    case eScene_Date:
         fn_800282E8();
         break;
-    case EScene_8:
+    case eScene_Fishing:
         fn_800456B4();
         break;
-    case EScene_9:
+    case eScene_Flea:
         fn_80047E24();
         break;
-    case EScene_A:
+    case eScene_Fork:
         fn_8004BFD0();
         break;
-    case EScene_B:
+    case eScene_Goma:
         fn_8004DF40();
         break;
-    case EScene_C:
+    case eScene_Interview:
         fn_800B5624();
         break;
-    case EScene_D:
+    case eScene_Karateman:
         fn_800699C0();
         break;
-    case EScene_E:
+    case eScene_Muscle:
         fn_80034618();
         break;
-    case EScene_F:
+    case eScene_Panel:
         fn_800230B8();
         break;
-    case EScene_10:
+    case eScene_Rap:
         fn_800504DC();
         break;
-    case EScene_11:
+    case eScene_Receive:
         fn_80053994();
         break;
-    case EScene_12:
+    case eScene_Robot:
         fn_8006C8DC();
         break;
-    case EScene_13:
+    case eScene_Rocket:
         fn_8002A88C();
         break;
-    case EScene_14:
+    case eScene_Rotation:
         fn_80056F50();
         break;
-    case EScene_15:
+    case eScene_Samurai:
         fn_80075B80();
         break;
-    case EScene_16:
+    case eScene_Seal:
         fn_80057F98();
         break;
-    case EScene_17:
+    case eScene_Seesaw:
         fn_8002D230();
         break;
-    case EScene_18:
+    case eScene_Shrimp:
         fn_800369B8();
         break;
-    case EScene_19:
+    case eScene_Sort:
         fn_8005A078();
         break;
-    case EScene_1A:
+    case eScene_Tambourine:
         fn_8006D760();
         break;
-    case EScene_1B:
+    case eScene_Tap:
         fn_8005D13C();
         break;
-    case EScene_1C:
+    case eScene_Watch:
         fn_8006F62C();
         break;
-    case EScene_1D:
+    case eScene_Alarm:
         break;
-    case EScene_1E:
+    case eScene_Eatmen:
         fn_800B96BC();
         break;
-    case EScene_1F:
+    case eScene_Metroman:
         fn_800D80A4();
         break;
-    case EScene_20:
+    case eScene_Shooting:
         break;
-    case EScene_21:
+    case eScene_Boat:
         fn_8003F690();
         break;
-    case EScene_22:
+    case eScene_Kungfu:
         break;
-    case EScene_23:
+    case eScene_Omochi:
         break;
-    case EScene_24:
+    case eScene_Sword:
         break;
-    case EScene_25:
+    case eScene_Basket:
         fn_8000F954();
         break;
-    case EScene_26:
+    case eScene_Tutorial:
         fn_80090B88();
         break;
-    case EScene_27:
+    case eScene_Frog:
         fn_8001DE04();
         break;
     }
@@ -1091,9 +1091,9 @@ void CSceneManager::fn_8008A8D8(void) {
     bool temp_r29 = false;
     bool temp_r28 = false;
 
-    if (mSceneHist[0] == EScene_3C) {
-        s32 i = sceneIdx(EScene_35);
-        s32 j = sceneIdx(EScene_3D);
+    if (mSceneHist[0] == eScene_Navi) {
+        s32 i = findSceneInHist(eScene_GameSelect);
+        s32 j = findSceneInHist(eScene_Cafe);
 
         if ((i >= 1) && (j >= 1)) {
             if (i < j) {
@@ -1113,7 +1113,7 @@ void CSceneManager::fn_8008A8D8(void) {
             temp_r28 = true;
         }
     }
-    else if ((mSceneHist[0] == EScene_34) || (mSceneHist[0] == EScene_35)) {
+    else if ((mSceneHist[0] == eScene_Title) || (mSceneHist[0] == eScene_GameSelect)) {
         temp_r28 = true;
     }
     else {
@@ -1121,8 +1121,8 @@ void CSceneManager::fn_8008A8D8(void) {
             temp_r29 = true;
         }
         else {
-            s32 i = sceneIdx(EScene_35);
-            s32 j = sceneIdx(EScene_36);
+            s32 i = findSceneInHist(eScene_GameSelect);
+            s32 j = findSceneInHist(eScene_BonusSelect);
 
             if ((i >= 1) && (j >= 1)) {
                 if (i < j) {
@@ -1173,7 +1173,7 @@ u32 CSceneManager::fn_8008B058(s32 idx) {
 
 void CSceneManager::fn_8008B068(void) {
     for (s32 i = 0; i < (s32)ARRAY_LENGTH(mSceneHist); i++) {
-        mSceneHist[i] = EScene_Invalid;
+        mSceneHist[i] = eScene_Null;
     }
 }
 
@@ -1181,8 +1181,8 @@ bool CSceneManager::fn_8008B0FC(s32 idx, u32 sceneID) {
     return mSceneHist[idx] == sceneID;
 }
 
-bool CSceneManager::fn_8008B118(eSceneID sceneID) {
-    return sceneIdx(sceneID) >= 0;
+bool CSceneManager::fn_8008B118(ESceneID sceneID) {
+    return findSceneInHist(sceneID) >= 0;
 }
 
 bool CSceneManager::fn_8008B27C(void) {
@@ -1190,16 +1190,16 @@ bool CSceneManager::fn_8008B27C(void) {
         return false;
     }
 
-    if (gSceneManager->sceneIdx(EScene_35) < 0) {
+    if (gSceneManager->findSceneInHist(eScene_GameSelect) < 0) {
         return false;
     }
-    s32 i = sceneIdx(EScene_35);
-    s32 j = sceneIdx(EScene_36);
+    s32 i = findSceneInHist(eScene_GameSelect);
+    s32 j = findSceneInHist(eScene_BonusSelect);
     if ((j != -1) && (j < i)) {
         return false;
     }
 
-    s32 k = sceneIdx(EScene_40);
+    s32 k = findSceneInHist(eScene_Credit);
     if ((k != -1) && (k < i)) {
         return false;
     }
