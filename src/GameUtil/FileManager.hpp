@@ -25,7 +25,7 @@ public:
     CFileManager(void);
 
     void fn_801D3C2C(const char *localeDir);
-    char *fn_801D3C44(void);
+    const char *fn_801D3C44(void);
     // NOTE: alignment must be a multiple of 32, or DVD read will fail!
     void *fn_801D3C4C(const char *path, EHeapMEM heap = eHeap_MEM2, s32 alignment = 32);
     bool fn_801D3D58(void);

@@ -67,7 +67,7 @@ void CFileManager::fn_801D3C2C(const char *localeDir) {
     sprintf(mLocaleDir, "%s", localeDir);
 }
 
-char *CFileManager::fn_801D3C44(void) {
+const char *CFileManager::fn_801D3C44(void) {
     return mLocaleDir;
 }
 
