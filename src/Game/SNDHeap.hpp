@@ -4,10 +4,11 @@
 #include <revolution/types.h>
 
 enum ESoundHeap {
-    eSoundHeap_0,
-    eSoundHeap_1,
-    eSoundHeap_2,
-    eSoundHeap_3,
+    eSoundHeap_0, // Common & Practice
+    eSoundHeap_1, // Game BGM
+    eSoundHeap_2, // Game SFX
+    eSoundHeap_3, // Prologue BGM
+
     eSoundHeap_Count
 };
 
