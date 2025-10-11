@@ -13,7 +13,7 @@ public:
 
     CSDManager(void);
 
-    u32 fn_801EC3A8(const char *);
+    s32 fn_801EC3A8(const char *);
 
 private:
     u8 pad04[0x11A0 - 4];

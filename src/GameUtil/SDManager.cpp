@@ -10,6 +10,6 @@ void CSDManager::_08(void) {}
 
 void CSDManager::_14(void) {}
 
-u32 CSDManager::fn_801EC3A8(const char *) {
+s32 CSDManager::fn_801EC3A8(const char *) {
     return 0;
 }
