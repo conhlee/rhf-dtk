@@ -3,6 +3,11 @@
 
 #include <revolution/types.h>
 
+/*
+    TODO:   rename these at some point to correspond to their purpose.
+    NOTE:   sometimes, the game allocates to a wrong heap as a dirty hack if they
+            run out of space in the correct heap .. see Endless Remix for example.
+*/
 enum ESoundHeap {
     eSoundHeap_0, // Common & Practice
     eSoundHeap_1, // Game BGM
