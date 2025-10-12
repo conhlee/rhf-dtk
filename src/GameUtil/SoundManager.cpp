@@ -636,8 +636,8 @@ WaveTempo *CSoundManager::fn_801E7414(WaveInfo *waveInfo, s32 pos) {
         }
 
         if (
-            (curTempo->flag & WAVE_TEMPO_FLAG_A) ||
-            (curTempo->flag & WAVE_TEMPO_FLAG_B)
+            (curTempo->flag & WAVE_TEMPO_FLAG_LAST_LOOP) ||
+            (curTempo->flag & WAVE_TEMPO_FLAG_LAST_STOP)
         ) {
             break;
         }
@@ -655,8 +655,8 @@ s32 CSoundManager::fn_801E7450(WaveInfo *waveInfo, WaveTempo *tempo) {
         }
 
         if (
-            (curTempo->flag & WAVE_TEMPO_FLAG_A) ||
-            (curTempo->flag & WAVE_TEMPO_FLAG_B)
+            (curTempo->flag & WAVE_TEMPO_FLAG_LAST_LOOP) ||
+            (curTempo->flag & WAVE_TEMPO_FLAG_LAST_STOP)
         ) {
             break;
         }
@@ -674,8 +674,8 @@ s32 CSoundManager::fn_801E748C(WaveInfo *waveInfo) {
         sampleCount += curTempo->sampleCount;
 
         if (
-            (curTempo->flag & WAVE_TEMPO_FLAG_A) ||
-            (curTempo->flag & WAVE_TEMPO_FLAG_B)
+            (curTempo->flag & WAVE_TEMPO_FLAG_LAST_LOOP) ||
+            (curTempo->flag & WAVE_TEMPO_FLAG_LAST_STOP)
         ) {
             break;
         }
@@ -691,8 +691,8 @@ s32 CSoundManager::fn_801E74BC(WaveInfo *waveInfo) {
         beatCount += curTempo->beatCount;
 
         if (
-            (curTempo->flag & WAVE_TEMPO_FLAG_A) ||
-            (curTempo->flag & WAVE_TEMPO_FLAG_B)
+            (curTempo->flag & WAVE_TEMPO_FLAG_LAST_LOOP) ||
+            (curTempo->flag & WAVE_TEMPO_FLAG_LAST_STOP)
         ) {
             break;
         }
@@ -714,10 +714,10 @@ BOOL CSoundManager::fn_801E7584(WaveInfo *waveInfo) {
     for (s32 i = 0;; i++) {
         WaveTempo *curTempo = &waveInfo->tempo[i];
 
-        if (curTempo->flag & WAVE_TEMPO_FLAG_A) {
+        if (curTempo->flag & WAVE_TEMPO_FLAG_LAST_LOOP) {
             return TRUE;
         }
-        if (curTempo->flag & WAVE_TEMPO_FLAG_B) {
+        if (curTempo->flag & WAVE_TEMPO_FLAG_LAST_STOP) {
             break;
         }
     }

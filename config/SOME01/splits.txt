@@ -65,6 +65,7 @@ Game/MyTagProcessor.cpp:
 
 Game/main.cpp:
 	.text       start:0x800380CC end:0x800399E4
+	.data       start:0x802E7370 end:0x802E95C0
 
 Game/BalloonLayout.cpp:
 	.text       start:0x800399E4 end:0x8003A52C

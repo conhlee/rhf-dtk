@@ -24,26 +24,75 @@ struct SeqTempo {
     u16 tempoOrSID;
 };
 
-// TODO: give these flags proper names ..
-#define WAVE_TEMPO_FLAG_A ((u16)(1 << 0))
-#define WAVE_TEMPO_FLAG_B ((u16)(1 << 15))
+#define SEQ_TEMPO_TABLE_BEGIN(tableName) \
+    SeqTempo tableName[] = {
+
+#define SEQ_TEMPO_TABLE_ENTRY(soundName, tempo) \
+    { soundName, SeqTempo::eType_Immediate, (tempo) },
+#define SEQ_TEMPO_TABLE_ENTRY_WAVE_INFO_REF(soundName, waveName) \
+    { soundName, SeqTempo::eType_WaveInfoRef, waveName },
+#define SEQ_TEMPO_TABLE_ENTRY_ALIAS(soundName, srcSoundName) \
+    { soundName, SeqTempo::eType_Alias, srcSoundName },
+#define SEQ_TEMPO_TABLE_ENTRY_FROM_PREV(soundName) \
+    { soundName, SeqTempo::eType_FromPrev, -1 },
+
+#define SEQ_TEMPO_TABLE_END() \
+    };
+
+#define WAVE_TEMPO_FLAG_NONE ((u16)(0))
+#define WAVE_TEMPO_FLAG_LAST_LOOP ((u16)(1 << 0))
+#define WAVE_TEMPO_FLAG_LAST_STOP ((u16)(1 << 15))
 
 struct WaveTempo {
     u32 beatCount;
     u32 sampleCount;
-    u16 flag; // WAVE_TEMPO_FLAG_A, WAVE_TEMPO_FLAG_B
+    u16 flag; // WAVE_TEMPO_FLAG_
 };
+
+#define WAVE_TEMPO_BEGIN(soundName) \
+    WaveTempo waveTempo_##soundName[] = {
+
+#define WAVE_TEMPO_ENTRY(beatCount, sampleCount) \
+    { (beatCount), (sampleCount), WAVE_TEMPO_FLAG_NONE },
+#define WAVE_TEMPO_ENTRY_LAST_LOOP(beatCount, sampleCount) \
+    { (beatCount), (sampleCount), WAVE_TEMPO_FLAG_LAST_LOOP },
+#define WAVE_TEMPO_ENTRY_LAST_STOP(beatCount, sampleCount) \
+    { (beatCount), (sampleCount), WAVE_TEMPO_FLAG_LAST_STOP },
+
+#define WAVE_TEMPO_END() \
+    };
+
 struct WaveInfo {
     u16 soundID;
     u16 sampleRate;
-    WaveTempo *tempo; // WaveTempo[]
+    WaveTempo *tempo; // WaveTempo[], cannot be NULL
 };
+
+#define WAVE_INFO_TABLE_BEGIN(tableName) \
+    WaveInfo tableName[] = {
+
+#define WAVE_INFO_TABLE_ENTRY_EX(soundName, sampleRate) \
+    { soundName, (sampleRate), waveTempo_##soundName },
+#define WAVE_INFO_TABLE_ENTRY(soundName) \
+    { soundName, 32000, waveTempo_##soundName },
+
+#define WAVE_INFO_TABLE_END() \
+    };
 
 struct SoundCooldown {
     u16 soundID;
     u16 coolFrames;
     u16 coolTimer; // Mutable.
 };
+
+#define SOUND_COOLDOWN_TABLE_BEGIN(tableName) \
+    SoundCooldown tableName[] = {
+
+#define SOUND_COOLDOWN_TABLE_ENTRY(soundID, frames) \
+    { (soundID), (frames), 0 },
+
+#define SOUND_COOLDOWN_TABLE_END() \
+    };
 
 class CSoundManager : public TSingleton<CSoundManager> {
     friend class SNDHandle; // end_sound_handle is private

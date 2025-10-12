@@ -47,6 +47,8 @@
 
 #include "Mem.hpp"
 
+#include "SoundData.inc"
+
 extern "C" {
     void fn_80009028(void);
     void fn_8000966C(void);
@@ -130,18 +132,6 @@ extern GXRenderModeObj sRenderModeObj;
 static bool sIs60FPS;
 
 extern char sSndArchivePath[64];
-
-SoundCooldown sndCooldown[30] = {
-
-};
-
-WaveInfo sndWaveInfo[162] = {
-
-};
-
-SeqTempo sndSeqAndSETempo[608] = {
-
-};
 
 void fn_80038350(void) {
     VIInit();
@@ -324,7 +314,7 @@ void fn_80038AE4(void) {
         break;
     }
 
-    GXColor clearColor = { 0, 0, 0, 0 };
+    GXColor clearColor = (GXColor){ 0, 0, 0, 0 };
 
     if (gGraphicManager == NULL) {
         gGraphicManager = new CGraphicManager;
@@ -378,9 +368,9 @@ void fn_80038AE4(void) {
 
     gSoundManager->fn_801E6E00(PLAYER_SE_SYSTEM);
 
-    gSoundManager->fn_801E60D4(sndCooldown, ARRAY_LENGTH(sndCooldown));
-    gSoundManager->fn_801E73C8(sndWaveInfo, ARRAY_LENGTH(sndWaveInfo));
-    gSoundManager->fn_801E75B4(sndSeqAndSETempo, ARRAY_LENGTH(sndSeqAndSETempo));
+    gSoundManager->fn_801E60D4(lbl_802E7370, ARRAY_LENGTH(lbl_802E7370));
+    gSoundManager->fn_801E73C8(lbl_802E8210, ARRAY_LENGTH(lbl_802E8210));
+    gSoundManager->fn_801E75B4(lbl_802E8720, ARRAY_LENGTH(lbl_802E8720));
 
     fn_8008357C();
 
