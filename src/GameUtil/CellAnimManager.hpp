@@ -17,8 +17,8 @@
 
 class CCellAnimManager : public TSingleton<CCellAnimManager> {
 public:
-    typedef void (*DrawPrepareFn)();
-    typedef void (*DrawEndCallbackFn)();
+    typedef void (*DrawSetupFn)();
+    typedef void (*DrawRestoreFn)();
     typedef void (*BaseUpdateCallbackFn)();
 
     virtual void _08(void);
@@ -26,9 +26,9 @@ public:
     virtual void _10(s32);
     virtual void _14(void);
     virtual void _18(void);
-    virtual void _1C(DrawPrepareFn, DrawEndCallbackFn);
-    virtual void _20(s32, DrawPrepareFn, DrawEndCallbackFn);
-    virtual void _24(s32, DrawPrepareFn, DrawEndCallbackFn);
+    virtual void _1C(DrawSetupFn, DrawRestoreFn);
+    virtual void _20(s32, DrawSetupFn, DrawRestoreFn);
+    virtual void _24(s32, DrawSetupFn, DrawRestoreFn);
 
     CCellAnimManager(void);
 

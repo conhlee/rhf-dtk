@@ -70,7 +70,7 @@ void CCellAnimManager::_18(void) {
     }
 }
 
-void CCellAnimManager::_1C(DrawPrepareFn setupFn, DrawEndCallbackFn endFn) {
+void CCellAnimManager::_1C(DrawSetupFn setupFn, DrawRestoreFn endFn) {
     // todo
 }
 
@@ -88,10 +88,10 @@ void CCellAnimManager::fn_801DB28C(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, TRUE, GX_TEVPREV);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-    GXSetZMode(0, GX_ALWAYS, 0);
+    GXSetZMode(FALSE, GX_ALWAYS, FALSE);
     GXSetCurrentMtx(0);
 }
 

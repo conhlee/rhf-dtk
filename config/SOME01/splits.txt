@@ -275,6 +275,10 @@ Game/ExFlow.cpp:
 	.text       start:0x8008D290 end:0x8008E430
 	.data       start:0x802ED598 end:0x802ED5B8
 
+Game/CellAnimRenderEff.cpp:
+	.text       start:0x8009DF2C end:0x8009E2BC
+	.sbss       start:0x803204D8 end:0x803204E0
+
 Game/Logo/MyChecker.cpp:
 	.text       start:0x800A090C end:0x800A0A08
 	.rodata     start:0x802633D0 end:0x802633E8
