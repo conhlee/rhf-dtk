@@ -195,6 +195,7 @@ cflags_base = [
     "-Cpp_exceptions off",
     # "-W all",
     "-O4,p",
+    "-ipa file",
     "-inline auto",
     '-pragma "cats off"',
     '-pragma "warn_notinlined off"',
@@ -237,7 +238,6 @@ cflags_game = [
     "-use_lmw_stmw on",
     "-func_align 4",
     "-enc multibyte",
-    "-ipa file",
 ]
 
 # Metrowerks library flags
@@ -257,7 +257,6 @@ cflags_gameutil = [
     "-str readonly",
     "-use_lmw_stmw on",
     "-func_align 4",
-    "-ipa file",
 ]
 
 config.linker_version = "Wii/1.0"
@@ -388,7 +387,7 @@ config.libs = [
     RevolutionLib(
         "base",
         [
-            Object(NonMatching, "revolution/base/PPCArch.c"),
+            Object(Matching, "revolution/base/PPCArch.c"),
         ]
     ),
     RevolutionLib(
@@ -664,11 +663,11 @@ config.libs = [
     RevolutionLib(
         "mem",
         [
-            Object(NonMatching, "revolution/mem/mem_heapCommon.c"),
+            Object(Matching, "revolution/mem/mem_heapCommon.c"),
             Object(NonMatching, "revolution/mem/mem_expHeap.c"),
-            Object(NonMatching, "revolution/mem/mem_frameHeap.c"),
-            Object(NonMatching, "revolution/mem/mem_allocator.c"),
-            Object(NonMatching, "revolution/mem/mem_list.c"),
+            Object(Matching, "revolution/mem/mem_frameHeap.c"),
+            Object(Matching, "revolution/mem/mem_allocator.c"),
+            Object(Matching, "revolution/mem/mem_list.c"),
         ]
     ),
     RevolutionLib(
@@ -835,7 +834,7 @@ config.libs = [
     RevolutionLib(
         "tpl",
         [
-            Object(NonMatching, "revolution/tpl/TPL.c"),
+            Object(Matching, "revolution/tpl/TPL.c"),
         ]
     ),
     RevolutionLib(

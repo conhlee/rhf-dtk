@@ -45,7 +45,7 @@ void TPLBind(TPLPalette* pal);
 TPLDescriptor* TPLGet(TPLPalette* pal, u32 id);
 
 void TPLGetGXTexObjFromPalette(TPLPalette*, GXTexObj*, u32);
-void TPLGetGXTexObjFromPaletteCI(TPLPalette*, GXTexObj*, GXTlutObj*, int, u32);
+void TPLGetGXTexObjFromPaletteCI(TPLPalette*, GXTexObj*, GXTlutObj*, GXTlut, u32);
 
 #ifdef __cplusplus
 }

@@ -1154,17 +1154,17 @@ NdevExi2A/exi.c:
 
 revolution/mem/mem_heapCommon.c:
 	.text       start:0x80119870 end:0x80119E20
-	.sbss       start:0x80320C18 end:0x80320C20
-	.bss        start:0x8036C260 end:0x8036C2A0
+	.sbss       start:0x80320C18 end:0x80320C1C
+	.bss        start:0x8036C260 end:0x8036C288
 
 revolution/mem/mem_expHeap.c:
-	.text       start:0x80119E20 end:0x8011A840
+	.text       start:0x80119E20 end:0x8011A83C
 
 revolution/mem/mem_frameHeap.c:
-	.text       start:0x8011A840 end:0x8011AC60
+	.text       start:0x8011A840 end:0x8011AC54
 
 revolution/mem/mem_allocator.c:
-	.text       start:0x8011AC60 end:0x8011ACC0
+	.text       start:0x8011AC60 end:0x8011ACBC
 	.sdata2     start:0x80328E78 end:0x80328E80
 
 revolution/mem/mem_list.c:
@@ -1636,7 +1636,7 @@ revolution/kpad/KZMplsTestSub.c:
 	.sdata2     start:0x803290C0 end:0x803290D0
 
 revolution/tpl/TPL.c:
-	.text       start:0x80173BB0 end:0x80173EF0
+	.text       start:0x80173BB0 end:0x80173EE8
 	.data       start:0x80310228 end:0x80310258
 	.sdata      start:0x8031FF68 end:0x8031FF70
 	.sdata2     start:0x803290D0 end:0x803290D8

@@ -9,7 +9,7 @@ extern "C" {
 typedef struct OSContext OSContext;
 
 #define OSError(line, ...) OSPanic(__FILE__, line, __VA_ARGS__)
-#define OSAssert(exp, line, ...)                                                     \
+#define OSAssert(exp, line, ...)                                                    \
     if (!(exp))                                                                \
     OSPanic(__FILE__, line, __VA_ARGS__)
 
