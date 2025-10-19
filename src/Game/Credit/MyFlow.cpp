@@ -11,8 +11,6 @@
 
 #include "LayoutManager.hpp"
 
-#include "Mem.hpp"
-
 #include "cellanim/credit/ver0/rcad_chara_00_labels.h"
 #include "cellanim/credit/ver0/rcad_wipe_labels.h"
 #include "cellanim/credit/ver0/rcad_title_labels.h"
@@ -26,8 +24,7 @@ extern s32 lbl_80320518; // Night Walk scene version. TODO: replace when possibl
 bool Credit::CMyFlow::_1C(u32 opcode, u32 arg0, const s32 *args) {
     switch (opcode) {
     case TF_CREDIT_INPUT: {
-        void *checkerAlloc = gInputCheckManager->fn_801E9144(sizeof(CMyChecker));
-        CMyChecker *checker = new (checkerAlloc) CMyChecker;
+        CMyChecker *checker = gInputCheckManager->makeNew<CMyChecker>();
 
         gInputCheckManager->fn_801E9158(checker, true);
     } break;

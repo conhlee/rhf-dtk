@@ -16,8 +16,7 @@ AgbGhost::CMyFlow::~CMyFlow(void) {}
 bool AgbGhost::CMyFlow::_1C(u32 opcode, u32 arg0, const s32 *args) {
     switch (opcode) {
     case TF_AGBGHOST_INPUT: {
-        void *checkerAlloc = gInputCheckManager->fn_801E9144(sizeof(CMyChecker));
-        CMyChecker *checker = new (checkerAlloc) CMyChecker;
+        CMyChecker *checker = gInputCheckManager->makeNew<CMyChecker>();
 
         checker->fn_801E7D5C(4);
 

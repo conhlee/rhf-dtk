@@ -7,8 +7,6 @@
 #include "InputCheckManager.hpp"
 #include "InputChecker.hpp"
 
-#include "Mem.hpp"
-
 TICKFLOW_IMPL_CREATE_FN(Logo::CMyFlow)
 
 Logo::CMyFlow::~CMyFlow(void) {}
@@ -16,8 +14,7 @@ Logo::CMyFlow::~CMyFlow(void) {}
 bool Logo::CMyFlow::_1C(u32 opcode, u32 arg0, const s32 *args) {
     switch (opcode) {
     case TF_LOGO_INPUT: {
-        void *checkerAlloc = gInputCheckManager->fn_801E9144(sizeof(CMyChecker));
-        CMyChecker *checker = new (checkerAlloc) CMyChecker;
+        CMyChecker *checker = gInputCheckManager->makeNew<CMyChecker>();
 
         gInputCheckManager->fn_801E9158(checker, true);
     } break;

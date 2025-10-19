@@ -3,10 +3,15 @@
 
 #include <revolution/types.h>
 #include <revolution/MEM.h>
+
 #include "Singleton.hpp"
+
 #include "InputChecker.hpp"
+
 #include "TickFlowManager.hpp"
 #include "CheckPointManager.hpp"
+
+#include "Mem.hpp"
 
 class CInputCheckManager : public TSingleton<CInputCheckManager> {
 public:
@@ -55,8 +60,17 @@ public:
         unk418 = func;
     }
 
+    void setUnk429(bool value) {
+        unk429 = value;
+    }
     void setUnk42B(bool value) {
         unk42B = value;
+    }
+
+    template <typename T>
+    T *makeNew(void) {
+        void *alloc = fn_801E9144(sizeof(T));
+        return new (alloc) T;
     }
 
 private:
