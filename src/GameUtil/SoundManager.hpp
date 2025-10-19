@@ -74,7 +74,7 @@ struct WaveInfo {
 #define WAVE_INFO_TABLE_ENTRY_EX(soundName, sampleRate) \
     { soundName, (sampleRate), waveTempo_##soundName },
 #define WAVE_INFO_TABLE_ENTRY(soundName) \
-    { soundName, 32000, waveTempo_##soundName },
+    WAVE_INFO_TABLE_ENTRY_EX(soundName, 32000)
 
 #define WAVE_INFO_TABLE_END() \
     };
@@ -377,7 +377,7 @@ private:
 
     SNDHandle mSoundHandle[16];
 
-    u32 _pad3374; // This field is never used / referenced.
+    u32 _pad3374; // NOTE: this field is never used / referenced
 };
 
 extern CSoundManager *gSoundManager;

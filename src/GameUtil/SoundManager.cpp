@@ -731,7 +731,7 @@ void CSoundManager::fn_801E75B4(SeqTempo *seqTempo, u16 count) {
 }
 
 f32 CSoundManager::fn_801E75C0(u16 soundID) {
-    s32 prevSoundID = 0;
+    u16 prevSoundID = 0;
 
     for (u16 i = 0; i < mSeqTempoCount; i++) {
         SeqTempo *tempo = &mSeqTempo[i];
