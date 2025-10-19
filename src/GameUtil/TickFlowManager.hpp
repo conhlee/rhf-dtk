@@ -33,6 +33,7 @@ public:
     void fn_801E2540(CTickFlow *);
     f32 fn_801E2698(void);
     void fn_801E26A8(void);
+    f32 fn_801E26B4(f32);
     f32 fn_801E2928(f32);
     void fn_801E2B9C(f32);
     void fn_801E2C04(f32);

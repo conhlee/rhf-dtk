@@ -309,6 +309,27 @@ Game/AgbGhost/SceneAgbGhost.cpp:
 	.sdata      start:0x8031F7B8 end:0x8031F7C0
 	.sdata2     start:0x80325F38 end:0x80325FE0
 
+Game/AgbTap/MyChecker.cpp:
+	.text       start:0x800A8B28 end:0x800A8D50
+	.rodata     start:0x80267268 end:0x80267280
+	.data       start:0x802EF5D8 end:0x802EF630
+	.sdata      start:0x8031F7C0 end:0x8031F7C8
+	.sdata2     start:0x80325FE0 end:0x80325FF0
+
+Game/AgbTap/MyFlow.cpp:
+	.text       start:0x800A8D50 end:0x800A8FA4
+	.rodata     start:0x80267280 end:0x80267290
+	.data       start:0x802EF630 end:0x802EF690
+	.sdata      start:0x8031F7C8 end:0x8031F7D0
+	.sdata2     start:0x80325FF0 end:0x80326008
+
+Game/AgbTap/SceneAgbTap.cpp:
+	.text       start:0x800A8FA4 end:0x800A9F0C
+	.rodata     start:0x80267290 end:0x80267390
+	.data       start:0x802EF690 end:0x802EF898
+	.sdata      start:0x8031F7D0 end:0x8031F7D8
+	.sdata2     start:0x80326008 end:0x803260A0
+
 Game/RFLManager.cpp:
 	.text       start:0x800C2A30 end:0x800C3078
 	.rodata     start:0x802B2480 end:0x802B24C0

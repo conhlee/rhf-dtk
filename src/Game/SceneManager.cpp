@@ -9,6 +9,7 @@
 #include "Credit/SceneCredit.hpp"
 #include "AgbGhost/SceneAgbGhost.hpp"
 #include "Error/SceneError.hpp"
+#include "AgbTap/SceneAgbTap.hpp"
 
 CSceneManager::CSceneManager(void) {}
 
@@ -82,7 +83,6 @@ extern "C" void fn_800C86EC(void);
 extern "C" void fn_800CB2B8(void);
 extern "C" void fn_8009D6B4(void);
 extern "C" void fn_800A5B24(void);
-extern "C" void fn_800A8FB8(void);
 extern "C" void fn_800AB9C8(void);
 extern "C" void fn_80092098(void);
 extern "C" void fn_8000EC28(void);
@@ -322,7 +322,7 @@ void CSceneManager::fn_80089FE0(ESceneID sceneID, const TickFlowCode *tickFlowCo
         fn = (CScene::CreateFn)fn_800A5B24;
         break;
     case eScene_AgbTap:
-        fn = (CScene::CreateFn)fn_800A8FB8;
+        fn = CSceneAgbTap::create;
         break;
     case eScene_NightWalk:
         fn = (CScene::CreateFn)fn_800AB9C8;
@@ -702,7 +702,6 @@ extern "C" void fn_800C8810(void);
 extern "C" void fn_800CB354(void);
 extern "C" void fn_8009D718(void);
 extern "C" void fn_800A5BA4(void);
-extern "C" void fn_800A9034(void);
 extern "C" void fn_800ABBC8(void);
 extern "C" void fn_8007963C(void);
 extern "C" void fn_80092104(void);
@@ -861,7 +860,7 @@ void CSceneManager::fn_8008A704(ESceneID sceneID) {
         fn_800A5BA4();
         break;
     case eScene_AgbTap:
-        fn_800A9034();
+        CSceneAgbTap::fn_800A9034();
         break;
     case eScene_NightWalk:
         fn_800ABBC8();
