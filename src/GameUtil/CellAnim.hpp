@@ -53,7 +53,8 @@ public:
     void setPosX(f32 x) { mPos.x = x; }
     void setPosY(f32 y) { mPos.y = y; }
 
-    nw4r::math::VEC2 getPos(void) { return mPos; }
+    nw4r::math::VEC2 &getPos(void) { return mPos; }
+    void setPos(nw4r::math::VEC2 &pos) { mPos = pos; }
     void setPos(f32 x, f32 y) { mPos = nw4r::math::VEC2(x, y); }
 
     f32 getScaleX(void) const { return mSize.x; }
