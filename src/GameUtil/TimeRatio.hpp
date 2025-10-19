@@ -56,10 +56,13 @@ public:
     f32 getOutputStart(void) const { return mOutputStart; }
     f32 getOutputEnd(void) const { return mOutputEnd; }
 
+    f32 getLinearTime(void) const { return mLinearT; }
+    f32 getMaxTime(void) const { return mMaxT; }
+
 protected:
     // Easing function parameters.
     s32 mEasingType;  // Easing type. TODO: enum
-    u8 mEasingPower;  // Controls curve sharpness (e.g., exponential intensity).
+    u8 mEasingPower;  // Controls curve sharpness.
     f32 mEasingScale; // ?
 
     // Time values (in ticks).
@@ -91,6 +94,8 @@ public:
     void fn_801EA698(f32, f32);
 
     f32 getCurrent(void) const { return mOutputStart; }
+
+    f32 getTarget(void) const { return mTarget; }
 
 private:
     f32 mTarget;
