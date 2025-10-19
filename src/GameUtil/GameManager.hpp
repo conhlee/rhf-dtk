@@ -62,9 +62,11 @@ private:
     };
     static DVDMessageData sDVDMessageData;
 
+    // TODO: rename, these are specifically for DVD mesg screen
     static bool sIsPowerOff;
     static void osPowerCallback(void);
 
+    // TODO: rename, these are specifically for DVD mesg screen
     static bool sIsReset;
     static void osResetCallback(void);
 
